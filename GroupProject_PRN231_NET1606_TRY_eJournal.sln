@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupProject_PRN231_NET1606_TRY_eJournal", "GroupProject_PRN231_NET1606_TRY_eJournal\GroupProject_PRN231_NET1606_TRY_eJournal.csproj", "{DD27B1D6-F641-4FE7-ACF0-923D116DEB80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroupProject_PRN231_NET1606_TRY_eJournal", "GroupProject_PRN231_NET1606_TRY_eJournal\GroupProject_PRN231_NET1606_TRY_eJournal.csproj", "{DD27B1D6-F641-4FE7-ACF0-923D116DEB80}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLayer", "BusinessLayer", "{D9F00161-EA78-4FED-B9C4-852BD08EFBB1}"
 EndProject
@@ -13,11 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PresentationLayer", "Presen
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebClient", "WebClient", "{624F97ED-42B1-4A8F-9185-37D51B6DC4D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{1AA9C32A-1D68-486A-965B-3F1479D3CBCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "DataAccess\Application.csproj", "{1AA9C32A-1D68-486A-965B-3F1479D3CBCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{6854D0AB-1213-41F3-842F-B491FFDFA7DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{6854D0AB-1213-41F3-842F-B491FFDFA7DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eJournal_WebClient", "eJournal_WebClient\eJournal_WebClient.csproj", "{D0E17860-28EA-4235-8C5D-F92DAA658F2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eJournal_WebClient", "eJournal_WebClient\eJournal_WebClient.csproj", "{D0E17860-28EA-4235-8C5D-F92DAA658F2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{E9B0EB85-6F22-497B-A8AE-C8E937E8CB9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{D0E17860-28EA-4235-8C5D-F92DAA658F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0E17860-28EA-4235-8C5D-F92DAA658F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0E17860-28EA-4235-8C5D-F92DAA658F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9B0EB85-6F22-497B-A8AE-C8E937E8CB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9B0EB85-6F22-497B-A8AE-C8E937E8CB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9B0EB85-6F22-497B-A8AE-C8E937E8CB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B0EB85-6F22-497B-A8AE-C8E937E8CB9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{1AA9C32A-1D68-486A-965B-3F1479D3CBCA} = {CE41E970-DA96-45E6-8C6A-C7CDE103C0FF}
 		{6854D0AB-1213-41F3-842F-B491FFDFA7DF} = {D9F00161-EA78-4FED-B9C4-852BD08EFBB1}
 		{D0E17860-28EA-4235-8C5D-F92DAA658F2E} = {624F97ED-42B1-4A8F-9185-37D51B6DC4D3}
+		{E9B0EB85-6F22-497B-A8AE-C8E937E8CB9A} = {CE41E970-DA96-45E6-8C6A-C7CDE103C0FF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2351A4B0-E218-4215-9D60-313FC2800C44}
