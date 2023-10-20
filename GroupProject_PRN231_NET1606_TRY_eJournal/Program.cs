@@ -10,10 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 var configuration =builder.Configuration.Get<AppConfiguration> ();
+configuration.DatabaseConnection = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddWebAPIServices("", builder.Configuration);
-builder.Services.AddInfrastructureService(configuration!.databaseConnection);
+builder.Services.AddInfrastructureService(configuration!.DatabaseConnection);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
