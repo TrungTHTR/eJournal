@@ -57,6 +57,16 @@ namespace Infrastructure.Repository
            .ToListAsync();
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
+        {
+            var query = _dbSet;
+            if (filter != null)
+            {
+                query.Where(filter);
+            }
+            return await query.ToListAsync();
+        }
+
         public Task<TEntity?> GetByIdAsync(Guid id)
         {
             return this.GetByIdAsync(id, Array.Empty<Expression<Func<TEntity, object>>>());
