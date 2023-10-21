@@ -20,6 +20,7 @@ namespace Infrastructure
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<AccountSpecialization> AccountSpecializations { get; set; }
+        public DbSet<Issue> Issue { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

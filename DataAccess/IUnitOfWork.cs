@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Application.InterfaceRepository;
 namespace Application
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork
     {
+        public IRequestDetailRepository RequestDetailRepository { get; }
     }
 }
