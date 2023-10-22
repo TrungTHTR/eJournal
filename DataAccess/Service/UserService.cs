@@ -26,11 +26,15 @@ namespace Application.Service
 
         public async Task<string> Login(AuthenticationRequest request)
         {
-            var users = await _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Email == request.Email && x.PasswordHash.Equals(EncryptionUtils.Encrypt(request.Password, x.PasswordSalt)));
-            var user = users.FirstOrDefault();
-            if (user == null)
+            var users = await _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Email == request.Email);
+            if (users == null || !users.Any())
             {
-                throw new Exception("Invalid Email or Password");
+                throw new Exception("Invalid Email");
+            }
+            Account user = users.First();
+            if(user.PasswordHash != EncryptionUtils.Encrypt(request.Password, user.PasswordSalt))
+            {
+                throw new Exception("Invalid password");
             }
             var token = _jwtService.GenerateAuthenticatedCustomerToken(user.RoleId.ToString(), user.Email, user.Id.ToString());
             return token;
@@ -38,7 +42,7 @@ namespace Application.Service
 
         public async Task Register(RegistrationRequest request)
         {
-            var users = await _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Email == request.Email);
+            var users = _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Email == request.Email).Result;
             if(users != null && users.Any())
             {
                 throw new Exception("This email has been registered before");

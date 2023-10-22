@@ -59,10 +59,10 @@ namespace Infrastructure.Repository
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
         {
-            var query = _dbSet;
+            IQueryable<TEntity> query = _dbSet;
             if (filter != null)
             {
-                query.Where(filter);
+                query = query.Where(filter);
             }
             return await query.ToListAsync();
         }
