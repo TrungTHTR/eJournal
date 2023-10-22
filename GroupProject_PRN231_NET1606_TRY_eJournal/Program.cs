@@ -1,3 +1,8 @@
+using Application.Common;
+using GroupProject_PRN231_NET1606_TRY_eJournal;
+using Infrastructure;
+using Microsoft.AspNetCore.OData;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,8 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+var configuration =builder.Configuration.Get<AppConfiguration> ();
+configuration.DatabaseConnection = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddWebAPIServices("", builder.Configuration);
+builder.Services.AddInfrastructureService(configuration!.DatabaseConnection);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -16,7 +23,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseODataBatching();
 
 app.MapControllers();
 

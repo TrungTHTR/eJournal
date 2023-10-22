@@ -1,4 +1,5 @@
-﻿using Application.InterfaceService;
+﻿using Application;
+using Application.InterfaceService;
 using Application.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,10 @@ namespace Infrastructure
         {
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddDbContext<AppDbContext>(services => services.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }
