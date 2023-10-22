@@ -18,7 +18,7 @@ namespace Application.Service
 
         public string GenerateAuthenticatedCustomerToken(string role, string email, string id)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
             var claims = new List<Claim>
             {

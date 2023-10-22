@@ -10,5 +10,6 @@ namespace Application.InterfaceService
     public interface IUserService
     {
         Task<string> Login(AuthenticationRequest request);
+        Task Register(RegistrationRequest request);
     }
 }

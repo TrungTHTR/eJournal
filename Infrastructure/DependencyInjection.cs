@@ -16,7 +16,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services,string databaseConnection) 
         {
             services.AddSingleton<ICurrentTime, CurrentTime>();
-            services.AddDbContext<AppDbContext>(services => services.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
+            services.AddDbContext<AppDbContext>(services => services.UseSqlServer(databaseConnection));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtService, JwtService>();

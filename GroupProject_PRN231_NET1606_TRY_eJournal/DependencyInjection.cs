@@ -1,4 +1,5 @@
 ﻿using Application.InterfaceService;
+using Infrastructure.Mappers;
 using GroupProject_PRN231_NET1606_TRY_eJournal.WebService;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,6 +13,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
         {
             services.AddScoped<IClaimService, ClaimService>();
             services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(UserMappingProfile));
             services.AddAuthorization();
             services.AddAuthentication().AddJwtBearer(options =>
             {

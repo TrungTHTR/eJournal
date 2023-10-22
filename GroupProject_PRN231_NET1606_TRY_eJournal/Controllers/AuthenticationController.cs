@@ -19,16 +19,15 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         [HttpPost("authentication")]
-        [EnableQuery]
-        public async Task<ActionResult> Login(AuthenticationRequest request)
+        public async Task<ActionResult<string>> Login(AuthenticationRequest request)
         {
             return Ok(await _userService.Login(request));
         }
 
         [HttpPost("registration")]
-        [EnableQuery]
         public async Task<ActionResult> Register(RegistrationRequest request)
         {
+            await _userService.Register(request);
             return Ok();
         }
     }
