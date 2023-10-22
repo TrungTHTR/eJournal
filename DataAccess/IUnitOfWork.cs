@@ -10,5 +10,6 @@ namespace Application
     {
         public IRequestDetailRepository RequestDetailRepository { get; }
         public IIssueRepository IssueRepository { get; }
+        public IArticleRepository ArticleRepository { get; }
     }
 }

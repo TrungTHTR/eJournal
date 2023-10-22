@@ -21,6 +21,7 @@ namespace Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
             services.AddScoped<IIssueRepository,IssueRepository>();
+            services.AddScoped<IArticleRepository,ArticelRepository>();
             services.AddDbContext<AppDbContext>(services => services.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
             return services;
         }
