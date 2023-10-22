@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 service IssueCRUD{
     rpc GetAllIssue(Empty) returns (ListIssues);
     rpc CreateIssue(AddIssue) returns (IssueStatus);
-    rpc UpdateIssue(ModifyIssue) returns (Empty);
+    rpc UpdateIssue(ModifyIssue) returns (IssueStatus);
 }
 message Guid {
     string value = 1;
@@ -30,13 +30,13 @@ message ArticleViewModel {
 message AddIssue{
 	 string Volumn =1;
     string Description=2;
-     google.protobuf.Timestamp DateRelease =3;
+    string DateRelease =3;
 }
 message ModifyIssue{
      Guid Id=1;
      string Volumn =2;
     string Description=3;
-    google.protobuf.Timestamp DateRelease =4;
+  string DateRelease =4;
 }
 message Empty {
 

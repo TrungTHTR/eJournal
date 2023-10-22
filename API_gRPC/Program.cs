@@ -2,6 +2,7 @@ using API_gRPC;
 using GrpcService;
 using GrpcService.Mappers;
 using GrpcService.Common;
+using API_gRPC.SchemaFilter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,11 @@ var configuration = builder.Configuration.Get<AppConfiguration>();
 builder.Services.AddInfrastructureService(configuration!.databaseConnection);
 builder.Services.AddWebAPIServices();
 builder.Services.AddAutoMapper(typeof(MappersConfigurations));
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SchemaFilter<AddIssueSchemaFilter>();
+    opt.SchemaFilter<UpdateIssueSchemaFilter>();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -3,6 +3,7 @@ using API.issueCRUD;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace API_gRPC.Controllers
 {
@@ -29,6 +30,16 @@ namespace API_gRPC.Controllers
         {
             var response= _client.CreateIssue(addIssue);
             if(response.IsTrue)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpPut]
+        public IActionResult UpdateIssue(ModifyIssue modifyIssue)
+        {
+            var response= _client.UpdateIssue(modifyIssue);
+            if (response.IsTrue)
             {
                 return Ok();
             }

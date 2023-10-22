@@ -4,6 +4,7 @@ using GrpcService.issueCRUD;
 using  BusinessObject;
 using Google.Protobuf.WellKnownTypes;
 using Empty = GrpcService.issueCRUD.Empty;
+using System.Globalization;
 
 namespace GrpcService.Services
 {
@@ -21,7 +22,12 @@ namespace GrpcService.Services
 
         public override async Task<IssueStatus> CreateIssue(AddIssue request, ServerCallContext context)
         {
-           Issue addIssue = _mapper.Map<Issue>(request);
+            DateTime releaseDate;
+            if (!DateTime.TryParseExact(request.DateRelease, "dd-mm-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate))
+            {
+                throw new Exception("Invalid release date format. Please use 'dd-mm-yyyy' format.");
+            }
+            Issue addIssue = _mapper.Map<Issue>(request);
            await _unitOfWork.IssueRepository.AddAsync(addIssue);
            bool isCreated= await _unitOfWork.SaveChangeAsync()>0;
             IssueStatus status = new IssueStatus() 
@@ -64,12 +70,21 @@ namespace GrpcService.Services
             return responseData;
         }
 
-        public override async Task<Empty> UpdateIssue(ModifyIssue request, ServerCallContext context)
+        public override async Task<IssueStatus> UpdateIssue(ModifyIssue request, ServerCallContext context)
         {
-          Issue updatedIssue=_mapper.Map<Issue>(request); ;
+            DateTime releaseDate;
+            if (!DateTime.TryParseExact(request.DateRelease, "dd-mm-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate))
+            {
+                throw new Exception("Invalid release date format. Please use 'dd-mm-yyyy' format.");
+            }
+            Issue updatedIssue=_mapper.Map<Issue>(request); ;
             _unitOfWork.IssueRepository.Update(updatedIssue);
-            await _unitOfWork.SaveChangeAsync();
-            return new Empty();
+            bool isUpdated = await _unitOfWork.SaveChangeAsync() > 0;
+            IssueStatus status = new IssueStatus()
+            {
+                IsTrue = isUpdated,
+            };
+            return status;
         }
     }
 }
