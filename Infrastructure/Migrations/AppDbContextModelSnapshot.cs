@@ -70,6 +70,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RoleId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -159,6 +160,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("IssueId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -430,6 +432,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("MajorId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -453,7 +456,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Role", "Role")
                         .WithMany("Accounts")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
@@ -481,7 +486,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Issue", "Issue")
                         .WithMany("Articles")
-                        .HasForeignKey("IssueId");
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Issue");
                 });
@@ -516,7 +523,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Major", "Major")
                         .WithMany("Specializations")
-                        .HasForeignKey("MajorId");
+                        .HasForeignKey("MajorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Major");
                 });

@@ -1,8 +1,8 @@
-﻿using Application;
-using Application.InterfaceRepository;
-using Application.InterfaceService;
-using Application.Service;
-using Infrastructure.Repository;
+﻿using GrpcService.Repository;
+using GrpcService;
+using GrpcService.InterfaceRepository;
+using GrpcService.InterfaceService;
+using GrpcService.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -10,17 +10,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GrpcService.WebService;
 
-namespace Infrastructure
+namespace GrpcService
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services,string databaseConnection) 
         {
             services.AddSingleton<ICurrentTime, CurrentTime>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
-            services.AddScoped<IIssueRepository,IssueRepository>();
+            services.AddScoped<IIssueRepository, IssueRepository>();
+            services.AddScoped<IClaimService, ClaimService>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddHttpContextAccessor();
             services.AddDbContext<AppDbContext>(services => services.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
             return services;
         }

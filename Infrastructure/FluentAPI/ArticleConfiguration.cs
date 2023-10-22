@@ -14,6 +14,7 @@ namespace Infrastructure.FluentAPI
         public void Configure(EntityTypeBuilder<Article> builder)
         {
             builder.Property(x => x.Id).HasDefaultValueSql("NEWID()");
+            builder.HasOne(x => x.Issue).WithMany(x => x.Articles).HasForeignKey(x => x.IssueId);
         }
     }
 }

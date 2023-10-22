@@ -12,7 +12,7 @@ namespace BusinessObject
         public string Content { get; set; }
         public string Status { get; set; }
         public string AuthorName { get; set; }
-        public Guid? IssueId { get; set; }
+        public Guid IssueId { get; set; }
         public Issue Issue { get; set; }
     }
 }

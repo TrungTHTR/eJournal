@@ -11,10 +11,14 @@ namespace Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IRequestDetailRepository _requestDetailRepository;
-        public UnitOfWork (IRequestDetailRepository requestDetailRepository)
+        private readonly IIssueRepository _issueRepository;
+        public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository)
         {
             _requestDetailRepository = requestDetailRepository;
+            _issueRepository = issueRepository;
         }
         public IRequestDetailRepository RequestDetailRepository => _requestDetailRepository;
+
+        public IIssueRepository IssueRepository => _issueRepository;
     }
 }

@@ -14,6 +14,7 @@ namespace Infrastructure.FluentAPI
         public void Configure(EntityTypeBuilder<Specialization> builder)
         {
             builder.Property(x => x.Id).HasDefaultValueSql("NEWID()");
+            builder.HasOne(x => x.Major).WithMany(x => x.Specializations).HasForeignKey(x => x.MajorId);
         }
     }
 }

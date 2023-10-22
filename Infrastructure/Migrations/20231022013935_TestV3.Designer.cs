@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231020065955_Test")]
-    partial class Test
+    [Migration("20231022013935_TestV3")]
+    partial class TestV3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,7 +61,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -73,6 +73,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RoleId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -162,6 +163,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("IssueId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -402,6 +404,11 @@ namespace Infrastructure.Migrations
                         {
                             RoleId = 4,
                             Rolename = "Author"
+                        },
+                        new
+                        {
+                            RoleId = 5,
+                            Rolename = "User"
                         });
                 });
 
@@ -428,6 +435,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("MajorId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -451,7 +459,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Role", "Role")
                         .WithMany("Accounts")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
@@ -479,7 +489,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Issue", "Issue")
                         .WithMany("Articles")
-                        .HasForeignKey("IssueId");
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Issue");
                 });
@@ -514,7 +526,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Major", "Major")
                         .WithMany("Specializations")
-                        .HasForeignKey("MajorId");
+                        .HasForeignKey("MajorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Major");
                 });
