@@ -11,10 +11,10 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<IIssueService, IssueService>();
             services.AddHttpContextAccessor();
-            services.AddControllers().AddJsonOptions(options =>
+            /*services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-            });
+            });*/
             return services;
         }
     }

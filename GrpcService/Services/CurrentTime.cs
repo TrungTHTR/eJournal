@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GrpcService.Service
 {
-    public class CurrentTime : ICurrentTime
+    /*public class CurrentTime : ICurrentTime
     {
         public DateTime GetCurrentTime() => DateTime.UtcNow;
        
-    }
+    }*/
 }

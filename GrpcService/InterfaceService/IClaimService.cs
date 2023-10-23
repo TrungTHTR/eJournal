@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GrpcService.InterfaceService
 {
-    public interface IClaimService
+/*    public interface IClaimService
     {
         public Guid  GetCurrentUserId { get; }
-    }
+    }*/
 }

@@ -47,7 +47,7 @@ namespace GrpcService.Services
                 {
                     Volumn = issue.Volumn,
                     Description = issue.Description,
-                    DateRelease = Timestamp.FromDateTime(issue.DateRelease.ToUniversalTime()) // Convert issue.DateRelease to Google.Protobuf.Timestamp
+                    DateRelease = issue.DateRelease.ToString("dd-MM-yyyy")// Convert issue.DateRelease to Google.Protobuf.Timestamp
                 };
                 if (issue.Articles!= null)
                 {

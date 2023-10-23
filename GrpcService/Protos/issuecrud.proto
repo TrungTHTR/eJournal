@@ -18,7 +18,7 @@ message ListIssues {
 message IssueViewModel{
      string Volumn =1;
        string  Description =2;
-    google.protobuf.Timestamp DateRelease =3;
+   string DateRelease =3;
   repeated ArticleViewModel Articles =4;
 }
 message ArticleViewModel {
