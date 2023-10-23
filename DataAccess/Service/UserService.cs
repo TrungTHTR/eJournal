@@ -3,6 +3,7 @@ using Application.Utils;
 using Application.ViewModels.UserViewModels;
 using AutoMapper;
 using BusinessObject;
+using Application.InterfaceRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,13 +27,13 @@ namespace Application.Service
 
         public async Task<string> Login(AuthenticationRequest request)
         {
-            var users = await _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Email == request.Email);
+            var users = await _unitOfWork.AccountRepository.GetAllAsync(x => x.Email == request.Email);
             if (users == null || !users.Any())
             {
                 throw new Exception("Invalid Email");
             }
             Account user = users.First();
-            if(user.PasswordHash != EncryptionUtils.Encrypt(request.Password, user.PasswordSalt))
+            if(!user.PasswordHash.SequenceEqual(EncryptionUtils.Encrypt(request.Password, user.PasswordSalt)))
             {
                 throw new Exception("Invalid password");
             }
@@ -40,16 +41,17 @@ namespace Application.Service
             return token;
         }
 
-        public async Task Register(RegistrationRequest request)
+        public async Task<bool> Register(RegistrationRequest request)
         {
-            var users = _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Email == request.Email).Result;
+            var users = _unitOfWork.AccountRepository.GetAllAsync(x => x.Email == request.Email).Result;
             if(users != null && users.Any())
             {
                 throw new Exception("This email has been registered before");
             }
             var user = _mapper.Map<Account>(request);
-            await _unitOfWork.GetRepository<Account>().AddAsync(user);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.AccountRepository.AddAsync(user);
+            int i = await _unitOfWork.SaveAsync();
+            return i >0;
         }
     }
 }

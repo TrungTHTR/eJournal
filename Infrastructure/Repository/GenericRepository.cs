@@ -13,11 +13,13 @@ namespace Infrastructure.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
+        protected readonly AppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
         private readonly IClaimService _claimService;
         private readonly ICurrentTime _timeService;
         public GenericRepository(AppDbContext dbContext,IClaimService claimService, ICurrentTime currentTime)
         {
+            _context = dbContext;
             _dbSet = dbContext.Set<TEntity>();
             _claimService = claimService;
             _timeService = currentTime;

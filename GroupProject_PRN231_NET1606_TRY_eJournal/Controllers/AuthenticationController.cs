@@ -9,7 +9,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthenticationController : ODataController
+    public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;
 
@@ -21,13 +21,14 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         [HttpPost("authentication")]
         public async Task<ActionResult<string>> Login(AuthenticationRequest request)
         {
-            return Ok(await _userService.Login(request));
+            var token = await _userService.Login(request);
+            return Ok(token);
         }
 
         [HttpPost("registration")]
         public async Task<ActionResult> Register(RegistrationRequest request)
         {
-            _userService.Register(request);
+            await _userService.Register(request);
             return Ok();
         }
     }

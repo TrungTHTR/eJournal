@@ -4,6 +4,7 @@ using Application.InterfaceService;
 using BusinessObject;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,23 @@ namespace Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private IDbContextTransaction? _transaction;
+        private bool _disposed;
         private readonly AppDbContext _appDbContext;
         private readonly IClaimService _claimService;
         private readonly ICurrentTime _timeService;
         private static readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();
 
-        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService)
+        public IAccountRepository AccountRepository { get; }
+        public IArticleRepository ArticleRepository { get; }
+
+        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, IArticleRepository articleRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
             _timeService = timeService;
+            AccountRepository = accountRepository;
+            ArticleRepository = articleRepository;
         }
 
         public int Save()
@@ -35,19 +43,6 @@ namespace Infrastructure
         {
             return _appDbContext.SaveChangesAsync();
         }
-
-        public IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
-        {
-            if (!_repositories.TryGetValue(typeof(TEntity), out var repository))
-            {
-                var newRepository = new GenericRepository<TEntity>(_appDbContext, _claimService, _timeService);
-                _repositories.Add(typeof(TEntity), newRepository);
-                return newRepository;
-            }
-            return (GenericRepository<TEntity>)repository;
-        }
-
-        private bool _disposed;
 
         private void Dispose(bool disposing)
         {
@@ -68,5 +63,14 @@ namespace Infrastructure
             GC.SuppressFinalize(this);
         }
 
+        public async ValueTask DisposeAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.DisposeAsync();
+            }
+
+            await _appDbContext.DisposeAsync();
+        }
     }
 }

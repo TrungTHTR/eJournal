@@ -10,6 +10,6 @@ namespace Application.InterfaceService
     public interface IUserService
     {
         Task<string> Login(AuthenticationRequest request);
-        void Register(RegistrationRequest request);
+        Task<bool> Register(RegistrationRequest request);
     }
 }
