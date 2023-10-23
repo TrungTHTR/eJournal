@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Application.ViewModels.ArticleViewModels;
 using Application.InterfaceService;
 using AutoMapper;
+using BusinessObject.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
@@ -19,11 +21,12 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             _articleService = articleService;
         }
 
-        [HttpGet]
+        [HttpGet("unauthorized-user")]
         [EnableQuery]
+        [AllowAnonymous]
         public async Task<IQueryable<ArticleResponse>> GetArticles()
         {
-            var articles = await _articleService.GetAll();
+            var articles = await _articleService.GetAll(ArticleStatus.Publish);
             return articles.AsQueryable();
         }
     }

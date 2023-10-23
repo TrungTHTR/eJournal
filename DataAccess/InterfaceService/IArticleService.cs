@@ -1,4 +1,5 @@
 ﻿using Application.ViewModels.ArticleViewModels;
+using BusinessObject.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Application.InterfaceService
 {
     public interface IArticleService
     {
-        Task<IEnumerable<ArticleResponse>> GetAll();
+        Task<IEnumerable<ArticleResponse>> GetAll(ArticleStatus? status);
     }
 }

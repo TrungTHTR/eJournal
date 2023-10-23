@@ -17,6 +17,5 @@ namespace Application.ViewModels.ArticleViewModels
         public string Status { get; set; }
         public string AuthorName { get; set; }
         public Guid? AccountId { get; set; }
-        public Account Account { get; set; }
     }
 }
