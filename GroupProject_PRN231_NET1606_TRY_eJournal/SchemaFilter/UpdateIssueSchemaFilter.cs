@@ -16,10 +16,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.SchemaFilter
             {
                 schema.Example = new OpenApiObject
                 {
-                    ["Id"] = new OpenApiObject
-                    {
-                        ["value"] = new OpenApiString(Guid.Empty.ToString())
-                    },
+                    ["Id"]=new OpenApiString(Guid.Empty.ToString()),
                     ["Volumn"] = new OpenApiString("string"),
                     ["Description"] = new OpenApiString("string"),
                     ["DateRelease"] = new OpenApiString(DateTime.UtcNow.ToString("dd-MM-yyyy"))
