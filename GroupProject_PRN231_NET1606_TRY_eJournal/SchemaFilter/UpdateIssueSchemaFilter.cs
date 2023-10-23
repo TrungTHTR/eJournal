@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Guid = System.Guid;
 
-namespace API_gRPC.SchemaFilter
+namespace GroupProject_PRN231_NET1606_TRY_eJournal.SchemaFilter
 {
     public class UpdateIssueSchemaFilter : ISchemaFilter
     {
