@@ -44,6 +44,7 @@ namespace Application.Service
         {
             var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status == nameof(status));
             return _mapper.Map<IEnumerable<ArticleResponse>>(articles);
+        }
         public ArticleService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;

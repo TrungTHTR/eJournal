@@ -16,6 +16,7 @@ namespace Application.InterfaceService
         Task<IEnumerable<ArticleResponse>> GetAll(ArticleStatus? status);
         Task<string> AddArticleFile(IFormFile file);
         Task DownloadArticleFile(Guid id);
+
         Task<List<Article>> GetAllArticle();
         Task<Article> GetArticles(Guid id);
         Task<int> CreateArticle(Article article);
