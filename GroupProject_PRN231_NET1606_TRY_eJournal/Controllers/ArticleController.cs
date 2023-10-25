@@ -29,6 +29,18 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         // GET api/<ArticleController>/5
+        [HttpGet]
+        public async Task<IActionResult> SearchArticle(string value)
+        {
+            List<Article> articles = await _articleService.SearchArticle(value);
+            if (articles != null)
+            {
+                return Ok(articles);
+            }
+            return NotFound();
+        }
+
+        // GET api/<ArticleController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -60,8 +72,14 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             var _article = await _articleService.GetArticles(id);
             if (_article != null)
             {
-                await _articleService.UpdateArticle(article);
-                return Ok(article); ;
+                if(_article.Status.Equals("Draff") || _article.Status.Equals("Revise"))
+                {
+                    await _articleService.UpdateArticle(article);
+                    return Ok(article);
+                }else
+                {
+                    return BadRequest("Article can't do it right now!! ");
+                }             
             }
             return BadRequest("Article not exist");
         }

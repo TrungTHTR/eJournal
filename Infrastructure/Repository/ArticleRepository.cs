@@ -13,6 +13,37 @@ namespace Infrastructure.Repository
     {
         public ArticleRepository(AppDbContext dbContext, IClaimService claimService, ICurrentTime currentTime) : base(dbContext, claimService, currentTime)
         {
+
+        }
+
+        public Task<int> CreateArticle(Article article)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> DeleteArticle(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Article>> GetAllArticle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Article> GetArticles(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+        //search Article By Title Or AuthorName
+        public Task<List<Article>> SearchArticle(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> UpdateArticle(Article article)
+        {
+            throw new NotImplementedException();
         }
     }
 }
