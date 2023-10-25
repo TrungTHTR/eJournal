@@ -37,7 +37,7 @@ namespace Application.Service
             {
                 throw new Exception("Invalid password");
             }
-            var token = _jwtService.GenerateAuthenticatedCustomerToken(user.RoleId.ToString(), user.Email, user.Id.ToString());
+            var token = _jwtService.GenerateAuthenticatedCustomerToken(user.Role.Rolename, user.Email, user.Id.ToString());
             return token;
         }
 

@@ -22,6 +22,7 @@ namespace Infrastructure.Mappers
                     EncryptionUtils.Encrypt(src.Password, out byte[] salt, out byte[] hash);
                     dest.PasswordSalt = salt;
                     dest.PasswordHash = hash;
+                    dest.RoleId = 5;
                 })
                 .ForAllMembers(config => config.Condition((src, dest, value) => value != null));
         }
