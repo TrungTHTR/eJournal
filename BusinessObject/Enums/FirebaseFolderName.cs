@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Common
+namespace BusinessObject.Enums
 {
-    public class AppConfiguration
+    public enum FirebaseFolderName
     {
-        public string DatabaseConnection { get; set; }
+        articles
     }
 }

@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,23 +12,23 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231022025917_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "6.0.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
             modelBuilder.Entity("BusinessObject.Account", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -80,8 +81,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
-                   b.Property<int?>("RoleId")
-                        .IsRequired()
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -89,8 +89,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.HasIndex("CountryId");
 
@@ -98,7 +96,7 @@ namespace Infrastructure.Migrations
 
                     b.ToTable("Accounts");
                 });
-  
+
             modelBuilder.Entity("BusinessObject.AccountSpecialization", b =>
                 {
                     b.Property<Guid?>("AccountId")
@@ -145,16 +143,11 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("AccountId")
                         .HasColumnType("uniqueidentifier");
-                        
-                    b.Property<Guid?>("IssueId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");     
-                        
+
                     b.Property<string>("AuthorName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -195,7 +188,7 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-                    b.HasIndex("IssueId");
+
                     b.ToTable("Articles");
                 });
 
@@ -1467,56 +1460,13 @@ namespace Infrastructure.Migrations
                             CountryName = "Zimbabwe"
                         });
                 });
-              
-            modelBuilder.Entity("BusinessObject.Issue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateRelease")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModificationBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Volumn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Issue");
-                });
             modelBuilder.Entity("BusinessObject.Major", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1606,8 +1556,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ArticleId")
                         .HasColumnType("uniqueidentifier");
@@ -1653,7 +1602,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"), 1L, 1);
 
                     b.Property<string>("Rolename")
                         .IsRequired()
@@ -1683,11 +1632,6 @@ namespace Infrastructure.Migrations
                         {
                             RoleId = 4,
                             Rolename = "Author"
-                        },
-                        new
-                        {
-                            RoleId = 5,
-                            Rolename = "User"
                         });
                 });
 
@@ -1695,8 +1639,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1714,8 +1657,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("MajorId")
-
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -1745,10 +1686,10 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("BusinessObject.Role", "Role")
                         .WithMany("Accounts")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
+
                     b.Navigation("Country");
+
                     b.Navigation("Role");
                 });
 
@@ -1778,13 +1719,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("AccountId");
 
                     b.Navigation("Account");
-
-                    b.HasOne("BusinessObject.Issue", "Issue")
-                        .WithMany("Articles")
-                        .HasForeignKey("IssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Issue");
                 });
 
             modelBuilder.Entity("BusinessObject.RequestDetail", b =>
@@ -1817,10 +1751,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Major", "Major")
                         .WithMany("Specializations")
-
-                        .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MajorId");
 
                     b.Navigation("Major");
                 });
@@ -1830,12 +1761,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Specializations");
                 });
 
-            modelBuilder.Entity("BusinessObject.Issue", b =>
-                {
-                    b.Navigation("Articles");
-                });
-
-           modelBuilder.Entity("BusinessObject.Major", b =>
+            modelBuilder.Entity("BusinessObject.Major", b =>
                 {
                     b.Navigation("Specializations");
                 });
