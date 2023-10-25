@@ -67,10 +67,15 @@ namespace Application.Service
         {
             return await _unitOfWork.ArticleRepository.GetArticles(id);
         }
-
+        
         public async Task<int> UpdateArticle(Article article)
         {
             return await _unitOfWork.ArticleRepository.UpdateArticle(article);
+        }
+        //search Article By Title Or AuthorName
+        public async Task<List<Article>> SearchArticle(string value)
+        {
+            return await _unitOfWork.ArticleRepository.SearchArticle(value);
         }
     }
 }

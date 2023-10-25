@@ -24,26 +24,27 @@ namespace Infrastructure
         private static readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();
 
         public IAccountRepository AccountRepository { get; }
-        public IArticleRepository ArticleRepository { get; }
+       // public IArticleRepository ArticleRepository { get; }
         
         private readonly IRequestDetailRepository _requestDetailRepository;
         private readonly IIssueRepository _issueRepository;
         private readonly IArticleRepository _articleRepository;
         
-        public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository, IArticleRepository articleRepository)
+       /* public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository, IArticleRepository articleRepository)
         {
             _requestDetailRepository = requestDetailRepository;
             _issueRepository = issueRepository;
             _articleRepository = articleRepository;
-        }
+        }*/
         
-        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, IArticleRepository articleRepository)
+        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, IArticleRepository articleRepository,IIssueRepository issueRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
             _timeService = timeService;
             AccountRepository = accountRepository;
-            ArticleRepository = articleRepository;
+            _articleRepository = articleRepository;
+            _issueRepository = issueRepository;
         }
 
         public int Save()

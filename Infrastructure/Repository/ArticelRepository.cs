@@ -15,6 +15,7 @@ namespace Infrastructure.Repository
         private readonly AppDbContext _appDbContext;
         private readonly IClaimService _claimService;
         private readonly ICurrentTime _currentTime;
+
         public ArticelRepository(AppDbContext dbContext, IClaimService claimService, ICurrentTime currentTime) : base(dbContext, claimService, currentTime)
         {
             _appDbContext = dbContext;
@@ -35,11 +36,12 @@ namespace Infrastructure.Repository
             return await _appDbContext.SaveChangesAsync();
         }
 
-         //GetAllArticle notDelete
+         //GetAllArticle is Publish
         public async Task<List<Article>> GetAllArticle()
         {
-           return await _appDbContext.Articles.Where(x=>x.IsDelete.Equals(false)).ToListAsync();
+           return await _appDbContext.Articles.Where(x=>x.IsDelete.Equals(false) && x.Status == "Publish").ToListAsync();
         }
+
 
         public async Task<Article> GetArticles(Guid id)
         {
@@ -55,6 +57,12 @@ namespace Infrastructure.Repository
                 _appDbContext.Articles.Update(article);
             }
             return await _appDbContext.SaveChangesAsync();
+        }
+
+        //search Article By Title Or AuthorName
+        async Task<List<Article>> IArticleRepository.SearchArticle(string value)
+        {
+            return await _appDbContext.Articles.Where(x => x.Title.Equals(value) || x.AuthorName.Equals(value)).ToListAsync();
         }
     }
 }
