@@ -1,5 +1,5 @@
 ﻿using GrpcService.InterfaceRepository;
-using GrpcService.InterfaceService;
+using Application.InterfaceService;
 using BusinessObject;
 using Microsoft.EntityFrameworkCore;
 using System;

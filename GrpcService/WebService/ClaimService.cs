@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace GrpcService.WebService
 {
-    public class ClaimService:IClaimService
+    /*public class ClaimService:IClaimService
     {
         public ClaimService(IHttpContextAccessor httpContextAccessor)
         {
@@ -13,5 +13,5 @@ namespace GrpcService.WebService
             GetCurrentUserId = string.IsNullOrEmpty(Id) ? Guid.Empty : Guid.Parse(Id);
         }
         public Guid  GetCurrentUserId { get; }
-    }
+    }*/
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GrpcService.InterfaceService
 {
-    public  interface ICurrentTime
+    /*public  interface ICurrentTime
     {
         public DateTime GetCurrentTime();
-    }
+    }*/
 }
