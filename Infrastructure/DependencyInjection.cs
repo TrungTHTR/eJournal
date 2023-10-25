@@ -1,6 +1,8 @@
 ﻿using Application;
+using Application.InterfaceRepository;
 using Application.InterfaceService;
 using Application.Service;
+using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,11 +18,16 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services,string databaseConnection) 
         {
             services.AddSingleton<ICurrentTime, CurrentTime>();
-            services.AddDbContext<AppDbContext>(services => services.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
+            services.AddScoped<AppDbContext>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IArticleService, ArticleService>();
+
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
             return services;
         }
     }

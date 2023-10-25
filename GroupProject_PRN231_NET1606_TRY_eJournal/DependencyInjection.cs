@@ -4,6 +4,9 @@ using GroupProject_PRN231_NET1606_TRY_eJournal.WebService;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
+using Application.ViewModels.ArticleViewModels;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal
 {
@@ -11,6 +14,9 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
     {
         public static IServiceCollection AddWebAPIServices(this IServiceCollection services,string secretKey, IConfiguration configuration)
         {
+            var modelBuilder = new ODataConventionModelBuilder();
+            modelBuilder.EntitySet<ArticleResponse>("Articles");
+            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
             services.AddScoped<IClaimService, ClaimService>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(UserMappingProfile));
