@@ -1,15 +1,11 @@
 syntax = "proto3";
 
-option csharp_namespace = "API.issueCRUD";
+option csharp_namespace = "Api.issueCRUD";
 package issue;
-import "google/protobuf/timestamp.proto";
 service IssueCRUD{
     rpc GetAllIssue(Empty) returns (ListIssues);
     rpc CreateIssue(AddIssue) returns (IssueStatus);
     rpc UpdateIssue(ModifyIssue) returns (IssueStatus);
-}
-message Guid {
-    string value = 1;
 }
 message ListIssues {
     repeated IssueViewModel item=1;
@@ -17,7 +13,7 @@ message ListIssues {
 message IssueViewModel{
      string Volumn =1;
        string  Description =2;
-    google.protobuf.Timestamp DateRelease =3;
+    string DateRelease =3;
   repeated ArticleViewModel Articles =4;
 }
 message ArticleViewModel {
@@ -32,7 +28,7 @@ message AddIssue{
     string DateRelease =3;
 }
 message ModifyIssue{
-     Guid Id=1;
+     string Id=1;
      string Volumn =2;
     string Description=3;
   string DateRelease =4;
