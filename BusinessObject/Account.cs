@@ -17,7 +17,7 @@ namespace BusinessObject
         public string? RefreshToken { get; set; }
         public string Address { get; set; }
         public string Affiliation { get; set; }
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         [ForeignKey(nameof(RoleId))]
         public virtual Role? Role { get; set; }
         public int CountryId { get; set; }

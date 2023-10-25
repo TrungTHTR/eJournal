@@ -55,8 +55,9 @@ namespace Infrastructure.Repository
             return await includes
            .Aggregate(_dbSet.AsQueryable(),
                (entity, property) => entity.Include(property))
-           .Where(x => x.IsDelete == false)
-           .ToListAsync();
+          .Where(x => x.IsDelete == false)
+          .ToListAsync();
+          
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
