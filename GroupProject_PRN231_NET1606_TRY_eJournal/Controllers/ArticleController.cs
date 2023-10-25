@@ -21,32 +21,61 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         public async Task<IActionResult> Get()
         {
             List<Article> articles = await _articleService.GetAllArticle();
+            if(articles == null)
+            {
+                return BadRequest();
+            }         
             return Ok(articles);
         }
 
         // GET api/<ArticleController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            var article = await _articleService.GetArticles(id);
+            if(article == null)
+            {
+                return NotFound();
+            }
+            return Ok(article);
         }
 
         // POST api/<ArticleController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Article article)
         {
+            var _article = await _articleService.GetArticles(article.Id);
+            if(_article != null)
+            {
+                return BadRequest("Article has exist");
+            }
+            await _articleService.CreateArticle(article);
+            return NoContent();
         }
 
         // PUT api/<ArticleController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(Guid id, [FromBody] Article article)
         {
+            var _article = await _articleService.GetArticles(id);
+            if (_article != null)
+            {
+                await _articleService.UpdateArticle(article);
+                return Ok(article); ;
+            }
+            return BadRequest("Article not exist");
         }
-
+        
         // DELETE api/<ArticleController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            int i = await _articleService.DeleteArticle(id);
+            if (i > 0)
+            {
+                return NoContent();
+            }
+            return BadRequest();
         }
     }
 }

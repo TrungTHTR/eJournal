@@ -13,7 +13,7 @@ namespace Application.InterfaceRepository
         Task<Article> GetArticles(Guid id);
         Task<int> CreateArticle(Article article);
         Task<int> UpdateArticle(Article article);
-        Task<int> DeleteArticle(Article article);
+        Task<int> DeleteArticle(Guid id);
 
 
     }

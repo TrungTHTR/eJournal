@@ -21,9 +21,9 @@ namespace Application.Service
             return await _unitOfWork.ArticleRepository.CreateArticle(article);
         }
 
-        public async Task<int> DeleteArticle(Article article)
+        public async Task<int> DeleteArticle(Guid id)
         {
-            return await _unitOfWork.ArticleRepository.DeleteArticle(article);
+            return await _unitOfWork.ArticleRepository.DeleteArticle(id);
         }
 
         public async Task<List<Article>> GetAllArticle()
