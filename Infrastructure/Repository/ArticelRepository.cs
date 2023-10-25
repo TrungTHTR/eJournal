@@ -28,7 +28,7 @@ namespace Infrastructure.Repository
             return await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<int> DeleteArticle(Article article)
+        public async Task<int> DeleteArticle(Guid id)
         {
             var _article = await GetArticles(id);
             _appDbContext.Articles.Remove(_article);
