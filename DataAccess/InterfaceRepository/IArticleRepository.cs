@@ -9,5 +9,11 @@ namespace Application.InterfaceRepository
 {
     public interface IArticleRepository: IGenericRepository<Article>
     {
+
+        Task<List<Article>> GetAllArticle();
+        Task<Article> GetArticles(Guid id);
+        Task<int> CreateArticle(Article article);
+        Task<int> UpdateArticle(Article article);
+        Task<int> DeleteArticle(Guid id);
     }
 }

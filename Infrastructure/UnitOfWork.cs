@@ -1,4 +1,4 @@
-﻿using Application;
+using Application;
 using Application.InterfaceRepository;
 using Application.InterfaceService;
 using BusinessObject;
@@ -15,6 +15,7 @@ namespace Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
+
         private IDbContextTransaction? _transaction;
         private bool _disposed;
         private readonly AppDbContext _appDbContext;
@@ -24,7 +25,18 @@ namespace Infrastructure
 
         public IAccountRepository AccountRepository { get; }
         public IArticleRepository ArticleRepository { get; }
-
+        
+        private readonly IRequestDetailRepository _requestDetailRepository;
+        private readonly IIssueRepository _issueRepository;
+        private readonly IArticleRepository _articleRepository;
+        
+        public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository, IArticleRepository articleRepository)
+        {
+            _requestDetailRepository = requestDetailRepository;
+            _issueRepository = issueRepository;
+            _articleRepository = articleRepository;
+        }
+        
         public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, IArticleRepository articleRepository)
         {
             _appDbContext = appDbContext;
@@ -72,5 +84,8 @@ namespace Infrastructure
 
             await _appDbContext.DisposeAsync();
         }
+        public IRequestDetailRepository RequestDetailRepository => _requestDetailRepository;
+        public IIssueRepository IssueRepository => _issueRepository;
+        public IArticleRepository ArticleRepository => _articleRepository;
     }
 }

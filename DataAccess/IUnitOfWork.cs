@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Application.InterfaceRepository;
 namespace Application
 {
     public interface IUnitOfWork : IAsyncDisposable
@@ -14,6 +14,8 @@ namespace Application
         public IArticleRepository ArticleRepository { get; }
 
         Task<int> SaveAsync();
-        int Save();
+        int Save();       
+        public IRequestDetailRepository RequestDetailRepository { get; }
+        public IIssueRepository IssueRepository { get; }
     }
 }

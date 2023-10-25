@@ -1,4 +1,4 @@
-﻿using Application.InterfaceRepository;
+﻿using GrpcService.InterfaceRepository;
 using Application.InterfaceService;
 using BusinessObject;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +9,15 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repository
+namespace GrpcService.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly AppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
         private readonly IClaimService _claimService;
         private readonly ICurrentTime _timeService;
         public GenericRepository(AppDbContext dbContext,IClaimService claimService, ICurrentTime currentTime)
         {
-            _context = dbContext;
             _dbSet = dbContext.Set<TEntity>();
             _claimService = claimService;
             _timeService = currentTime;
@@ -42,6 +40,15 @@ namespace Infrastructure.Repository
             await _dbSet.AddRangeAsync(entities);
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            TEntity entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+            }
+        }
+
         public async  Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
         {
             return await includes
@@ -55,19 +62,8 @@ namespace Infrastructure.Repository
             return await includes
            .Aggregate(_dbSet.AsQueryable(),
                (entity, property) => entity.Include(property))
-          .Where(x => x.IsDelete == false)
-          .ToListAsync();
-          
-        }
-
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
-        {
-            IQueryable<TEntity> query = _dbSet;
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-            return await query.ToListAsync();
+          // .Where(x => x.IsDelete == false)
+           .ToListAsync();
         }
 
         public Task<TEntity?> GetByIdAsync(Guid id)
