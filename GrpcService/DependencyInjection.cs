@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GrpcService.WebService;
-
+using GroupProject_PRN231_NET1606_TRY_eJournal.WebService;
+using Application.InterfaceService;
+using Application.Service;
 namespace GrpcService
 {
     public static class DependencyInjection

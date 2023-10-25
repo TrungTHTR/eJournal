@@ -13,11 +13,13 @@ namespace Infrastructure.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
+        protected readonly AppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
         private readonly IClaimService _claimService;
         private readonly ICurrentTime _timeService;
         public GenericRepository(AppDbContext dbContext,IClaimService claimService, ICurrentTime currentTime)
         {
+            _context = dbContext;
             _dbSet = dbContext.Set<TEntity>();
             _claimService = claimService;
             _timeService = currentTime;
@@ -56,6 +58,16 @@ namespace Infrastructure.Repository
           .Where(x => x.IsDelete == false)
           .ToListAsync();
           
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
+        {
+            IQueryable<TEntity> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            return await query.ToListAsync();
         }
 
         public Task<TEntity?> GetByIdAsync(Guid id)

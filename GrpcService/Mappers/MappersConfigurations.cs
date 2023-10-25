@@ -20,7 +20,7 @@ namespace GrpcService.Mappers
                  .ForMember(dest => dest.DateRelease, opt => opt.MapFrom(src => ParseStringToDateTime(src.DateRelease)))
                 .ReverseMap();
             CreateMap<ModifyIssue,Issue>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ParseStringToGuid(src.Id.Value.ToString())))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ParseStringToGuid(src.Id)))
                 .ForMember(dest => dest.DateRelease, opt => opt.MapFrom(src => ParseStringToDateTime(src.DateRelease)))
                 .ReverseMap();
             

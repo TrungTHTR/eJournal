@@ -8,6 +8,6 @@ namespace Application.Common
 {
     public class AppConfiguration
     {
-        public string databaseConnection { get; set; }
+        public string DatabaseConnection { get; set; }
     }
 }
