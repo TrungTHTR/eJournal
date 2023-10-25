@@ -1,5 +1,5 @@
-﻿using Application.InterfaceRepository;
-using Application.InterfaceService;
+﻿using GrpcService.InterfaceRepository;
+using GrpcService.InterfaceService;
 using BusinessObject;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repository
+namespace GrpcService.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
@@ -40,6 +40,15 @@ namespace Infrastructure.Repository
             await _dbSet.AddRangeAsync(entities);
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            TEntity entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+            }
+        }
+
         public async  Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
         {
             return await includes
@@ -53,9 +62,8 @@ namespace Infrastructure.Repository
             return await includes
            .Aggregate(_dbSet.AsQueryable(),
                (entity, property) => entity.Include(property))
-          .Where(x => x.IsDelete == false)
-          .ToListAsync();
-          
+          // .Where(x => x.IsDelete == false)
+           .ToListAsync();
         }
 
         public Task<TEntity?> GetByIdAsync(Guid id)

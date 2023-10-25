@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.InterfaceRepository;
-namespace Application
+using GrpcService.InterfaceRepository;
+namespace GrpcService
 {
     public interface IUnitOfWork
     {
-        public IRequestDetailRepository RequestDetailRepository { get; }
         public IIssueRepository IssueRepository { get; }
-        public IArticleRepository ArticleRepository { get; }
+        public Task<int> SaveChangeAsync();
     }
 }
