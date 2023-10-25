@@ -11,6 +11,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<IIssueService, IssueService>();
             services.AddScoped<IArticleService,ArticleService>();
+            services.AddScoped<IRequestDetailService, RequestDetailService>();
+            services.AddScoped<IRequestReviewService, RequestReviewService>();
             services.AddHttpContextAccessor();
             services.AddControllers().AddJsonOptions(options =>
             {

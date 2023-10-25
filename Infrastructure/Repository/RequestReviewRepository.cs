@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repository
 {
-    public class RequestDetailRepository : GenericRepository<RequestDetail>, IRequestDetailRepository
+    public class RequestReviewRepository : GenericRepository<RequestReview>, IRequestReviewRepository
     {
         private AppDbContext _dbContext;
         private IClaimService _claimService;
@@ -22,14 +22,9 @@ namespace Infrastructure.Repository
             _currentTime = currentTime;
         }
 
-        public async Task<List<RequestDetail>> ShowAllRequestDetail(Guid AccountId)
+        public async Task<List<RequestReview>> ShowAllRequestReview(Guid ArticleId)
         {
-            return await _dbContext.RequestDetails.Where(x => x.AccountId.Equals(AccountId)).ToListAsync();
-        }
-
-        public async Task<List<Article>> GetAllRequestDetail()
-        {
-           return await _appDbContext.RequestDetails.ToListAsync();
+            return await _dbContext.RequestReviews.Where(x => x.ArticleId.Equals(ArticleId)).ToListAsync();
         }
     }
 }

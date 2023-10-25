@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.InterfaceService
 {
-    public interface IRequestDetailService
+    public interface IRequestReviewService
     {
-        Task<List<RequestDetail>> GetByReviewerId(Guid accountId);
-        Task<List<RequestDetail>> GetAllRequestDetail();
+        Task<List<RequestReview>> GetByArticleId(Guid articleId);
     }
 }
