@@ -10,5 +10,6 @@ namespace Application.InterfaceRepository
     public interface IRequestReviewRepository : IGenericRepository<RequestReview>
     {
         Task<List<RequestReview>> ShowAllRequestReview(Guid ArticleId);
+        Task<int> CreateRequestReview(RequestReview requestReview);
     }
 }

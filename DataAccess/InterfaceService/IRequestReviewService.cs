@@ -10,5 +10,6 @@ namespace Application.InterfaceService
     public interface IRequestReviewService
     {
         Task<List<RequestReview>> GetByArticleId(Guid articleId);
+        Task<int> CreateRequestReview(RequestReview requestReview);
     }
 }

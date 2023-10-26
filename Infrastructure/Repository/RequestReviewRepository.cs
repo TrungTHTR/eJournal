@@ -26,5 +26,10 @@ namespace Infrastructure.Repository
         {
             return await _dbContext.RequestReviews.Where(x => x.ArticleId.Equals(ArticleId)).ToListAsync();
         }
+        public async Task<int> CreateRequestReview(RequestReview requestReview)
+        {
+            await _dbContext.RequestReviews.AddAsync(requestReview);
+            return await _dbContext.SaveChangesAsync();
+        }
     }
 }

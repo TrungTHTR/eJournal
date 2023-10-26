@@ -20,5 +20,9 @@ namespace Application.Service
         {
             return await _unitOfWork.RequestReviewRepository.ShowAllRequestReview(articleId);
         }
+        public async Task<int> CreateRequestReview(RequestReview requestReview)
+        {
+            return await _unitOfWork.RequestReviewRepository.CreateRequestReview(requestReview);
+        }
     }
 }
