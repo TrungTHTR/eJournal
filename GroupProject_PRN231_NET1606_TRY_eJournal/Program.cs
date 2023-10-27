@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen(opt =>
 {
     opt.SchemaFilter<AddIssueSchemaFilter>();
     opt.SchemaFilter<UpdateIssueSchemaFilter>();
+    opt.SchemaFilter<IssueIdSchemaFilter>();
 });
 var app = builder.Build();
 

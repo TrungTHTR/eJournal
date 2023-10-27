@@ -22,11 +22,11 @@ namespace GrpcService.Services
 
         public override async Task<IssueStatus> CreateIssue(AddIssue request, ServerCallContext context)
         {
-            DateTime releaseDate;
+           /* DateTime releaseDate;
             if (!DateTime.TryParseExact(request.DateRelease, "dd-mm-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate))
             {
                 throw new Exception("Invalid release date format. Please use 'dd-mm-yyyy' format.");
-            }
+            }*/
             Issue addIssue = _mapper.Map<Issue>(request);
            await _unitOfWork.IssueRepository.AddAsync(addIssue);
            bool isCreated= await _unitOfWork.SaveChangeAsync()>0;
@@ -45,11 +45,12 @@ namespace GrpcService.Services
             {
                 IssueViewModel issueViewModel = new IssueViewModel
                 {
+                    Id=issue.Id.ToString(),
                     Volumn = issue.Volumn,
                     Description = issue.Description,
                     DateRelease = issue.DateRelease.ToString("dd-MM-yyyy")// Convert issue.DateRelease to Google.Protobuf.Timestamp
                 };
-                if (issue.Articles!= null)
+             /*   if (issue.Articles!= null)
                 {
                     foreach (var article in issue.Articles)
                     {
@@ -63,7 +64,7 @@ namespace GrpcService.Services
 
                         issueViewModel.Articles.Add(articleViewModel);
                     }
-                } 
+                } */
                    responseData.Item.Add(issueViewModel);
                 
             }
@@ -85,6 +86,38 @@ namespace GrpcService.Services
                 IsTrue = isUpdated,
             };
             return status;
+        }
+
+        public override async Task<IssueStatus> DeleteIssue(IssueId request, ServerCallContext context)
+        {
+            if(Guid.TryParse(request.Id, out var id))
+            {
+                _unitOfWork.IssueRepository.RemoveIssue(id);
+            }
+            bool isDeleted= await _unitOfWork.SaveChangeAsync()>0;
+            IssueStatus status = new IssueStatus()
+            {
+                IsTrue = isDeleted,
+            };
+            return status;  
+        }
+
+        public override async Task<IssueViewModel> GetIssueById(IssueId request, ServerCallContext context)
+        {
+            Issue issue=new Issue();
+            if (Guid.TryParse(request.Id, out var id))
+            {
+                issue = await _unitOfWork.IssueRepository.GetByIdAsync(id);
+            }
+            IssueViewModel issueViewModel = new IssueViewModel()
+            {
+                Id = issue.Id.ToString(),
+                DateRelease = issue.DateRelease.ToString("dd/MM/yyyy"),
+                Description = issue.Description,
+                Volumn = issue.Volumn,
+            };
+            return issueViewModel;
+          
         }
     }
 }

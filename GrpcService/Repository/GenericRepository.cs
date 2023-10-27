@@ -27,6 +27,7 @@ namespace GrpcService.Repository
         {
             entity.CreationDate = _timeService.GetCurrentTime();
             entity.CreatedBy = _claimService.GetCurrentUserId;
+            entity.IsDelete = false;
             await _dbSet.AddAsync(entity);
         }
 
@@ -77,7 +78,7 @@ namespace GrpcService.Repository
              .Aggregate(_dbSet.AsQueryable(),
                  (entity, property) => entity.Include(property))
              .AsNoTracking()
-             .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsDelete == false);
+             .FirstOrDefaultAsync(x => x.Id.Equals(id) /*&& x.IsDelete == false*/);
         }
 
         public void Update(TEntity entity)
