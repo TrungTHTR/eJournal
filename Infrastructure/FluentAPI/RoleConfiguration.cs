@@ -35,8 +35,8 @@ namespace Infrastructure.FluentAPI
             },
             new Role
             {
-                RoleId= 5,
-                Rolename="User"
+                RoleId = 5,
+                Rolename = "User"
             }
             );
         }

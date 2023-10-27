@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Common
+namespace Application.ViewModels.ArticleViewModels
 {
-    public class AppConfiguration
+    public class ArticleRequest
     {
-        public string DatabaseConnection { get; set; }
     }
 }
