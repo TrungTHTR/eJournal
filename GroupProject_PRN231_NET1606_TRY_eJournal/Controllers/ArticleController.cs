@@ -1,4 +1,4 @@
-﻿using Application;
+﻿/*using Application;
 using Application.InterfaceService;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
@@ -97,3 +97,4 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
     }
 }
+*/

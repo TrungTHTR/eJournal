@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using EJournalDBFirst.Models;
 using System.Net.Http.Headers;
 using Api.issueCRUD;
 
@@ -32,26 +31,19 @@ namespace eJournal_WebClient.Pages.IssuePage
 
         [BindProperty]
         public AddIssue Issue { get; set; } = default!;
-        
+        [BindProperty]
+        public string ErrorMessage { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-         /* if (!ModelState.IsValid || _context.Issues == null || Issue == null)
-            {
-                return Page();
-            }
-
-            _context.Issues.Add(Issue);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");*/
          JsonContent content= JsonContent.Create(Issue);
             var httpResponseMessage= await _client.PostAsync(IssueAPIUrl, content); 
             if(httpResponseMessage.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");
             }
+            ErrorMessage= await httpResponseMessage.Content.ReadAsStringAsync();
             return Page();
         }
     }

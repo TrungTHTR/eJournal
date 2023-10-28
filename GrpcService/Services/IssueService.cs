@@ -73,11 +73,6 @@ namespace GrpcService.Services
 
         public override async Task<IssueStatus> UpdateIssue(ModifyIssue request, ServerCallContext context)
         {
-            DateTime releaseDate;
-            if (!DateTime.TryParseExact(request.DateRelease, "dd-mm-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate))
-            {
-                throw new Exception("Invalid release date format. Please use 'dd-mm-yyyy' format.");
-            }
             Issue updatedIssue=_mapper.Map<Issue>(request); ;
             _unitOfWork.IssueRepository.Update(updatedIssue);
             bool isUpdated = await _unitOfWork.SaveChangeAsync() > 0;

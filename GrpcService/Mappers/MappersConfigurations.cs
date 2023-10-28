@@ -29,7 +29,7 @@ namespace GrpcService.Mappers
         {
             DateTime result;
             // Parse the string to DateTime using a specific format 
-            if (DateTime.TryParseExact(dateString, "dd-MM-yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
+            if (DateTime.TryParseExact(dateString, "dd/MM/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
             {
                 return result;
             }

@@ -6,35 +6,52 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EJournalDBFirst.Models;
+using System.Net.Http.Headers;
+using Api.issueCRUD;
+using Newtonsoft.Json.Linq;
 
 namespace eJournal_WebClient.Pages.IssuePage
 {
     public class EditModel : PageModel
     {
-        private readonly EJournalDBFirst.Models.EjournalDbContext _context;
+        private readonly HttpClient _client;
+        private string IssueAPIUrl = "";
 
-        public EditModel(EJournalDBFirst.Models.EjournalDbContext context)
+        public EditModel(HttpClient client)
         {
-            _context = context;
+           _client= client;
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            _client.DefaultRequestHeaders.Accept.Add(contentType);
+            _client.Timeout = TimeSpan.FromSeconds(100);
+            IssueAPIUrl = "http://localhost:5035/api/Issue";
         }
 
         [BindProperty]
-        public Issue Issue { get; set; } = default!;
+        public ModifyIssue Issue { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Issues == null)
+            if (id == null)
             {
                 return NotFound();
             }
+            IssueId issueId = new IssueId()
+            {
+                Id = id.Value.ToString(),
+            };
+            string detailURL = $"{IssueAPIUrl}/detail";
+            JsonContent content = JsonContent.Create(issueId);
+            var httpResponseMessage = await _client.PostAsync(detailURL, content);
+            string strData = await httpResponseMessage.Content.ReadAsStringAsync();
+            dynamic jsonContent = JObject.Parse(strData);
+            Issue = new ModifyIssue()
+            {
+                Id = jsonContent["id"].ToString(),
+                Volumn = jsonContent["volumn"],
+                Description = jsonContent["description"],
+                DateRelease = jsonContent["dateRelease"]
+            };
 
-            var issue =  await _context.Issues.FirstOrDefaultAsync(m => m.Id == id);
-            if (issue == null)
-            {
-                return NotFound();
-            }
-            Issue = issue;
             return Page();
         }
 
@@ -46,31 +63,13 @@ namespace eJournal_WebClient.Pages.IssuePage
             {
                 return Page();
             }
-
-            _context.Attach(Issue).State = EntityState.Modified;
-
-            try
+            JsonContent content= JsonContent.Create(Issue);
+            var httpResponseMessage= await _client.PutAsync(IssueAPIUrl,content);
+            if (!httpResponseMessage.IsSuccessStatusCode)
             {
-                await _context.SaveChangesAsync();
+                return Page();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!IssueExists(Issue.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
             return RedirectToPage("./Index");
-        }
-
-        private bool IssueExists(Guid id)
-        {
-          return (_context.Issues?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
