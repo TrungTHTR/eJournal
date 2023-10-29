@@ -16,6 +16,6 @@ namespace Application
         Task<int> SaveAsync();
         int Save();       
         public IRequestDetailRepository RequestDetailRepository { get; }
-        public IIssueRepository IssueRepository { get; }
+        public ICountryRepository CountryRepository { get; }
     }
 }

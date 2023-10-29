@@ -1,4 +1,4 @@
-﻿/*using Application;
+﻿using Application;
 using Application.InterfaceService;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +21,15 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         public async Task<IActionResult> Get()
         {
             List<Article> articles = await _articleService.GetAllArticle();
-            if(articles == null)
+            if (articles == null)
             {
                 return BadRequest();
-            }         
+            }
             return Ok(articles);
         }
 
-        // GET api/<ArticleController>/5
-        [HttpGet]
+        // GET api/<ArticleController>/search/5
+        [HttpGet("search")]
         public async Task<IActionResult> SearchArticle(string value)
         {
             List<Article> articles = await _articleService.SearchArticle(value);
@@ -45,7 +45,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             var article = await _articleService.GetArticles(id);
-            if(article == null)
+            if (article == null)
             {
                 return NotFound();
             }
@@ -57,7 +57,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         public async Task<IActionResult> Post([FromBody] Article article)
         {
             var _article = await _articleService.GetArticles(article.Id);
-            if(_article != null)
+            if (_article != null)
             {
                 return BadRequest("Article has exist");
             }
@@ -72,18 +72,19 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             var _article = await _articleService.GetArticles(id);
             if (_article != null)
             {
-                if(_article.Status.Equals("Draff") || _article.Status.Equals("Revise"))
+                if (_article.Status.Equals("Draff") || _article.Status.Equals("Revise"))
                 {
                     await _articleService.UpdateArticle(article);
                     return Ok(article);
-                }else
+                }
+                else
                 {
                     return BadRequest("Article can't do it right now!! ");
-                }             
+                }
             }
             return BadRequest("Article not exist");
         }
-        
+
         // DELETE api/<ArticleController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
@@ -97,4 +98,3 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
     }
 }
-*/
