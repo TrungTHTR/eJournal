@@ -40,6 +40,8 @@ namespace Application.Service
             }
             await _firebaseService.DownloadFile(article.ArticleFileUrl);
         }
+
+
         public async Task<IEnumerable<ArticleResponse>> GetAll(ArticleStatus? status)
         {
             var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status == nameof(status));

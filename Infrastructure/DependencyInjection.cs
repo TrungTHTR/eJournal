@@ -26,9 +26,10 @@ namespace Infrastructure
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRequestReviewRepository, RequestReviewRepository>();
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
             services.AddScoped<IIssueRepository,IssueRepository>();
+
             return services;
         }
     }

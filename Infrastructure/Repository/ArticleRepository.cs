@@ -1,6 +1,7 @@
 ﻿using Application.InterfaceRepository;
 using Application.InterfaceService;
 using BusinessObject;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,39 +12,60 @@ namespace Infrastructure.Repository
 {
     public class ArticleRepository : GenericRepository<Article>, IArticleRepository
     {
+        private readonly AppDbContext _appDbContext;
+        private readonly IClaimService _claimService;
+        private readonly ICurrentTime _currentTime;
+
+
         public ArticleRepository(AppDbContext dbContext, IClaimService claimService, ICurrentTime currentTime) : base(dbContext, claimService, currentTime)
         {
-
+            _appDbContext = dbContext;
+            _claimService = claimService;
+            _currentTime = currentTime;
         }
 
-        public Task<int> CreateArticle(Article article)
+        public async Task<int> CreateArticle(Article article)
         {
-            throw new NotImplementedException();
+            await _appDbContext.Articles.AddAsync(article);
+            return await _appDbContext.SaveChangesAsync();
         }
 
-        public Task<int> DeleteArticle(Guid id)
+        public async Task<int> DeleteArticle(Guid id)
         {
-            throw new NotImplementedException();
+            var _article = await GetArticles(id);
+            _appDbContext.Articles.Remove(_article);
+            return await _appDbContext.SaveChangesAsync();
         }
 
-        public Task<List<Article>> GetAllArticle()
+         //GetAllArticle is Publish
+        public async Task<List<Article>> GetAllArticle()
         {
-            throw new NotImplementedException();
+           return await _appDbContext.Articles.Where(x=>x.IsDelete.Equals(false) && x.Status == "Publish").ToListAsync();
         }
 
-        public Task<Article> GetArticles(Guid id)
+
+        public async Task<Article> GetArticles(Guid id)
         {
-            throw new NotImplementedException();
+            return await _appDbContext.Articles.FindAsync(id);
         }
+
+        public async Task<int> UpdateArticle(Article article)
+        {
+            var _article = await GetArticles(article.Id);
+            if (_article != null)
+            {
+                _appDbContext.Entry(_article).State = EntityState.Detached;
+                _appDbContext.Articles.Update(article);
+            }
+            return await _appDbContext.SaveChangesAsync();
+        }
+
         //search Article By Title Or AuthorName
-        public Task<List<Article>> SearchArticle(string value)
+        async Task<List<Article>> IArticleRepository.SearchArticle(string value)
         {
-            throw new NotImplementedException();
+            return await _appDbContext.Articles.Where(x => x.Title.Equals(value) || x.AuthorName.Equals(value)).ToListAsync();
         }
 
-        public Task<int> UpdateArticle(Article article)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

@@ -26,5 +26,9 @@ namespace Infrastructure.Repository
         {
             return await _dbContext.RequestDetails.Where(x => x.AccountId.Equals(AccountId)).ToListAsync();
         }
+        public async Task<List<RequestDetail>> GetAllRequestDetail()
+        {
+            return await _dbContext.RequestDetails.ToListAsync();
+        }
     }
 }

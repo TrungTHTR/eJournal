@@ -20,5 +20,9 @@ namespace Application.Service
         {
             return await _unitOfWork.RequestDetailRepository.ShowAllRequestDetail(accountId);
         }
+        public async Task<List<RequestDetail>> GetAllRequestDetail()
+        {
+            return await _unitOfWork.RequestDetailRepository.GetAllRequestDetail();
+        }
     }
 }
