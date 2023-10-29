@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.InterfaceService
 {
-    public  interface IIssueService
-    {
-        Task<List<Issue>> GetAll(); 
-    }
+	public  interface ICountryService
+	{
+		Task<List<Country>> GetAllCountry();
+	}
 }

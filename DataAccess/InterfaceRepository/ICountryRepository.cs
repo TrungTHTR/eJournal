@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.InterfaceRepository
 {
-    public interface IIssueRepository:IGenericRepository<Issue>
-    {
-        Task<List<Issue>> GetAllIssue();
-    }
+	public  interface ICountryRepository
+	{
+		public Task<List<Country>> GetAll();
+	}
 }

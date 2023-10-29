@@ -8,14 +8,19 @@ using System.Text;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 using Application.ViewModels.ArticleViewModels;
+using BusinessObject;
+using System.Reflection;
+
 namespace GroupProject_PRN231_NET1606_TRY_eJournal
 {
     public static class DependencyInjection
     {
-      public static IServiceCollection AddWebAPIServices(this IServiceCollection services)
+        public static IServiceCollection AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
         {
+
             var modelBuilder = new ODataConventionModelBuilder();
             modelBuilder.EntitySet<ArticleResponse>("Articles");
+            modelBuilder.EntitySet<Country>("Countries");
             services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<IIssueService, IssueService>();
@@ -32,9 +37,14 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
         }
         
 
-        public static IServiceCollection AddWebAPIServices(this IServiceCollection services,string secretKey, IConfiguration configuration)
-        {
-            services.AddAutoMapper(typeof(UserMappingProfile));
+			services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+			services.AddScoped<IClaimService, ClaimService>();
+			services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IRequestDetailService, RequestDetailService>();  
+			services.AddHttpContextAccessor();
+			services.AddAutoMapper(typeof(UserMappingProfile));
             services.AddAuthorization();
             services.AddAuthentication().AddJwtBearer(options =>
             {

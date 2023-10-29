@@ -26,24 +26,55 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateIssue(AddIssue addIssue)
+        public async Task<IActionResult> CreateIssue([FromBody]AddIssue addIssue)
         {
-            var response = _client.CreateIssue(addIssue);
-            if (response.IsTrue)
+            try
             {
-                return Ok();
+                var response = _client.CreateIssue(addIssue);
+                if (response.IsTrue)
+                {
+                    return Ok();
+                }
+            } catch(Exception ex)
+            {
+                return BadRequest("String must be in dd/MM/yyyy format");
             }
+           
             return BadRequest();
         }
         [HttpPut]
-        public IActionResult UpdateIssue(ModifyIssue modifyIssue)
+        public IActionResult UpdateIssue([FromBody]ModifyIssue modifyIssue)
         {
-            var response = _client.UpdateIssue(modifyIssue);
+            try 
+            {
+                var response = _client.UpdateIssue(modifyIssue);
+                if (response.IsTrue)
+                {
+                    return Ok();
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("String must be in dd/MM/yyyy format");
+            }
+           
+            return BadRequest();
+        }
+        [HttpDelete]
+        public IActionResult RemoveIssue([FromBody] IssueId issueId)
+        {
+            var response= _client.DeleteIssue(issueId);
             if (response.IsTrue)
             {
-                return Ok();
+                return NoContent();
             }
             return BadRequest();
+        }
+        [HttpPost("detail")]
+        public IActionResult GetIssueById([FromBody]IssueId issueId)
+        {
+            var response= _client.GetIssueById(issueId);
+            return Ok(response);
         }
     }
 }
