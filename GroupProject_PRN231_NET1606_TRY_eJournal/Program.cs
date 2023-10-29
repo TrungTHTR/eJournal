@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 var configuration =builder.Configuration.Get<AppConfiguration> ();
-configuration.DatabaseConnection = builder.Configuration.GetConnectionString("Default");
+/*configuration.DatabaseConnection = builder.Configuration.GetConnectionString("Default");*/
 builder.Services.AddWebAPIServices("", builder.Configuration);
 builder.Services.AddInfrastructureService(configuration!.DatabaseConnection);
 

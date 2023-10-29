@@ -1,10 +1,48 @@
 ﻿@page
-@model IndexModel
+@model eJournal_WebClient.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
 }
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference Management System</title>
+    <link rel="stylesheet" href="~/css/indexstyle.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="header">
+        <h1>Conference Management System</h1>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Welcome to our Conference Management System</h1>
+            <p>Submit your papers and manage your conference seamlessly with us.</p>
+            <a href="#" class="cta-button">Submit Paper</a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h2>Easy Submission</h2>
+                <p>Submit your papers easily through our user-friendly interface.</p>
+            </div>
+            <div class="feature">
+                <h2>Peer Review</h2>
+                <p>Expert peer review process to ensure high-quality content.</p>
+            </div>
+            <div class="feature">
+                <h2>Conference Management</h2>
+                <p>Efficient tools to manage conferences, sessions, and participants.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2023 Conference Management System. All rights reserved.</p>
+    </div>
+</body>
+
+</html>

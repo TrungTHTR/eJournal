@@ -17,11 +17,11 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "6.0.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
             modelBuilder.Entity("BusinessObject.Account", b =>
                 {
                     b.Property<Guid>("Id")
@@ -54,7 +54,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
@@ -80,8 +80,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
-                   b.Property<int?>("RoleId")
-                        .IsRequired()
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -89,16 +88,17 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("Accounts");
                 });
-  
+
             modelBuilder.Entity("BusinessObject.AccountSpecialization", b =>
                 {
                     b.Property<Guid?>("AccountId")
@@ -148,13 +148,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid?>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-                        
-                    b.Property<Guid?>("IssueId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");     
-                        
+                    b.Property<string>("ArticleFileUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AuthorName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -178,6 +174,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("IssueId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("ModificationBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -194,8 +193,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
                     b.HasIndex("IssueId");
+
                     b.ToTable("Articles");
                 });
 
@@ -1467,7 +1466,7 @@ namespace Infrastructure.Migrations
                             CountryName = "Zimbabwe"
                         });
                 });
-              
+
             modelBuilder.Entity("BusinessObject.Issue", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1511,12 +1510,14 @@ namespace Infrastructure.Migrations
 
                     b.ToTable("Issue");
                 });
+
             modelBuilder.Entity("BusinessObject.Major", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
+
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1653,7 +1654,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"), 1L, 1);
 
                     b.Property<string>("Rolename")
                         .IsRequired()
@@ -1714,7 +1715,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("MajorId")
-
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
@@ -1748,7 +1748,9 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
                     b.Navigation("Country");
+
                     b.Navigation("Role");
                 });
 
@@ -1773,17 +1775,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("BusinessObject.Article", b =>
                 {
-                    b.HasOne("BusinessObject.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId");
-
-                    b.Navigation("Account");
-
                     b.HasOne("BusinessObject.Issue", "Issue")
                         .WithMany("Articles")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
                     b.Navigation("Issue");
                 });
 
@@ -1794,7 +1791,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("AccountId");
 
                     b.HasOne("BusinessObject.RequestReview", "RequestReview")
-                        .WithMany()
+                        .WithMany("Details")
                         .HasForeignKey("RequestReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1817,7 +1814,6 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Major", "Major")
                         .WithMany("Specializations")
-
                         .HasForeignKey("MajorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1835,9 +1831,14 @@ namespace Infrastructure.Migrations
                     b.Navigation("Articles");
                 });
 
-           modelBuilder.Entity("BusinessObject.Major", b =>
+            modelBuilder.Entity("BusinessObject.Major", b =>
                 {
                     b.Navigation("Specializations");
+                });
+
+            modelBuilder.Entity("BusinessObject.RequestReview", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("BusinessObject.Role", b =>

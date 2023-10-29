@@ -1,0 +1,43 @@
+﻿.navbar {
+    padding: 0.5rem;
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: #000;
+    text-decoration: none;
+    padding: 0.5rem;
+}
+
+    .nav-link:hover {
+        color: #fff;
+        background-color: #000;
+    }
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
+    .navbar-toggler:hover {
+        background-color: #ccc;
+    }
+
+.collapse {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .navbar-collapse {
+        display: flex;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+}
