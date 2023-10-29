@@ -1,15 +1,21 @@
 ﻿using Application;
 using Application.InterfaceService;
+using Application.ViewModels.ArticleViewModels;
 using BusinessObject;
+using BusinessObject.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
+using AutoMapper;
+using Application.Service;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticleController : ControllerBase
+    public class ArticleController : ODataController
     {
         private readonly IArticleService _articleService;
         public ArticleController(IArticleService articleService)
@@ -96,5 +102,31 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             }
             return BadRequest();
         }
-    }
-}
+
+        //NgoThiKhanhLy
+        [HttpGet("unauthorized-user")]
+        [EnableQuery]
+        [AllowAnonymous]
+        public async Task<IQueryable<ArticleResponse>> GetArticles()
+        {
+            var articles = await _articleService.GetAll(ArticleStatus.Publish);
+            return articles.AsQueryable();
+        }
+        //NgoThiKhanhLy
+        [HttpPost("article-file")]
+        [Authorize]
+        public async Task<ActionResult<string>> AddArticleFile(IFormFile file)
+        {
+            var url = await _articleService.AddArticleFile(file);
+            return Ok(await _articleService.AddArticleFile(file));
+        }
+        //NgoThiKhanhLy
+        [HttpPost("{id}/download-article-file")]
+        public async Task DownloadArticleFile([FromRoute(Name = "id")] Guid id)
+        {
+            await _articleService.DownloadArticleFile(id);
+        }
+
+
+    }//end class
+}//end namespace

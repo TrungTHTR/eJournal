@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.InterfaceRepository
 {
-    public interface IRequestDetailRepository:IGenericRepository<RequestDetail>
+    public interface IRequestDetailRepository : IGenericRepository<RequestDetail>
     {
         Task<List<RequestDetail>> ShowAllRequestDetail(Guid AccountId);
+        Task<List<RequestDetail>> GetAllRequestDetail();
     }
 }
