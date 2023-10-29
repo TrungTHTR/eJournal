@@ -19,17 +19,14 @@ namespace Infrastructure
         {
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
-            services.AddScoped<AppDbContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IRequestReviewRepository, RequestReviewRepository>();
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
             services.AddScoped<IIssueRepository,IssueRepository>();
-
             return services;
         }
     }

@@ -21,14 +21,12 @@ namespace Infrastructure
         private readonly AppDbContext _appDbContext;
         private readonly IClaimService _claimService;
         private readonly ICurrentTime _timeService;
-        private static readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();
 
         public IAccountRepository AccountRepository { get; }
-       // public IArticleRepository ArticleRepository { get; }
         
         private readonly IRequestDetailRepository _requestDetailRepository;
-        private readonly IIssueRepository _issueRepository;
         private readonly IArticleRepository _articleRepository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IRequestReviewRepository _requestReviewRepository;
         /* public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository, IArticleRepository articleRepository)
          {
@@ -36,13 +34,15 @@ namespace Infrastructure
              _issueRepository = issueRepository;
              _articleRepository = articleRepository;
          }*/
-        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, IArticleRepository articleRepository,IIssueRepository issueRepository, IRequestReviewRepository requestReviewRepository)
+        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, 
+        IArticleRepository articleRepository,IIssueRepository issueRepository, IRequestReviewRepository requestReviewRepository,,ICountryRepository countryRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
             _timeService = timeService;
             AccountRepository = accountRepository;
             _articleRepository = articleRepository;
+            _countryRepository = countryRepository;
             _issueRepository = issueRepository;
             _requestReviewRepository = requestReviewRepository;
         }
@@ -52,9 +52,9 @@ namespace Infrastructure
             return _appDbContext.SaveChanges();
         }
 
-        public Task<int> SaveAsync()
+        public async  Task<int> SaveAsync()
         {
-            return _appDbContext.SaveChangesAsync();
+            return await _appDbContext.SaveChangesAsync();
         }
 
         private void Dispose(bool disposing)
@@ -86,9 +86,8 @@ namespace Infrastructure
             await _appDbContext.DisposeAsync();
         }
         public IRequestDetailRepository RequestDetailRepository => _requestDetailRepository;
-        public IIssueRepository IssueRepository => _issueRepository;
         public IArticleRepository ArticleRepository => _articleRepository;
-
+		    public ICountryRepository CountryRepository => _countryRepository;
         public IRequestReviewRepository RequestReviewRepository => _requestReviewRepository;
     }
 }
