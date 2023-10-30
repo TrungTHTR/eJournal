@@ -49,6 +49,7 @@ namespace Application.Service
                 throw new Exception("This email has been registered before");
             }
             var user = _mapper.Map<Account>(request);
+            user.RoleId = 5;
             await _unitOfWork.AccountRepository.AddAsync(user);
             int i = await _unitOfWork.SaveAsync();
             return i >0;
