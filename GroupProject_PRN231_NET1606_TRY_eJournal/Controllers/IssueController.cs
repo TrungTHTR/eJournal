@@ -24,6 +24,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             var response = _client.GetAllIssue(new Empty { });
             return Ok(response);
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateIssue([FromBody]AddIssue addIssue)
         {
