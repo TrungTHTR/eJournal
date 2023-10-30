@@ -30,6 +30,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddHttpContextAccessor();
 			services.AddScoped<IClaimService, ClaimService>();
 			services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();  
