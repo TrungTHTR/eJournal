@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessObject\BusinessObject.csproj" />
     <ProjectReference Include="..\GroupProject_PRN231_NET1606_TRY_eJournal\GroupProject_PRN231_NET1606_TRY_eJournal.csproj" />
   </ItemGroup>
 

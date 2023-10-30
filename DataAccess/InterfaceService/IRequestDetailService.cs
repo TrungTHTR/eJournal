@@ -10,5 +10,6 @@ namespace Application.InterfaceService
     public interface IRequestDetailService
     {
         Task<List<RequestDetail>> GetByReviewerId(Guid accountId);
+        Task<List<RequestDetail>> GetAllRequestDetail();
     }
 }

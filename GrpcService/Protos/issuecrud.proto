@@ -7,16 +7,19 @@ service IssueCRUD{
     rpc GetAllIssue(Empty) returns (ListIssues);
     rpc CreateIssue(AddIssue) returns (IssueStatus);
     rpc UpdateIssue(ModifyIssue) returns (IssueStatus);
+    rpc DeleteIssue (IssueId) returns (IssueStatus);
+    rpc GetIssueById(IssueId) returns (IssueViewModel);
 }
 
 message ListIssues {
     repeated IssueViewModel item=1;
 }
 message IssueViewModel{
-     string Volumn =1;
-       string  Description =2;
-   string DateRelease =3;
-  repeated ArticleViewModel Articles =4;
+    string Id=1;
+     string Volumn =2;
+       string  Description =3;
+    string DateRelease =4;
+ 
 }
 message ArticleViewModel {
      string Title =1;
@@ -34,6 +37,9 @@ message ModifyIssue{
      string Volumn =2;
     string Description=3;
   string DateRelease =4;
+}
+message  IssueId{
+    string Id=1;
 }
 message Empty {
 
