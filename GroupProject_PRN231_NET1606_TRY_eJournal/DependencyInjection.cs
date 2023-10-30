@@ -6,10 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.OData;
-using Microsoft.OData.ModelBuilder;
 using Application.ViewModels.ArticleViewModels;
 using BusinessObject;
-using System.Reflection;
+using Microsoft.OData.ModelBuilder;
+using Microsoft.AspNetCore.OData.Extensions;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal
 {
@@ -17,11 +17,13 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
     {
         public static IServiceCollection AddWebAPIServices(this IServiceCollection services, IConfiguration configuration)
         {
-
-            var modelBuilder = new ODataConventionModelBuilder();
+            // OData
+            ODataModelBuilder modelBuilder = new ODataConventionModelBuilder();
             modelBuilder.EntitySet<ArticleResponse>("Articles");
-            modelBuilder.EntitySet<Country>("Countries");
-            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+            modelBuilder.EntityType<Country>();
+            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().Count().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+            
+            // Services
             services.AddScoped<IClaimService, ClaimService>();
             //services.AddScoped<IIssueService, IssueService>();
             services.AddScoped<IArticleService,ArticleService>();
@@ -35,7 +37,11 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();  
 			services.AddHttpContextAccessor();
+
+            // Mapper
 			services.AddAutoMapper(typeof(UserMappingProfile));
+
+            // Authentication
             services.AddAuthorization();
             services.AddAuthentication().AddJwtBearer(options =>
             {
@@ -49,6 +55,11 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwt:secretKey"]))
                 };
             });
+
+            // CORS
+            services.AddCors();
+
+            // Swagger
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "eJournal API", Version = "v1", Description = "API for eJournal project" });

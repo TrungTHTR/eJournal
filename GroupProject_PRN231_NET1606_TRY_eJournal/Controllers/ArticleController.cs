@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using AutoMapper;
 using Application.Service;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
@@ -106,7 +107,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]
-        [AllowAnonymous]
+        [ODataRouteComponent]
+        //[AllowAnonymous]
         public async Task<IQueryable<ArticleResponse>> GetArticles()
         {
             var articles = await _articleService.GetAll(ArticleStatus.Publish);

@@ -27,7 +27,7 @@ namespace Application.Service
 
         public async Task<string> Login(AuthenticationRequest request)
         {
-            var users = await _unitOfWork.AccountRepository.GetAllAsync(x => x.Email == request.Email);
+            var users = await _unitOfWork.AccountRepository.GetAllAsync(filter: x => x.Email == request.Email, includedProperties: nameof(Account.Role));
             if (users == null || !users.Any())
             {
                 throw new Exception("Invalid Email");

@@ -60,14 +60,19 @@ namespace Infrastructure.Repository
           
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, string includedProperties = "")
         {
             IQueryable<TEntity> query = _dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
             }
-            return await query.ToListAsync();
+			foreach (var includeProperty in includedProperties.Split
+				(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+			{
+				query = query.Include(includeProperty);
+			}
+			return await query.ToListAsync();
         }
 
         public Task<TEntity?> GetByIdAsync(Guid id)
