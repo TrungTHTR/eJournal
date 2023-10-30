@@ -26,5 +26,14 @@ namespace GrpcService.Repository
         {
             return await _appDbContext.Issue.Include(x=>x.Articles).ToListAsync();
         }
+
+        public void RemoveIssue(Guid issueId)
+        {
+            Issue issue = _appDbContext.Issue.Find(issueId);
+            if (issue != null)
+            {
+                _appDbContext.Issue.Remove(issue);
+            }
+        }
     }
 }

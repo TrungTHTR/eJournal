@@ -12,10 +12,11 @@ namespace Application
     {
         public IAccountRepository AccountRepository { get; }
         public IArticleRepository ArticleRepository { get; }
-
         Task<int> SaveAsync();
         int Save();       
         public IRequestDetailRepository RequestDetailRepository { get; }
+        public ICountryRepository CountryRepository { get; }
+        public IRequestReviewRepository RequestReviewRepository { get; }
         public IIssueRepository IssueRepository { get; }
     }
 }

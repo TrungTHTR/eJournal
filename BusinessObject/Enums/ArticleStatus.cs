@@ -11,6 +11,7 @@ namespace BusinessObject.Enums
         Draft,
         Accept,
         Reject,
+        Review,
         Revise,
         Publish
     }
