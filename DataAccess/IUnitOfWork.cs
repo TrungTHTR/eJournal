@@ -17,6 +17,6 @@ namespace Application
         public IRequestDetailRepository RequestDetailRepository { get; }
         public ICountryRepository CountryRepository { get; }
         public IRequestReviewRepository RequestReviewRepository { get; }
-        public IIssueRepository IssueRepository { get; }
+        //public IIssueRepository IssueRepository { get; }
     }
 }
