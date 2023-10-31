@@ -49,13 +49,8 @@ namespace Application.Service
 
         public async Task<IEnumerable<ArticleResponse>> GetAll(ArticleStatus? status)
         {
-            var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status == nameof(status));
-            return _mapper.Map<IEnumerable<ArticleResponse>>(articles);
-        }
-
-        public ArticleService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
+            var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status.Equals(status.ToString()));
+            return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleResponse>>(articles);
         }
         public async Task<int> CreateArticle(Article article)
         {

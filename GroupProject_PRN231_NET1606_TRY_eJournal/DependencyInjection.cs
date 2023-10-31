@@ -41,6 +41,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
 
             // Mapper
 			services.AddAutoMapper(typeof(UserMappingProfile));
+            services.AddAutoMapper(typeof(ArticleMappingProfile));
 
             // Authentication
             services.AddAuthorization();

@@ -107,7 +107,6 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]
-        [ODataRouteComponent]
         [AllowAnonymous]
         public async Task<IQueryable<ArticleResponse>> GetArticles()
         {
