@@ -8,6 +8,7 @@ namespace Application.InterfaceService
 {
     public interface IJwtService
     {
-        string GenerateAuthenticatedCustomerToken(string role, string email, string id);
-    }
+        string GenerateAuthenticatedAccessToken(string role, string email, string id);
+		string GenerateAuthenticatedRefreshToken(string id, DateTime expiredDate);
+	}
 }

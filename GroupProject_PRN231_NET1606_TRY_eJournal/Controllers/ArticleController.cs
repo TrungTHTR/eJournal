@@ -109,7 +109,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IQueryable<ArticleResponse>> GetArticles()
         {
             var articles = await _articleService.GetAll(ArticleStatus.Publish);

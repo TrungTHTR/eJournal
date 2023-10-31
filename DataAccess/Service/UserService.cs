@@ -3,12 +3,6 @@ using Application.Utils;
 using Application.ViewModels.UserViewModels;
 using AutoMapper;
 using BusinessObject;
-using Application.InterfaceRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -29,7 +23,7 @@ namespace Application.Service
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<string> Login(AuthenticationRequest request)
+        public async Task<AuthenticationResponse> Login(AuthenticationRequest request)
         {
             var users = await _unitOfWork.AccountRepository.GetAllAsync(filter: x => x.Email == request.Email, includedProperties: nameof(Account.Role));
             if (users == null || !users.Any())
@@ -37,12 +31,24 @@ namespace Application.Service
                 throw new Exception("Invalid Email");
             }
             Account user = users.First();
-            if(!user.PasswordHash.SequenceEqual(EncryptionUtils.Encrypt(request.Password, user.PasswordSalt)))
+			// need to check whether it expired
+			if (!string.IsNullOrEmpty(user.RefreshToken))
+			{
+				throw new Exception("You haven't logout yet");
+			}
+			if (!user.PasswordHash.SequenceEqual(EncryptionUtils.Encrypt(request.Password, user.PasswordSalt)))
             {
                 throw new Exception("Invalid password");
             }
-            var token = _jwtService.GenerateAuthenticatedCustomerToken(user.Role.Rolename, user.Email, user.Id.ToString());
-            return token;
+            string token = _jwtService.GenerateAuthenticatedAccessToken(user.Role.Rolename, user.Email, user.Id.ToString());
+            string refreshToken = _jwtService.GenerateAuthenticatedRefreshToken(user.Id.ToString(), DateTime.UtcNow);
+            user.RefreshToken = token;
+            _unitOfWork.AccountRepository.Update(user);
+            await _unitOfWork.SaveAsync();
+            return new AuthenticationResponse { 
+                AccessToken = token,
+                RefreshToken = refreshToken
+            };
         }
 
         public async Task<bool> Register(RegistrationRequest request)
@@ -56,6 +62,14 @@ namespace Application.Service
             await _unitOfWork.AccountRepository.AddAsync(user);
             int i = await _unitOfWork.SaveAsync();
             return i >0;
+        }
+
+        public async Task Logout()
+        {
+            Account user = await GetCurrentLoginUser();
+            user.RefreshToken = null;
+            _unitOfWork.AccountRepository.Update(user);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<Account> GetCurrentLoginUser()

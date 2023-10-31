@@ -32,11 +32,11 @@
                 <div class="form">
                     <form method="post">
                         <div class="inputBox">
-                            <input asp-for="@Model.AuthenRequest.Email" type="email" required>
-                            <i>Password</i>
+                            <input asp-for="AuthenRequest.Email" type="email" required>
+                            <i>Email</i>
                         </div>
                         <div class="inputBox">
-                            <input asp-for="@Model.AuthenRequest.Password" type="password" required>
+                            <input asp-for="AuthenRequest.Password" type="password" required>
                             <i>Password</i>
                         </div>
                         @if (!string.IsNullOrEmpty(@Model.ErrorMessage))

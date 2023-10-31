@@ -14,19 +14,17 @@
 		<h2>Form</h2>
 		<form method="post" action="#">
 			<div class="row gtr-uniform">
-				<div class="col-12">
+				<div class="col-6">
+					<label for="id">Article ID</label>
 					<input type="text" name="id" id="demo-name" value="" placeholder="Article ID">
 				</div>
-				<div class="col-12">
+				<div class="col-6">
 					<input type="text" name="title" id="demo-name" value="" placeholder="Article title">
 				</div>
-				<div class="col-12">
+				<div class="col-6">
 					<input type="text" name="authorName" id="demo-name" value="" placeholder="Author name">
 				</div>
-				<div class="col-6 col-12-xsmall">
-					<input type="email" name="demo-email" id="demo-email" value="" placeholder="Email">
-				</div>
-				<div class="col-12">
+				<div class="col-6">
 					<select name="demo-category" id="demo-category">
 						<option value="">- Category -</option>
 						<option value="1">Manufacturing</option>
@@ -35,80 +33,15 @@
 						<option value="1">Human Resources</option>
 					</select>
 				</div>
-				<div class="col-4 col-12-small">
-					<input type="radio" id="demo-priority-low" name="demo-priority" checked="">
-					<label for="demo-priority-low">Low</label>
-				</div>
-				<div class="col-4 col-12-small">
-					<input type="radio" id="demo-priority-normal" name="demo-priority">
-					<label for="demo-priority-normal">Normal</label>
-				</div>
-				<div class="col-4 col-12-small">
-					<input type="radio" id="demo-priority-high" name="demo-priority">
-					<label for="demo-priority-high">High</label>
-				</div>
-				<div class="col-6 col-12-small">
-					<input type="checkbox" id="demo-copy" name="demo-copy">
-					<label for="demo-copy">Email me a copy</label>
-				</div>
-				<div class="col-6 col-12-small">
-					<input type="checkbox" id="demo-human" name="demo-human" checked="">
-					<label for="demo-human">Not a robot</label>
-				</div>
-				<div class="col-12">
-					<div class="textarea-wrapper"><textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="1" style="overflow: hidden; resize: none; height: 69px;"></textarea></div>
-				</div>
 				<div class="col-12">
 					<ul class="actions">
-						<li><input type="submit" value="Send Message" class="primary"></li>
+						<li><input type="submit" value="Search" class="primary"></li>
 						<li><input type="reset" value="Reset"></li>
 					</ul>
 				</div>
 			</div>
 		</form>
 	</section>
-
-	<div class="board row">
-		<table>
-			<caption>Enter search criteria</caption>
-			<colgroup>
-				<col style="width:20%">
-				<col style="width:auto">
-			</colgroup>
-			<tbody>
-				<tr>
-					<th scope="row">Works</th>
-					<td>
-						<input type="radio" value="I" onclick="setHnabGbTitle(this.value)" checked="checked" name="S_HNAB_GBN" id="domestic">
-						<label for="domestic">Domestic</label>
-						<input type="radio" name="S_HNAB_GBN" id="foreign" value="O" onclick="setHnabGbTitle(this.value)">
-						<label for="foreign">International</label>
-						<span>
-							<label>( <input type="checkbox" name="LIB_YN"> Production Music )</label>
-						</span>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="worksName">Title and/or Alternative title</label></th>
-					<td>
-						<input type="text" style="text-transform:uppercase;width:80%;" onkeyup="if(event.keyCode == 13)goSrch();" name="S_PROD_TTL" id="worksName">
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="albumName">Album Title</label></th>
-					<td><input type="text" onkeyup="if(event.keyCode == 13)goSrch();" name="S_DISCTITLE_NM" id="albumName" style="width:80%"></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="singer">Performers</label></th>
-					<td><input style="text-transform:uppercase;width:200px;" type="text" name="S_SINA_NM" onkeyup="if(event.keyCode == 13)goSrch();" id="singer"></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="author">Writers &amp; Publishers</label></th>
-					<td><input type="text" id="author" onkeyup="if(event.keyCode == 13)goSrch();" name="S_RIGHTPRES_NM" style="width:200px"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
 
 			<p>Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.</p>
 		</header>
