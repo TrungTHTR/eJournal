@@ -58,7 +58,17 @@ namespace Application.Service
         }
         public async Task<int> DeleteArticle(Guid id)
         {
-            return await _unitOfWork.ArticleRepository.DeleteArticle(id);
+            var article = await _unitOfWork.ArticleRepository.GetByIdAsync(id);
+            if (article == null)
+            {
+                throw new Exception("Article is not existed");
+            }
+            if(article.Status == nameof(ArticleStatus.Publish) || article.Status == nameof(ArticleStatus.Accept))
+            {
+                throw new Exception("Can't delete published or accepted article");
+            }
+            _unitOfWork.ArticleRepository.Delete(article);
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<List<Article>> GetAllArticle()

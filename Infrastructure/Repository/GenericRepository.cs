@@ -42,6 +42,20 @@ namespace Infrastructure.Repository
             await _dbSet.AddRangeAsync(entities);
         }
 
+        public void Delete(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public async Task DeleteByIdAsync(Guid id)
+        {
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+            }
+        }
+
         public async  Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
         {
             return await includes

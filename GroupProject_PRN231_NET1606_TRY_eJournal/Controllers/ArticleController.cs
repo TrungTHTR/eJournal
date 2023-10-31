@@ -104,6 +104,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             return BadRequest();
         }
 
+        [HttpPut]
+
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]

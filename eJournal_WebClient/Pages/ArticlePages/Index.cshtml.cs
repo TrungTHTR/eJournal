@@ -10,6 +10,7 @@ namespace eJournal_WebClient.Pages.ArticlePages
     {
 		private readonly HttpClient _httpClient;
 		private readonly string ApiUrl = "http://localhost:5035/api/Article/unauthorized-user";
+		private readonly string MajorApiUrl = "http://localhost:5035/api/";
 
 		public IndexModel()
 		{
@@ -20,9 +21,9 @@ namespace eJournal_WebClient.Pages.ArticlePages
 
 		public IList<ArticleResponse> Articles { get; set; } = default!;
 
-		public async Task OnGetAsync(int? id, string? title, string? status, string? authorName)
+		public async Task OnGetAsync(string? id, string? title, string? authorName)
 		{
-			if(id != null)
+			if(!string.IsNullOrEmpty(id))
 			{
 
 			}

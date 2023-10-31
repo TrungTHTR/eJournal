@@ -19,5 +19,7 @@ namespace Application.InterfaceRepository
         void UpdateRange(List<TEntity> entities);
         Task AddRangeAsync(List<TEntity> entities);
         Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes);
+        void Delete(TEntity entity);
+        Task DeleteByIdAsync(Guid id);
     }
 }
