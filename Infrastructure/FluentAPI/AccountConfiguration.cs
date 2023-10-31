@@ -17,6 +17,7 @@ namespace Infrastructure.FluentAPI
             builder.Property(x => x.Id).HasDefaultValueSql("NEWID()");
             builder.HasIndex(x => x.Email).IsUnique();
             builder.HasOne(x => x.Role).WithMany(x => x.Accounts).HasForeignKey(x => x.RoleId);
+            builder.HasOne(x => x.Country).WithMany(x => x.Accounts).HasForeignKey(x => x.CountryId);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Infrastructure
              _articleRepository = articleRepository;
          }*/
         public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, 
-        IArticleRepository articleRepository,IIssueRepository issueRepository, IRequestReviewRepository requestReviewRepository,,ICountryRepository countryRepository)
+        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository,ICountryRepository countryRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
@@ -43,7 +43,7 @@ namespace Infrastructure
             AccountRepository = accountRepository;
             _articleRepository = articleRepository;
             _countryRepository = countryRepository;
-            _issueRepository = issueRepository;
+            //_issueRepository = issueRepository;
             _requestReviewRepository = requestReviewRepository;
         }
 
