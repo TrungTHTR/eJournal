@@ -33,6 +33,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
 			services.AddScoped<IClaimService, ClaimService>();
 			services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IFirebaseService, FirebaseService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();  

@@ -26,11 +26,20 @@ namespace Application.Service
             _unitOfWork = unitOfWork;
             _firebaseService = firebaseService;
         }
-        public async Task<string> AddArticleFile(IFormFile file)
+
+        public async Task<string> AddArticleFile(IFormFile file, Guid id)
         {
+            var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+            if(article == null || (article.IsDelete != null && article.IsDelete.Value) || (!article.Status.Equals(nameof(ArticleStatus.Draft)) && !article.Status.Equals(nameof(ArticleStatus.Revise)))){
+                throw new Exception("Article is not existed or not available for edit");
+            }
             var url = await _firebaseService.UploadFile(fileStream: file.OpenReadStream(), fileName: file.FileName, folder: nameof(FirebaseFolderName.articles));
+            article.ArticleFileUrl = url;
+            _unitOfWork.ArticleRepository.Update(article);
+            await _unitOfWork.SaveAsync();
             return url;
         }
+
         public async Task DownloadArticleFile(Guid id)
         {
             var article = await _unitOfWork.ArticleRepository.GetByIdAsync(id);

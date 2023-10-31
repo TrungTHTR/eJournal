@@ -22,6 +22,10 @@ namespace eJournal_WebClient.Pages.ArticlePages
 
 		public async Task OnGetAsync(int? id, string? title, string? status, string? authorName)
 		{
+			if(id != null)
+			{
+
+			}
 			HttpResponseMessage response = await _httpClient.GetAsync(ApiUrl);
 			string data = await response.Content.ReadAsStringAsync();
 			var options = new JsonSerializerOptions
