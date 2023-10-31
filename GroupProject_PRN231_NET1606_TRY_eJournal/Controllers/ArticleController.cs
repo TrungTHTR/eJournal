@@ -116,7 +116,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
         //NgoThiKhanhLy
         [HttpPost("{id}/article-file")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<string>> AddArticleFile(IFormFile file, [FromRoute(Name = "id")] Guid id)
         {
             var url = await _articleService.AddArticleFile(file, id);

@@ -20,16 +20,23 @@ namespace Application.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFirebaseService _firebaseService;
-        public ArticleService(IMapper mapper, IUnitOfWork unitOfWork, IFirebaseService firebaseService)
+        private readonly IUserService _userService;
+        public ArticleService(IMapper mapper, IUnitOfWork unitOfWork, IFirebaseService firebaseService, IUserService userService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _firebaseService = firebaseService;
+            _userService = userService;
         }
 
         public async Task<string> AddArticleFile(IFormFile file, Guid id)
         {
             var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+            var user = await _userService.GetCurrentLoginUser();
+            if (!article.AuthorName.Equals(user.UserName))
+            {
+                throw new Exception("You don't have the right to modify this article");
+            }
             if(article == null || (article.IsDelete != null && article.IsDelete.Value) || (!article.Status.Equals(nameof(ArticleStatus.Draft)) && !article.Status.Equals(nameof(ArticleStatus.Revise)))){
                 throw new Exception("Article is not existed or not available for edit");
             }
@@ -39,17 +46,6 @@ namespace Application.Service
             await _unitOfWork.SaveAsync();
             return url;
         }
-
-        public async Task DownloadArticleFile(Guid id)
-        {
-            var article = await _unitOfWork.ArticleRepository.GetByIdAsync(id);
-            if(article == null || article.ArticleFileUrl == null)
-            {
-                throw new Exception("Article is not available for downloading");
-            }
-            await _firebaseService.DownloadFile(article.ArticleFileUrl);
-        }
-
 
         public async Task<IEnumerable<ArticleResponse>> GetAll(ArticleStatus? status)
         {
