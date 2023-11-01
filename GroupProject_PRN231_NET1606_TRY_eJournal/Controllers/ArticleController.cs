@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using AutoMapper;
 using Application.Service;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
@@ -103,6 +104,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             return BadRequest();
         }
 
+        [HttpPut]
+
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]
@@ -113,18 +116,12 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             return articles.AsQueryable();
         }
         //NgoThiKhanhLy
-        [HttpPost("article-file")]
+        [HttpPost("{id}/article-file")]
         [Authorize]
-        public async Task<ActionResult<string>> AddArticleFile(IFormFile file)
+        public async Task<ActionResult<string>> AddArticleFile(IFormFile file, [FromRoute(Name = "id")] Guid id)
         {
-            var url = await _articleService.AddArticleFile(file);
-            return Ok(await _articleService.AddArticleFile(file));
-        }
-        //NgoThiKhanhLy
-        [HttpPost("{id}/download-article-file")]
-        public async Task DownloadArticleFile([FromRoute(Name = "id")] Guid id)
-        {
-            await _articleService.DownloadArticleFile(id);
+            var url = await _articleService.AddArticleFile(file, id);
+            return Ok(url);
         }
 
 

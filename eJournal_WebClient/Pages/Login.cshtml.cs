@@ -13,15 +13,17 @@ namespace eJournal_WebClient.Pages
         [BindProperty]
         public string ErrorMessage { get; set; }
         private readonly HttpClient _client;
+        private readonly IHttpContextAccessor _contextAccessor;
         private string LoginUrl;
-        public LoginModel(HttpClient client)
+        public LoginModel(HttpClient client, IHttpContextAccessor contextAccessor)
         {
             _client = client;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             LoginUrl = "http://localhost:5035/api/Authentication/authentication";
+            _contextAccessor = contextAccessor;
         }
-       public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPost()
         {
             JsonContent jsonContent = JsonContent.Create(AuthenRequest);
             var httpResponseMessage= await _client.PostAsync(LoginUrl, jsonContent);
@@ -30,7 +32,9 @@ namespace eJournal_WebClient.Pages
                 ErrorMessage = await httpResponseMessage.Content.ReadAsStringAsync();
                 return Page();
             }
-            return RedirectToPage("/Userpage/Index");
+            string jwt = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            return RedirectToPage("/ArticlePage/Index");
         }
     }
 }
