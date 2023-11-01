@@ -24,7 +24,7 @@ namespace eJournal_WebClient.Pages.ArticlePages
 
 		public IList<ArticleResponse> Articles { get; set; } = default!;
 
-		public async Task OnGetAsync(string? id, string? title, string? authorName)
+		public async Task<IActionResult> OnGetAsync(string? id, string? title, string? authorName)
 		{
             #region Get articles
             StringBuilder apiUrl = new StringBuilder(ApiUrl);
@@ -48,21 +48,29 @@ namespace eJournal_WebClient.Pages.ArticlePages
                 {
                     apiUrl.Append(string.Join(" and ", filters));
                 }
+                else
+                {
+                    apiUrl.Append(filters.First());
+                }
             }
             _httpClient.AddAuthorizationHeader(HttpContext);
-            HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result;
+            HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result; //response.Headers.WwwAuthenticate
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 Articles = JsonConvert.DeserializeObject<IList<ArticleResponse>>(data);
             }
-            //else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && response.)
-            //{
-
-            //}
             else
             {
-                RedirectToPage("/Error");
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && response.Headers.WwwAuthenticate.ToString().Contains("Bearer error=\"invalid_token\", error_description=\"The token expired at"))
+                {
+                    var renewTokenStatus = await _httpClient.RenewAccessToken(HttpContext);
+                    if (renewTokenStatus)
+                    {
+                        return RedirectToPage("./Index");
+                    }
+                }
+                return RedirectToPage("/Error");
             }
             #endregion
             #region Get majors
@@ -72,6 +80,7 @@ namespace eJournal_WebClient.Pages.ArticlePages
 
             }
             #endregion
+            return Page();
         }
     }
 }

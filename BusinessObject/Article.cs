@@ -15,5 +15,6 @@ namespace BusinessObject
         public string AuthorName { get; set; }
         public Guid? IssueId { get; set; }
         public virtual Issue? Issue { get; set; }
+        public virtual ICollection<Author> Author { get; set; } = new List<Author>();
     }
 }

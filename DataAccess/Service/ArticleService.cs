@@ -78,10 +78,33 @@ namespace Application.Service
 
         public async Task<Article> GetArticles(Guid id)
         {
-            return await _unitOfWork.ArticleRepository.GetArticles(id);
+            var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+            if(article == null)
+            {
+                throw new Exception("Article doesn't exist");
+            }
+            if(article.Status != nameof(ArticleStatus.Publish))
+            {
+                throw new Exception("You don't have the right to access this article");
+            }
+			return article;
         }
-        
-        public async Task<int> UpdateArticle(Article article)
+
+		public async Task<Article> GetArticlesForAuthor(Guid id)
+		{
+			var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+			if (article == null)
+			{
+				throw new Exception("Article doesn't exist");
+			}
+			if (article.Status != nameof(ArticleStatus.Publish))
+			{
+				throw new Exception("You don't have the right to access this article");
+			}
+			return article;
+		}
+
+		public async Task<int> UpdateArticle(Article article)
         {
             return await _unitOfWork.ArticleRepository.UpdateArticle(article);
         }
@@ -97,6 +120,10 @@ namespace Application.Service
             if (article == null)
             {
                 throw new Exception("Article doesn't exist");
+            }
+            if(article.CreatedBy != _userService.GetCurrentLoginUser().Result.Id)
+            {
+                throw new Exception("You don't have the right to modify this article");
             }
             if(article.Status != nameof(ArticleStatus.Draft) && article.Status != nameof(ArticleStatus.Revise))
             {
