@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using eJournal_WebClient.Common;
 
 namespace eJournal_WebClient.Pages.ArticlePages
 {
@@ -48,13 +49,17 @@ namespace eJournal_WebClient.Pages.ArticlePages
                     apiUrl.Append(string.Join(" and ", filters));
                 }
             }
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["AccessToken"]);
+            _httpClient.AddAuthorizationHeader(HttpContext);
             HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 Articles = JsonConvert.DeserializeObject<IList<ArticleResponse>>(data);
             }
+            //else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && response.)
+            //{
+
+            //}
             else
             {
                 RedirectToPage("/Error");

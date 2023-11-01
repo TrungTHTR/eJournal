@@ -89,7 +89,12 @@ namespace Infrastructure.Repository
 			return await query.ToListAsync();
         }
 
-        public Task<TEntity?> GetByIdAsync(Guid id)
+		public async Task<TEntity?> GetAsync(object id)
+		{
+			return await _dbSet.FindAsync(id);
+		}
+
+		public Task<TEntity?> GetByIdAsync(Guid id)
         {
             return this.GetByIdAsync(id, Array.Empty<Expression<Func<TEntity, object>>>());
         }

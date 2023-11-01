@@ -3,6 +3,7 @@ using Application.Utils;
 using Application.ViewModels.UserViewModels;
 using AutoMapper;
 using BusinessObject;
+using Firebase.Auth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -25,27 +26,69 @@ namespace Application.Service
 
         public async Task<AuthenticationResponse> Login(AuthenticationRequest request)
         {
-            var users = await _unitOfWork.AccountRepository.GetAllAsync(filter: x => x.Email == request.Email, includedProperties: nameof(Account.Role));
+			#region check email
+			var users = await _unitOfWork.AccountRepository.GetAllAsync(filter: x => x.Email == request.Email, includedProperties: nameof(Account.Role));
             if (users == null || !users.Any())
             {
                 throw new Exception("Invalid Email");
             }
-            Account user = users.First();
-			// need to check whether it expired
-			if (!string.IsNullOrEmpty(user.RefreshToken))
-			{
-				throw new Exception("You haven't logout yet");
-			}
+			#endregion
+			Account user = users.First();
+			#region check password
 			if (!user.PasswordHash.SequenceEqual(EncryptionUtils.Encrypt(request.Password, user.PasswordSalt)))
-            {
-                throw new Exception("Invalid password");
-            }
-            string token = _jwtService.GenerateAuthenticatedAccessToken(user.Role.Rolename, user.Email, user.Id.ToString());
-            string refreshToken = _jwtService.GenerateAuthenticatedRefreshToken(user.Id.ToString(), DateTime.UtcNow);
+			{
+				throw new Exception("Invalid password");
+			}
+			#endregion
+			#region check if refresh token is existed & valid
+			string? refreshToken = user.RefreshToken;
+            DateTime? expiredDate = null;
+			if (!string.IsNullOrEmpty(refreshToken))
+			{
+                expiredDate = _jwtService.GetExpiredDate(refreshToken);
+                if(expiredDate != null && expiredDate > DateTime.UtcNow)
+                {
+					throw new Exception("You haven't logout yet");
+				}
+			}
+			#endregion
+			string token = _jwtService.GenerateAuthenticatedAccessToken(user.Role.Rolename, user.Email, user.Id.ToString());
+            refreshToken = _jwtService.GenerateAuthenticatedRefreshToken(user.Id.ToString(), expiredDate ?? DateTime.UtcNow);
             user.RefreshToken = token;
             _unitOfWork.AccountRepository.Update(user);
             await _unitOfWork.SaveAsync();
             return new AuthenticationResponse { 
+                AccessToken = token,
+                RefreshToken = refreshToken
+            };
+        }
+
+        public async Task<AuthenticationResponse> RefreshToken(string refreshToken)
+        {
+			if (!_jwtService.VerifyToken(refreshToken))
+			{
+				throw new Exception("Invalid refresh token");
+			}
+			var userId = _jwtService.GetUserId(refreshToken);
+            if (userId == null)
+            {
+                throw new Exception("Invalid token");
+            }
+			var users = await _unitOfWork.AccountRepository.GetAllAsync(filter: x => x.Id == userId, includedProperties: nameof(Account.Role));
+			if (users == null || !users.Any())
+            {
+                throw new Exception("User doesn't exist");
+            }
+			var user = users.First();
+			string token = _jwtService.GenerateAuthenticatedAccessToken(user.Role.Rolename, user.Email, user.Id.ToString());
+			var expiredDate = _jwtService.GetExpiredDate(refreshToken);
+			if (expiredDate != null && expiredDate > DateTime.UtcNow)
+			{
+				throw new Exception("Invalid token");
+			}
+			refreshToken = _jwtService.GenerateAuthenticatedRefreshToken(user.Id.ToString(), expiredDate ?? DateTime.UtcNow);
+            return new AuthenticationResponse
+            {
                 AccessToken = token,
                 RefreshToken = refreshToken
             };
@@ -74,12 +117,12 @@ namespace Application.Service
 
         public async Task<Account> GetCurrentLoginUser()
         {
-            var userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Sid)?.Value;
+            var userId = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
             if(userId == null)
             {
                 throw new Exception("User hasn't logged in yet");
             }
-            var user = await _unitOfWork.AccountRepository.GetByIdAsync(new Guid(userId));
+            var user = await _unitOfWork.AccountRepository.GetAsync(Guid.Parse(userId));
             if(user == null)
             {
                 throw new Exception("User doesn't exist");

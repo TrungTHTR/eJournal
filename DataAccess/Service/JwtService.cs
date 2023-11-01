@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using BusinessObject;
 using Application.Utils;
+using Newtonsoft.Json.Linq;
 
 namespace Application.Service
 {
@@ -32,7 +33,8 @@ namespace Application.Service
             {
                 SigningCredentials = credentials,
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddMinutes(1),
+                //Expires = DateTime.UtcNow.AddDays(1),
 				Issuer = _configuration["jwt:issuer"],
                 Audience = _configuration["jwt:audience"]
 
@@ -58,15 +60,20 @@ namespace Application.Service
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 
+        /// <summary>
+        /// verify if token is validated jwt token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>Return true if token valid, false otherwise</returns>
 		public bool VerifyToken(string token)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
-            // is valid credentials
-			var claims = tokenHandler.ValidateToken(token, new TokenValidationParameters
+            // is valid credentials, is token expired
+			var claimPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
 			{
 				ValidateIssuerSigningKey = true,
 				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"])),
-				ValidateLifetime = false,
+				ValidateLifetime = true,
 				ValidateAudience = false,
 				ValidateIssuer = false,
 				ClockSkew = TimeSpan.Zero
@@ -79,13 +86,45 @@ namespace Application.Service
                     return false;
                 }
             }
-            // is token expired
-            var unixExpiredDate = claims.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp)?.Value;
-            if(unixExpiredDate != null)
-            {
-                DateTimeUtils.ConvertUnixTimeToUtcDateTime(long.Parse(unixExpiredDate));
-            }
 			return true;
+		}
+
+        public DateTime? GetExpiredDate(string token)
+        {
+            var claims = GetClaims(token);
+			var unixExpiredDate = claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp)?.Value;
+			if (unixExpiredDate != null)
+			{
+                return DateTimeUtils.ConvertUnixTimeToUtcDateTime(long.Parse(unixExpiredDate));
+			}
+            return null;
+		}
+
+        public Guid? GetUserId(string token)
+        {
+			var claims = GetClaims(token);
+            var userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid)?.Value;
+            if(userId != null)
+            {
+                return Guid.Parse(userId);
+            }
+            return null;
+		}
+
+        private IEnumerable<Claim> GetClaims(string token)
+        {
+			var tokenHandler = new JwtSecurityTokenHandler();
+			// is valid credentials, is token expired
+			var claimPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+			{
+				ValidateIssuerSigningKey = true,
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"])),
+				ValidateLifetime = false,
+				ValidateAudience = false,
+				ValidateIssuer = false,
+				ClockSkew = TimeSpan.Zero
+			}, out SecurityToken validatedToken);
+            return claimPrincipal.Claims;
 		}
 	}
 }

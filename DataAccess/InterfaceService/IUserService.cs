@@ -13,7 +13,7 @@ namespace Application.InterfaceService
         Task<AuthenticationResponse> Login(AuthenticationRequest request);
         Task<bool> Register(RegistrationRequest request);
         Task Logout();
+        Task<AuthenticationResponse> RefreshToken(string refreshToken);
 		Task<Account> GetCurrentLoginUser();
-
 	}
 }

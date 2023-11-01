@@ -45,17 +45,6 @@ namespace eJournal_WebClient.Pages
             {
                 string data = await httpResponseMessage.Content.ReadAsStringAsync();
                 AuthenticationResponse? authResponse = JsonConvert.DeserializeObject<AuthenticationResponse>(data);
-				//var tokenHandler = new JwtSecurityTokenHandler();
-				//var jwtSecurityToken = tokenHandler.ReadJwtToken(authResponse.AccessToken);
-				//var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-				//var role = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
-				//identity.AddClaim(new Claim(ClaimTypes.Email, jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "email").Value));
-				//identity.AddClaim(new Claim(ClaimTypes.Role, jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "role").Value));
-				//var principal = new ClaimsPrincipal(identity);
-				//await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-				//SessionHelper.SetObjectAsJson(HttpContext.Session, "jwt", customer.Token);
-				//SessionHelper.SetObjectAsJson(HttpContext.Session, "refreshToken", customer.RefreshToken);
-				//SessionHelper.SetObjectAsJson(HttpContext.Session, "role", role);
 				if (authResponse != null)
                 {
                     HttpContext.Response.Cookies.Append("AccessToken", authResponse.AccessToken);
