@@ -2,14 +2,17 @@
 using Application.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   /* [Route("odata")]*/
     [AllowAnonymous]
-    public class AuthenticationController : ControllerBase
+    
+    public class AuthenticationController : ODataController
     {
         private readonly IUserService _userService;
 
@@ -21,8 +24,16 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         [HttpPost("authentication")]
         public async Task<ActionResult<string>> Login(AuthenticationRequest request)
         {
-            var token = await _userService.Login(request);
+            string token;
+            try
+            {
+                 token = await _userService.Login(request);
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(token);
+            
         }
 
         [HttpPost("registration")]
@@ -31,5 +42,12 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             await _userService.Register(request);
             return Ok();
         }
+        /*[EnableQuery]
+        [HttpGet("Users")]
+        public async Task<ActionResult> Get() 
+        { 
+            List<UserViewAllModel> users= await _userService.ListAll();
+            return Ok(users);
+        }*/
     }
 }

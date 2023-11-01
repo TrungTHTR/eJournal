@@ -1,4 +1,5 @@
-﻿using BusinessObject;
+﻿using Application.ViewModels.UserViewModels;
+using BusinessObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Application.InterfaceRepository
 {
     public interface IAccountRepository: IGenericRepository<Account>
     {
+        Task<List<UserViewAllModel>> GetAllWithViewModel();
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Application.Service
 {
@@ -25,14 +26,19 @@ namespace Application.Service
             _jwtService = jwtService;
         }
 
+        public async Task<List<UserViewAllModel>> ListAll()
+        {
+            return await _unitOfWork.AccountRepository.GetAllWithViewModel();
+        }
+
         public async Task<string> Login(AuthenticationRequest request)
         {
-            var users = await _unitOfWork.AccountRepository.GetAllAsync(x => x.Email == request.Email);
-            if (users == null || !users.Any())
+            var user =  _unitOfWork.AccountRepository.GetAllAsync(x=>x.Role).Result.SingleOrDefault(x=>x.Email==request.Email);
+            if (user == null)
             {
                 throw new Exception("Invalid Email");
             }
-            Account user = users.First();
+  
             if(!user.PasswordHash.SequenceEqual(EncryptionUtils.Encrypt(request.Password, user.PasswordSalt)))
             {
                 throw new Exception("Invalid password");
@@ -43,13 +49,14 @@ namespace Application.Service
 
         public async Task<bool> Register(RegistrationRequest request)
         {
-            var users = _unitOfWork.AccountRepository.GetAllAsync(x => x.Email == request.Email).Result;
-            if(users != null && users.Any())
+            var users = _unitOfWork.AccountRepository.GetAllAsync().Result.SingleOrDefault(x=>x.Email==request.Email);
+            if(users != null)
             {
                 throw new Exception("This email has been registered before");
             }
             var user = _mapper.Map<Account>(request);
             user.RoleId = 5;
+            user.IsDelete=false;
             await _unitOfWork.AccountRepository.AddAsync(user);
             int i = await _unitOfWork.SaveAsync();
             return i >0;
