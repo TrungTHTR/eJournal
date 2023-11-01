@@ -27,6 +27,7 @@ namespace Application.Service
                 new Claim(ClaimTypes.Role, role)
             };
             var token = new JwtSecurityToken(
+                issuer: _configuration["jwt:issuer"],
                 claims: claims,
                 expires: DateTime.Now.AddDays(3),
                 signingCredentials: credentials

@@ -12,6 +12,8 @@ namespace Application.InterfaceService
     {
         Task<string> Login(AuthenticationRequest request);
         Task<bool> Register(RegistrationRequest request);
+        Task<List<UserViewAllModel>> ListAll();
+    
         Task<Account> GetCurrentLoginUser();
 
 	}

@@ -8,6 +8,8 @@ using System.Text;
 using Microsoft.AspNetCore.OData;
 using Application.ViewModels.ArticleViewModels;
 using BusinessObject;
+using System.Reflection;
+using Application.ViewModels.UserViewModels;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.OData.Extensions;
 
@@ -20,12 +22,15 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             // OData
             ODataModelBuilder modelBuilder = new ODataConventionModelBuilder();
             modelBuilder.EntitySet<ArticleResponse>("Articles");
+            modelBuilder.EntitySet<Country>("Countries");
+            modelBuilder.EntitySet<Account>("Accounts");
+            modelBuilder.EntitySet<UserViewAllModel>("Users");
             modelBuilder.EntityType<Country>();
-            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().Count().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+            services.AddScoped<IClaimService, ClaimService>();
             
             // Services
             services.AddScoped<IClaimService, ClaimService>();
-            //services.AddScoped<IIssueService, IssueService>();
             services.AddScoped<IArticleService,ArticleService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();
             services.AddScoped<IRequestReviewService, RequestReviewService>();

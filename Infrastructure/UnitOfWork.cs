@@ -43,7 +43,7 @@ namespace Infrastructure
             AccountRepository = accountRepository;
             _articleRepository = articleRepository;
             _countryRepository = countryRepository;
-            //_issueRepository = issueRepository;
+     
             _requestReviewRepository = requestReviewRepository;
         }
 

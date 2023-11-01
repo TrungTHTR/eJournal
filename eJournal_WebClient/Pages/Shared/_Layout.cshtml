@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,10 +34,10 @@
             <h2>Menu</h2>
             <ul>
                 <li><a asp-area="" asp-page="/Home">Home</a></li>
-                <li ><a asp-area="" asp-page="/About">About</a></li>
-                <li ><a asp-area="" asp-page="#">Groups</a></li>
-                <li ><a asp-area="" asp-page="/Explore">Explore</a></li>
-                <li ><a asp-area="" asp-page="/Privacy">Privacy</a></li>
+                <li><a asp-area="" asp-page="/About">About</a></li>
+                <li><a asp-area="" asp-page="#">Groups</a></li>
+                <li><a asp-area="" asp-page="/Explore">Explore</a></li>
+                <li><a asp-area="" asp-page="/Privacy">Privacy</a></li>
                 <li><a asp-page="/ArticlePages/Index">Article</a></li>
             </ul>
         </nav>
@@ -48,11 +49,11 @@
             </div>
         </div>
 
-    <footer id="footer">
-        <div class="inner">
-            &copy; 2023 - eJournalClient- TryTeam PRN231 - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+        <footer id="footer">
+            <div class="inner">
+                &copy; 2023 - eJournalClient- TryTeam PRN231 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>
+        </footer>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -64,11 +65,11 @@
     <script src="~/assets/js/util.js"></script>
     <script src="~/assets/js/main.js"></script>
     <script>
-    function redirectToLoginPage() {
-        // Redirect the user to the login page
-        window.location.href = "/Login"; // Replace "login.html" with the actual URL of your login page
-    }
-</script>
+        function redirectToLoginPage() {
+            // Redirect the user to the login page
+            window.location.href = "/Login"; // Replace "login.html" with the actual URL of your login page
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
