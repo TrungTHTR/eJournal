@@ -56,7 +56,8 @@ namespace Application.Service
                 signingCredentials: credentials, 
                 expires: expiredDate,
                 issuer: _configuration["jwt:issuer"],
-                audience: _configuration["jwt:audience"]);
+                audience: _configuration["jwt:audience"],
+                claims: claims);
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 

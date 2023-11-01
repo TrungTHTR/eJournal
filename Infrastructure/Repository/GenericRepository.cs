@@ -105,7 +105,7 @@ namespace Infrastructure.Repository
              .Aggregate(_dbSet.AsQueryable(),
                  (entity, property) => entity.Include(property))
              .AsNoTracking()
-             .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsDelete == false);
+             .FirstOrDefaultAsync(x => x.Id.Equals(id) && (x.IsDelete == null || x.IsDelete == false));
         }
 
         public void Update(TEntity entity)

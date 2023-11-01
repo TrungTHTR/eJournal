@@ -90,5 +90,21 @@ namespace Application.Service
         {
             return await _unitOfWork.ArticleRepository.SearchArticle(value);
         }
-    }
+
+		public async Task SubmitArticle(Guid id)
+		{
+            var article = await _unitOfWork.ArticleRepository.GetAsync(id);
+            if (article == null)
+            {
+                throw new Exception("Article doesn't exist");
+            }
+            if(article.Status != nameof(ArticleStatus.Draft) && article.Status != nameof(ArticleStatus.Revise))
+            {
+                throw new Exception("Only draft or revised article can be submitted");
+            }
+            article.Status = nameof(ArticleStatus.Review);
+            _unitOfWork.ArticleRepository.Update(article);
+            await _unitOfWork.SaveAsync();
+		}
+	}
 }

@@ -41,10 +41,10 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 		}
 
 		[HttpPost("refresh-access-token")]
-        public async Task<ActionResult> RefreshAccessToken(string refreshToken)
+        public async Task<ActionResult<AuthenticationResponse>> RefreshAccessToken(string refreshToken)
         {
-            await _userService.RefreshToken(refreshToken);
-            return Ok();
+            var result = await _userService.RefreshToken(refreshToken);
+            return Ok(result);
         }
     }
 }
