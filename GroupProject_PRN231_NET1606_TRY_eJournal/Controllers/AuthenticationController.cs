@@ -30,7 +30,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
                  token = await _userService.Login(request);
             } catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new  { message=ex.Message});
             }
             return Ok(token);
             
