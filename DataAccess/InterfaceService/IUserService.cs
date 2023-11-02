@@ -1,4 +1,5 @@
 ﻿using Application.ViewModels.UserViewModels;
+using BusinessObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Application.InterfaceService
     {
         Task<string> Login(AuthenticationRequest request);
         Task<bool> Register(RegistrationRequest request);
-    }
+        Task<Account> GetCurrentLoginUser();
+
+	}
 }

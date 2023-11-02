@@ -14,6 +14,8 @@ namespace Infrastructure.Mappers
         public ArticleMappingProfile()
         {
             CreateMap<Article, ArticleResponse>();
+            CreateMap<Guid, string>().ConstructUsing(x => x.ToString());
+            CreateMap<string, Guid>().ConstructUsing(x => new Guid(x));
         }
     }
 }

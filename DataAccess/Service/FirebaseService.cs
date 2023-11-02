@@ -51,15 +51,6 @@ namespace Application.Service
             return storage;
         }
 
-        public async Task DownloadFile(string url)
-        {
-            var storage = await GetFirebaseStorage();
-            using(Stream downloadFileStream = new FileStream($"abc", FileMode.CreateNew))
-            {
-                await WebRequest.Create(url).GetResponseAsync().ContinueWith(task => task.Result.GetResponseStream().CopyToAsync(downloadFileStream));
-            }
-        }
-
         public async Task<string> UploadFile(Stream fileStream, string fileName, string? folder = null)
         {
             var storage = await GetFirebaseStorage();

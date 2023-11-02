@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
-	[Route("odata")]
+	[Route("api/[controller]")]
 	public class CountryController : ODataController
 	{
 		private readonly ICountryService _countryService;

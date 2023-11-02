@@ -42,6 +42,20 @@ namespace Infrastructure.Repository
             await _dbSet.AddRangeAsync(entities);
         }
 
+        public void Delete(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public async Task DeleteByIdAsync(Guid id)
+        {
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+            }
+        }
+
         public async  Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
         {
             return await includes
@@ -60,14 +74,19 @@ namespace Infrastructure.Repository
           
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, string includedProperties = "")
         {
             IQueryable<TEntity> query = _dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
             }
-            return await query.ToListAsync();
+			foreach (var includeProperty in includedProperties.Split
+				(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+			{
+				query = query.Include(includeProperty);
+			}
+			return await query.ToListAsync();
         }
 
         public Task<TEntity?> GetByIdAsync(Guid id)
