@@ -16,12 +16,6 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             _requestReviewService = requestReviewService;
         }
 
-        //Why ArticleController ???
-        /*public ArticleController(IRequestReviewService requestReviewService)
-        {
-            _requestReviewService = requestReviewService;
-        }*/
-
         // GET api/<ArticleController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByArticleId(Guid id)
@@ -37,6 +31,11 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RequestReview requestReview)
         {
+            var _requestReview = await _requestReviewService.GetRequestReviews(requestReview.Id);
+            if (_requestReview == null)
+            {
+                return BadRequest("Request has exist");
+            }
             await _requestReviewService.CreateRequestReview(requestReview);
             return NoContent();
         }

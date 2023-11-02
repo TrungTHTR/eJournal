@@ -24,5 +24,9 @@ namespace Application.Service
         {
             return await _unitOfWork.RequestReviewRepository.CreateRequestReview(requestReview);
         }
+        public async Task<RequestReview> GetRequestReviews(Guid id)
+        {
+            return await _unitOfWork.RequestReviewRepository.GetRequestReviews(id);
+        }
     }
 }
