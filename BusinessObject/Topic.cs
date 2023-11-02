@@ -8,16 +8,11 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-	public class Author
+	public class Topic
 	{
-		[Key]
-		public Guid Id { get; set; }
-		public string AuthorName { get; set; }
-		public string IdentityCardNumber { get; set; }
-		public Guid? AccountId { get; set; }
-		[ForeignKey(nameof(AccountId))]
-		public virtual Account? Account { get; set; }
+		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int TopicId { get; set; }
+		public string TopicName { get; set; }
 		public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
-
 	}
 }

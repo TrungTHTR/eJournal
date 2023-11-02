@@ -33,7 +33,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
 		[HttpPost("logout")]
-        //[Authorize]
+        [Authorize]
 		public async Task<ActionResult> Logout()
 		{
             await _userService.Logout();

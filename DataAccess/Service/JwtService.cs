@@ -33,7 +33,7 @@ namespace Application.Service
             {
                 SigningCredentials = credentials,
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(30),
                 //Expires = DateTime.UtcNow.AddDays(1),
 				Issuer = _configuration["jwt:issuer"],
                 Audience = _configuration["jwt:audience"]

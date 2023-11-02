@@ -9,8 +9,8 @@ namespace BusinessObject
     public  class Specialization:BaseEntity
     {
         public string SpecializationName { get; set;}
-        public Guid? MajorId { get; set; }
-        public Major Major { get; set; }
-        public ICollection<AccountSpecialization> AccountSpecializations { get; set; }
+        public Guid MajorId { get; set; }
+        public virtual Major? Major { get; set; }
+        public virtual ICollection<AccountSpecialization> AccountSpecializations { get; set; } = new List<AccountSpecialization>();
     }
 }

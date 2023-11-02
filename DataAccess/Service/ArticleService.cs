@@ -116,12 +116,13 @@ namespace Application.Service
 
 		public async Task SubmitArticle(Guid id)
 		{
-            var article = await _unitOfWork.ArticleRepository.GetAsync(id);
+            var article = await _unitOfWork.ArticleRepository.GetByIdAsync(id, x => x.Author);
             if (article == null)
             {
                 throw new Exception("Article doesn't exist");
             }
-            if(article.CreatedBy != _userService.GetCurrentLoginUser().Result.Id)
+            var author = article.Author.FirstOrDefault(x => x.Id == _userService.GetCurrentLoginUser().Result.Id);
+            if(author == null)
             {
                 throw new Exception("You don't have the right to modify this article");
             }

@@ -10,8 +10,8 @@ namespace BusinessObject
     {
         public string RequestTitle { get; set; }
         public DateTime RequestDate { get; set; }
-        public Guid? ArticleId { get; set; }
-        public Article Article { get; set; }
-        public ICollection<RequestDetail> Details { get; set; }
+        public Guid ArticleId { get; set; }
+        public virtual Article? Article { get; set; }
+        public virtual ICollection<RequestDetail> Details { get; set; } = new List<RequestDetail>();
     }
 }

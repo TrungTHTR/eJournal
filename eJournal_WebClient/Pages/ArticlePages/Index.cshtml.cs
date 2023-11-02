@@ -54,7 +54,7 @@ namespace eJournal_WebClient.Pages.ArticlePages
                 }
             }
             _httpClient.AddAuthorizationHeader(HttpContext);
-            HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result; //response.Headers.WwwAuthenticate
+            HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();

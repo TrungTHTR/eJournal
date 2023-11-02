@@ -11,9 +11,9 @@ namespace BusinessObject
         public int Status { get; set; }
         public string Description { get; set; }
         public string? Comments { get; set; }    
-        public Guid? RequestId { get; set; }
-        public RequestReview RequestReview { get; set; }
-        public Guid? AccountId { get; set; }
-        public Account Account { get; set; }
+        public Guid RequestId { get; set; }
+        public virtual RequestReview? RequestReview { get; set; }
+        public Guid AccountId { get; set; }
+        public virtual Account? Account { get; set; }
     }
 }
