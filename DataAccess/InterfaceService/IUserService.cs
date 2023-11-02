@@ -15,5 +15,6 @@ namespace Application.InterfaceService
         Task Logout();
         Task<AuthenticationResponse> RefreshToken(string refreshToken);
 		Task<Account> GetCurrentLoginUser();
+        Task<List<UserViewAllModel>> ListAll();
 	}
 }

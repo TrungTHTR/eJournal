@@ -10,6 +10,7 @@ namespace Application.InterfaceRepository
 {
     public interface IGenericRepository<TEntity> where TEntity: BaseEntity
     {
+       
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, string includedProperties = "");
         Task<List<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity?> GetAsync(object id);

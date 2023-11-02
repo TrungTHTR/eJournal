@@ -20,18 +20,19 @@ namespace eJournal_WebClient.Pages
         private readonly HttpClient _client;
         private string LoginUrl;
         private string LogoutUrl = "http://localhost:5035/api/Authentication/logout";
-
-		public LoginModel(HttpClient client)
+        public LoginModel(HttpClient client)
         {
             _client = client;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             LoginUrl = "http://localhost:5035/api/Authentication/authentication";
         }
+
         public IActionResult OnGet()
         {
             return Page();
         }
+
         public async Task<IActionResult> OnPost()
         {
             JsonContent jsonContent = JsonContent.Create(AuthenRequest);
@@ -51,7 +52,7 @@ namespace eJournal_WebClient.Pages
                     Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
                 }
             }
-            return RedirectToPage("/Userpage/Index");
+            return RedirectToPage("/ArticlePage/Index");
         }
 
         public async Task OnPostLogout()

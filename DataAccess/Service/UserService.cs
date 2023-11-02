@@ -3,7 +3,6 @@ using Application.Utils;
 using Application.ViewModels.UserViewModels;
 using AutoMapper;
 using BusinessObject;
-using Firebase.Auth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -22,6 +21,10 @@ namespace Application.Service
             _mapper = mapper;
             _jwtService = jwtService;
             _contextAccessor = contextAccessor;
+		}
+        public async Task<List<UserViewAllModel>> ListAll()
+        {
+            return await _unitOfWork.AccountRepository.GetAllWithViewModel();
         }
 
         public async Task<AuthenticationResponse> Login(AuthenticationRequest request)
@@ -108,12 +111,14 @@ namespace Application.Service
 
         public async Task<bool> Register(RegistrationRequest request)
         {
-            var users = _unitOfWork.AccountRepository.GetAllAsync(x => x.Email == request.Email).Result;
-            if(users != null && users.Any())
+            var users = _unitOfWork.AccountRepository.GetAllAsync().Result.SingleOrDefault(x=>x.Email==request.Email);
+            if(users != null)
             {
                 throw new Exception("This email has been registered before");
             }
             var user = _mapper.Map<Account>(request);
+            user.RoleId = 5;
+            user.IsDelete=false;
             await _unitOfWork.AccountRepository.AddAsync(user);
             int i = await _unitOfWork.SaveAsync();
             return i >0;
