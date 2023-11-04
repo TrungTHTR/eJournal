@@ -1634,9 +1634,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RequestReviewId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -1644,7 +1641,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("RequestReviewId");
+                    b.HasIndex("RequestId");
 
                     b.ToTable("RequestDetails");
                 });
@@ -1886,7 +1883,9 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("BusinessObject.RequestReview", "RequestReview")
                         .WithMany("Details")
-                        .HasForeignKey("RequestReviewId");
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
 

@@ -132,6 +132,7 @@ namespace Application.Service
             }
             article.Status = nameof(ArticleStatus.Review);
             _unitOfWork.ArticleRepository.Update(article);
+
             await _unitOfWork.SaveAsync();
 		}
 	}

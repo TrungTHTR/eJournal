@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231102130544_v1")]
+    [Migration("20231104002057_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1636,9 +1636,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RequestReviewId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -1646,7 +1643,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("RequestReviewId");
+                    b.HasIndex("RequestId");
 
                     b.ToTable("RequestDetails");
                 });
@@ -1888,7 +1885,9 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("BusinessObject.RequestReview", "RequestReview")
                         .WithMany("Details")
-                        .HasForeignKey("RequestReviewId");
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
 

@@ -1,6 +1,9 @@
 ﻿using Application;
 using Application.InterfaceService;
+using Application.ViewModels.RequestReviewViewModels;
 using BusinessObject;
+using BusinessObject.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
@@ -33,6 +36,20 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
                 return BadRequest();
             }
             return Ok(requests);
+        }
+
+        [HttpPost]
+        //[Authorize("Staff")]
+        public async Task<IActionResult> Create([FromBody] CreatedRequestDetailsRequest request)
+        {
+            await _requestDetailService.Create(request);
+            return Ok();
+        }
+
+        [HttpPut("{id}/status")]
+        public async Task ChangeRequestDetailsStatus([FromRoute] Guid id, [FromQuery] RequestDetailStatus status)
+        {
+            await _requestDetailService.ChangeRequestStatus(id, status);
         }
     }
 }

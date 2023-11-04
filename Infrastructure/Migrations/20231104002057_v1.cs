@@ -302,7 +302,6 @@ namespace Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RequestReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -322,10 +321,11 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RequestDetails_RequestReviews_RequestReviewId",
-                        column: x => x.RequestReviewId,
+                        name: "FK_RequestDetails_RequestReviews_RequestId",
+                        column: x => x.RequestId,
                         principalTable: "RequestReviews",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -693,9 +693,9 @@ namespace Infrastructure.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestDetails_RequestReviewId",
+                name: "IX_RequestDetails_RequestId",
                 table: "RequestDetails",
-                column: "RequestReviewId");
+                column: "RequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestReviews_ArticleId",
