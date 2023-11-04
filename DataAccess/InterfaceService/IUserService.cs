@@ -10,9 +10,11 @@ namespace Application.InterfaceService
 {
     public interface IUserService
     {
-        Task<string> Login(AuthenticationRequest request);
+        Task<AuthenticationResponse> Login(AuthenticationRequest request);
         Task<bool> Register(RegistrationRequest request);
-        Task<Account> GetCurrentLoginUser();
-
+        Task Logout();
+        Task<AuthenticationResponse> RefreshToken(string refreshToken);
+		Task<Account> GetCurrentLoginUser();
+        Task<List<UserViewAllModel>> ListAll();
 	}
 }

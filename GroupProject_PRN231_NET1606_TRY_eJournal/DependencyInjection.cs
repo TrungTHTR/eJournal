@@ -8,8 +8,11 @@ using System.Text;
 using Microsoft.AspNetCore.OData;
 using Application.ViewModels.ArticleViewModels;
 using BusinessObject;
+using System.Reflection;
+using Application.ViewModels.UserViewModels;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.OData.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal
 {
@@ -20,12 +23,15 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             // OData
             ODataModelBuilder modelBuilder = new ODataConventionModelBuilder();
             modelBuilder.EntitySet<ArticleResponse>("Articles");
+            modelBuilder.EntitySet<Country>("Countries");
+            modelBuilder.EntitySet<Account>("Accounts");
+            modelBuilder.EntitySet<UserViewAllModel>("Users");
             modelBuilder.EntityType<Country>();
-            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().Count().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+            services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
+            services.AddScoped<IClaimService, ClaimService>();
             
             // Services
             services.AddScoped<IClaimService, ClaimService>();
-            //services.AddScoped<IIssueService, IssueService>();
             services.AddScoped<IArticleService,ArticleService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();
             services.AddScoped<IRequestReviewService, RequestReviewService>();
@@ -37,6 +43,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();  
+            services.AddScoped<IMajorService, MajorService>();
 			services.AddHttpContextAccessor();
 
             // Mapper
@@ -45,9 +52,14 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
 
             // Authentication
             services.AddAuthorization();
-            services.AddAuthentication().AddJwtBearer(options =>
+            services.AddAuthentication(options =>
             {
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
                     ValidateIssuer = true,

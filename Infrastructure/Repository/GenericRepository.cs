@@ -66,14 +66,15 @@ namespace Infrastructure.Repository
 
         public async Task<List<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
         {
-            return await includes
+            var query = includes
            .Aggregate(_dbSet.AsQueryable(),
-               (entity, property) => entity.Include(property))
-          .Where(x => x.IsDelete == false)
-          .ToListAsync();
+               (entity, property) => entity.Include(property));
+          var result =await query.Where(x=>x.IsDelete== false).ToListAsync();   
+            return result;
           
         }
 
+      
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, string includedProperties = "")
         {
             IQueryable<TEntity> query = _dbSet;
@@ -89,7 +90,12 @@ namespace Infrastructure.Repository
 			return await query.ToListAsync();
         }
 
-        public Task<TEntity?> GetByIdAsync(Guid id)
+		public async Task<TEntity?> GetAsync(object id)
+		{
+			return await _dbSet.FindAsync(id);
+		}
+
+		public Task<TEntity?> GetByIdAsync(Guid id)
         {
             return this.GetByIdAsync(id, Array.Empty<Expression<Func<TEntity, object>>>());
         }
@@ -100,7 +106,7 @@ namespace Infrastructure.Repository
              .Aggregate(_dbSet.AsQueryable(),
                  (entity, property) => entity.Include(property))
              .AsNoTracking()
-             .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsDelete == false);
+             .FirstOrDefaultAsync(x => x.Id.Equals(id) && (x.IsDelete == null || x.IsDelete == false));
         }
 
         public void Update(TEntity entity)

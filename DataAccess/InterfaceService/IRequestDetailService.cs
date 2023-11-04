@@ -1,4 +1,6 @@
-﻿using BusinessObject;
+﻿using Application.ViewModels.RequestReviewViewModels;
+using BusinessObject;
+using BusinessObject.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,7 @@ namespace Application.InterfaceService
     {
         Task<List<RequestDetail>> GetByReviewerId(Guid accountId);
         Task<List<RequestDetail>> GetAllRequestDetail();
+        Task ChangeRequestStatus(Guid id, RequestDetailStatus status);
+        Task Create(CreatedRequestDetailsRequest request);
     }
 }
