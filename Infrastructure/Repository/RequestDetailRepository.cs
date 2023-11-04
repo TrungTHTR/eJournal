@@ -30,5 +30,19 @@ namespace Infrastructure.Repository
         {
             return await _dbContext.RequestDetails.ToListAsync();
         }
+        public async Task<RequestDetail> GetRequestDetails(Guid id)
+        {
+            return await _dbContext.RequestDetails.FindAsync(id);
+        }
+        public async Task<int> UpdateRequestDetail(RequestDetail requestDetail)
+        {
+            var _requestDetail = await GetRequestDetails(requestDetail.Id);
+            if (_requestDetail != null)
+            {
+                _dbContext.Entry(_requestDetail).State = EntityState.Detached;
+                _dbContext.RequestDetails.Update(requestDetail);
+            }
+            return await _dbContext.SaveChangesAsync();
+        }
     }
 }

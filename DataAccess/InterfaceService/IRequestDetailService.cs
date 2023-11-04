@@ -11,5 +11,7 @@ namespace Application.InterfaceService
     {
         Task<List<RequestDetail>> GetByReviewerId(Guid accountId);
         Task<List<RequestDetail>> GetAllRequestDetail();
+        Task<RequestDetail> GetRequestDetails(Guid id);
+        Task<int> UpdateRequestDetail(RequestDetail requestDetail);
     }
 }

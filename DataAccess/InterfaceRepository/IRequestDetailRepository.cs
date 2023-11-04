@@ -11,5 +11,7 @@ namespace Application.InterfaceRepository
     {
         Task<List<RequestDetail>> ShowAllRequestDetail(Guid AccountId);
         Task<List<RequestDetail>> GetAllRequestDetail();
+        Task<RequestDetail> GetRequestDetails(Guid id);
+        Task<int> UpdateRequestDetail(RequestDetail requestDetail);
     }
 }
