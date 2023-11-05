@@ -36,5 +36,15 @@ namespace Infrastructure.Repository
         {
             return await _dbContext.RequestReviews.FindAsync(id);
         }
+        public async Task<int> UpdateRequestReview(RequestReview requestReview)
+        {
+            var _requestReview = await GetRequestReviews(requestReview.Id);
+            if (_requestReview != null)
+            {
+                _dbContext.Entry(_requestReview).State = EntityState.Detached;
+                _dbContext.RequestReviews.Update(requestReview);
+            }
+            return await _dbContext.SaveChangesAsync();
+        }
     }
 }

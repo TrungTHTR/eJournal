@@ -12,5 +12,6 @@ namespace Application.InterfaceRepository
         Task<List<RequestReview>> ShowAllRequestReview(Guid ArticleId);
         Task<int> CreateRequestReview(RequestReview requestReview);
         Task<RequestReview> GetRequestReviews(Guid id);
+        Task<int> UpdateRequestReview(RequestReview requestReview);
     }
 }

@@ -1,13 +1,13 @@
-﻿using Application;
-using Application.InterfaceService;
+﻿using Application.InterfaceService;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RequestReviewController : ControllerBase
+    public class RequestReviewController : ODataController
     {
         private readonly IRequestReviewService _requestReviewService;
 

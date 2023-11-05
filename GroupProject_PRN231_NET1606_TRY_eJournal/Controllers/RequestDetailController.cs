@@ -1,23 +1,26 @@
-﻿using Application;
 using Application.InterfaceService;
+using Application.ViewModels.RequestDetailViewModels;
 using Application.ViewModels.RequestReviewViewModels;
 using BusinessObject;
 using BusinessObject.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RequestDetailController : ControllerBase
+    public class RequestDetailController : ODataController
     {
         private readonly IRequestDetailService _requestDetailService;
         public RequestDetailController(IRequestDetailService requestDetailService)
         {
             _requestDetailService = requestDetailService;
         }
+
         [HttpGet]
+        [EnableQuery]
         public async Task<IActionResult> Get()
         {
             List<RequestDetail> requestDetails = await _requestDetailService.GetAllRequestDetail();
@@ -27,7 +30,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             }
             return Ok(requestDetails);
         }
-        [HttpGet("{id}")]
+
+        [HttpGet("reviewer/{id}")]
         public async Task<IActionResult> GetByReviewerId(Guid id)
         {
             List<RequestDetail> requests = await _requestDetailService.GetByReviewerId(id);
@@ -50,6 +54,35 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         public async Task ChangeRequestDetailsStatus([FromRoute] Guid id, [FromQuery] RequestDetailStatus status)
         {
             await _requestDetailService.ChangeRequestStatus(id, status);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateRequestStatus(Guid id, [FromBody] StatusUpdate statusUpdate)
+        {
+            var _request = await _requestDetailService.GetRequestDetails(id);
+            if (_request == null)
+            {
+                return BadRequest("Request is not found");
+            }
+            _request.Status = statusUpdate.Status;
+            await _requestDetailService.UpdateRequestDetail(_request);
+            return Ok(_request);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetArticleStatus(Guid id)
+        {
+            var _request = await _requestDetailService.GetRequestDetails(id);
+            if (_request == null)
+            {
+                return BadRequest("Request is not found");
+            }
+            var statusModel = new RequestViewStatus
+            {
+                Status = _request.Status,
+                Description = _request.Description,
+            };
+            return Ok(statusModel);
         }
     }
 }

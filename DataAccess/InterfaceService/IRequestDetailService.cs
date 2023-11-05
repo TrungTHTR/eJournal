@@ -15,5 +15,7 @@ namespace Application.InterfaceService
         Task<List<RequestDetail>> GetAllRequestDetail();
         Task ChangeRequestStatus(Guid id, RequestDetailStatus status);
         Task Create(CreatedRequestDetailsRequest request);
+        Task<RequestDetail> GetRequestDetails(Guid id);
+        Task<int> UpdateRequestDetail(RequestDetail requestDetail);
     }
 }

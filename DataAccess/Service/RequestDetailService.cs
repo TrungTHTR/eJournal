@@ -48,5 +48,13 @@ namespace Application.Service
             await _unitOfWork.RequestDetailRepository.AddAsync(detail);
             await _unitOfWork.SaveAsync();
 		}
-	}
+        public async Task<RequestDetail> GetRequestDetails(Guid id)
+        {
+            return await _unitOfWork.RequestDetailRepository.GetRequestDetails(id);
+        }
+        public async Task<int> UpdateRequestDetail(RequestDetail requestDetail)
+        {
+            return await _unitOfWork.RequestDetailRepository.UpdateRequestDetail(requestDetail);
+        }
+    }
 }
