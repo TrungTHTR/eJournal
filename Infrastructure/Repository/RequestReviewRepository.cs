@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,10 @@ namespace Infrastructure.Repository
         {
             await _dbContext.RequestReviews.AddAsync(requestReview);
             return await _dbContext.SaveChangesAsync();
+        }
+        public async Task<RequestReview> GetRequestReviews(Guid id)
+        {
+            return await _dbContext.RequestReviews.FindAsync(id);
         }
     }
 }

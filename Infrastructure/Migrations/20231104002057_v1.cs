@@ -76,33 +76,16 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Articles",
+                name: "Topic",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArticleFileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IssueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModificationBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDelete = table.Column<bool>(type: "bit", nullable: true),
-                    DeletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    TopicId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TopicName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Articles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Articles_Issue_IssueId",
-                        column: x => x.IssueId,
-                        principalTable: "Issue",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Topic", x => x.TopicId);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,13 +155,17 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequestReviews",
+                name: "Articles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    RequestTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArticleFileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IssueId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TopicId = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -189,12 +176,18 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RequestReviews", x => x.Id);
+                    table.PrimaryKey("PK_Articles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RequestReviews_Articles_ArticleId",
-                        column: x => x.ArticleId,
-                        principalTable: "Articles",
+                        name: "FK_Articles_Issue_IssueId",
+                        column: x => x.IssueId,
+                        principalTable: "Issue",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Articles_Topic_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "Topic",
+                        principalColumn: "TopicId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,6 +224,76 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Author",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdentityCardNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Author", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Author_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequestReviews",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    RequestTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModificationBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: true),
+                    DeletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestReviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequestReviews_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ArticleAuthor",
+                columns: table => new
+                {
+                    ArticlesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArticleAuthor", x => new { x.ArticlesId, x.AuthorId });
+                    table.ForeignKey(
+                        name: "FK_ArticleAuthor_Articles_ArticlesId",
+                        column: x => x.ArticlesId,
+                        principalTable: "Articles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArticleAuthor_Author_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Author",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RequestDetails",
                 columns: table => new
                 {
@@ -238,9 +301,8 @@ namespace Infrastructure.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RequestReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -256,10 +318,11 @@ namespace Infrastructure.Migrations
                         name: "FK_RequestDetails_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RequestDetails_RequestReviews_RequestReviewId",
-                        column: x => x.RequestReviewId,
+                        name: "FK_RequestDetails_RequestReviews_RequestId",
+                        column: x => x.RequestId,
                         principalTable: "RequestReviews",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -603,9 +666,26 @@ namespace Infrastructure.Migrations
                 column: "SpecializationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ArticleAuthor_AuthorId",
+                table: "ArticleAuthor",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Articles_IssueId",
                 table: "Articles",
                 column: "IssueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Articles_TopicId",
+                table: "Articles",
+                column: "TopicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Author_AccountId",
+                table: "Author",
+                column: "AccountId",
+                unique: true,
+                filter: "[AccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestDetails_AccountId",
@@ -613,9 +693,9 @@ namespace Infrastructure.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestDetails_RequestReviewId",
+                name: "IX_RequestDetails_RequestId",
                 table: "RequestDetails",
-                column: "RequestReviewId");
+                column: "RequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestReviews_ArticleId",
@@ -634,13 +714,16 @@ namespace Infrastructure.Migrations
                 name: "AccountSpecializations");
 
             migrationBuilder.DropTable(
+                name: "ArticleAuthor");
+
+            migrationBuilder.DropTable(
                 name: "RequestDetails");
 
             migrationBuilder.DropTable(
                 name: "Specializations");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Author");
 
             migrationBuilder.DropTable(
                 name: "RequestReviews");
@@ -649,16 +732,22 @@ namespace Infrastructure.Migrations
                 name: "Majors");
 
             migrationBuilder.DropTable(
+                name: "Accounts");
+
+            migrationBuilder.DropTable(
+                name: "Articles");
+
+            migrationBuilder.DropTable(
                 name: "Country");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Issue");
 
             migrationBuilder.DropTable(
-                name: "Issue");
+                name: "Topic");
         }
     }
 }

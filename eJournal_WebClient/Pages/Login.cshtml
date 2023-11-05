@@ -10,7 +10,7 @@
 <head>
 
     <meta charset="UTF-8">
-
+    <title>eJournal - Login</title>
     <link rel="stylesheet" href="~/css/login.css">
 
 </head>
@@ -30,11 +30,11 @@
                 <div class="form">
                     <form method="post">
                         <div class="inputBox">
-                            <input asp-for="@Model.AuthenRequest.Email" type="email" required>
+                            <input asp-for="AuthenRequest.Email" type="email" required>
                             <i>Email</i>
                         </div>
                         <div class="inputBox">
-                            <input asp-for="@Model.AuthenRequest.Password" type="password" required>
+                            <input asp-for="AuthenRequest.Password" type="password" required>
                             <i>Password</i>
                         </div>
                       

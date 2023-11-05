@@ -28,14 +28,9 @@ namespace Infrastructure
         private readonly IArticleRepository _articleRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IRequestReviewRepository _requestReviewRepository;
-        /* public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository, IArticleRepository articleRepository)
-         {
-             _requestDetailRepository = requestDetailRepository;
-             _issueRepository = issueRepository;
-             _articleRepository = articleRepository;
-         }*/
+        private readonly IMajorRepository _majorRepository;
         public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, 
-        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository,ICountryRepository countryRepository)
+        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository,ICountryRepository countryRepository, IMajorRepository majorRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
@@ -43,8 +38,8 @@ namespace Infrastructure
             AccountRepository = accountRepository;
             _articleRepository = articleRepository;
             _countryRepository = countryRepository;
-     
             _requestReviewRepository = requestReviewRepository;
+            _majorRepository = majorRepository;
         }
 
         public int Save()
@@ -89,5 +84,7 @@ namespace Infrastructure
         public IArticleRepository ArticleRepository => _articleRepository;
 		    public ICountryRepository CountryRepository => _countryRepository;
         public IRequestReviewRepository RequestReviewRepository => _requestReviewRepository;
-    }
+
+		public IMajorRepository MajorRepository => _majorRepository;
+	}
 }

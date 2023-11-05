@@ -22,5 +22,6 @@ namespace Application.InterfaceService
         Task<int> DeleteArticle(Guid id);
         //search Article By Title Or AuthorName
         Task<List<Article>> SearchArticle(string value);
+        Task SubmitArticle(Guid id);
     }
 }

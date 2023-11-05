@@ -104,12 +104,16 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPut("{id}/article-submission")]
+        public async Task SubmitArticle([FromRoute] Guid id)
+        {
+            await _articleService.SubmitArticle(id);
+        }
 
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IQueryable<ArticleResponse>> GetArticles()
         {
             var articles = await _articleService.GetAll(ArticleStatus.Publish);

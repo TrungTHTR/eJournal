@@ -78,10 +78,33 @@ namespace Application.Service
 
         public async Task<Article> GetArticles(Guid id)
         {
-            return await _unitOfWork.ArticleRepository.GetArticles(id);
+            var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+            if(article == null)
+            {
+                throw new Exception("Article doesn't exist");
+            }
+            if(article.Status != nameof(ArticleStatus.Publish))
+            {
+                throw new Exception("You don't have the right to access this article");
+            }
+			return article;
         }
-        
-        public async Task<int> UpdateArticle(Article article)
+
+		public async Task<Article> GetArticlesForAuthor(Guid id)
+		{
+			var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+			if (article == null)
+			{
+				throw new Exception("Article doesn't exist");
+			}
+			if (article.Status != nameof(ArticleStatus.Publish))
+			{
+				throw new Exception("You don't have the right to access this article");
+			}
+			return article;
+		}
+
+		public async Task<int> UpdateArticle(Article article)
         {
             return await _unitOfWork.ArticleRepository.UpdateArticle(article);
         }
@@ -90,5 +113,27 @@ namespace Application.Service
         {
             return await _unitOfWork.ArticleRepository.SearchArticle(value);
         }
-    }
+
+		public async Task SubmitArticle(Guid id)
+		{
+            var article = await _unitOfWork.ArticleRepository.GetByIdAsync(id, x => x.Author);
+            if (article == null)
+            {
+                throw new Exception("Article doesn't exist");
+            }
+            var author = article.Author.FirstOrDefault(x => x.Id == _userService.GetCurrentLoginUser().Result.Id);
+            if(author == null)
+            {
+                throw new Exception("You don't have the right to modify this article");
+            }
+            if(article.Status != nameof(ArticleStatus.Draft) && article.Status != nameof(ArticleStatus.Revise))
+            {
+                throw new Exception("Only draft or revised article can be submitted");
+            }
+            article.Status = nameof(ArticleStatus.Review);
+            _unitOfWork.ArticleRepository.Update(article);
+
+            await _unitOfWork.SaveAsync();
+		}
+	}
 }

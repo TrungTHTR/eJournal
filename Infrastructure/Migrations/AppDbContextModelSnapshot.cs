@@ -22,6 +22,21 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ArticleAuthor", b =>
+                {
+                    b.Property<Guid>("ArticlesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ArticlesId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("ArticleAuthor");
+                });
+
             modelBuilder.Entity("BusinessObject.Account", b =>
                 {
                     b.Property<Guid>("Id")
@@ -101,10 +116,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("BusinessObject.AccountSpecialization", b =>
                 {
-                    b.Property<Guid?>("AccountId")
+                    b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SpecializationId")
+                    b.Property<Guid>("SpecializationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ConfidentLevel")
@@ -174,7 +189,7 @@ namespace Infrastructure.Migrations
                     b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IssueId")
+                    b.Property<Guid?>("IssueId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -191,11 +206,42 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
 
+                    b.HasIndex("TopicId");
+
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("BusinessObject.Author", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityCardNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique()
+                        .HasFilter("[AccountId] IS NOT NULL");
+
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("BusinessObject.Country", b =>
@@ -1554,7 +1600,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AccountId")
+                    b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comments")
@@ -1585,10 +1631,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("RequestId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RequestReviewId")
+                    b.Property<Guid>("RequestId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -1598,7 +1641,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("RequestReviewId");
+                    b.HasIndex("RequestId");
 
                     b.ToTable("RequestDetails");
                 });
@@ -1610,7 +1653,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid?>("ArticleId")
+                    b.Property<Guid>("ArticleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -1714,8 +1757,7 @@ namespace Infrastructure.Migrations
                     b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("MajorId")
-                        .IsRequired()
+                    b.Property<Guid>("MajorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ModificationBy")
@@ -1733,6 +1775,38 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MajorId");
 
                     b.ToTable("Specializations");
+                });
+
+            modelBuilder.Entity("BusinessObject.Topic", b =>
+                {
+                    b.Property<int>("TopicId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TopicId"), 1L, 1);
+
+                    b.Property<string>("TopicName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TopicId");
+
+                    b.ToTable("Topic");
+                });
+
+            modelBuilder.Entity("ArticleAuthor", b =>
+                {
+                    b.HasOne("BusinessObject.Article", null)
+                        .WithMany()
+                        .HasForeignKey("ArticlesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObject.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BusinessObject.Account", b =>
@@ -1777,22 +1851,39 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Issue", "Issue")
                         .WithMany("Articles")
-                        .HasForeignKey("IssueId")
+                        .HasForeignKey("IssueId");
+
+                    b.HasOne("BusinessObject.Topic", "Topic")
+                        .WithMany("Articles")
+                        .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Issue");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("BusinessObject.Author", b =>
+                {
+                    b.HasOne("BusinessObject.Account", "Account")
+                        .WithOne("Author")
+                        .HasForeignKey("BusinessObject.Author", "AccountId");
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("BusinessObject.RequestDetail", b =>
                 {
                     b.HasOne("BusinessObject.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BusinessObject.RequestReview", "RequestReview")
                         .WithMany("Details")
-                        .HasForeignKey("RequestReviewId")
+                        .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1805,7 +1896,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("BusinessObject.Article", "Article")
                         .WithMany()
-                        .HasForeignKey("ArticleId");
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Article");
                 });
@@ -1823,6 +1916,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("BusinessObject.Account", b =>
                 {
+                    b.Navigation("Author");
+
                     b.Navigation("Specializations");
                 });
 
@@ -1854,6 +1949,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("BusinessObject.Specialization", b =>
                 {
                     b.Navigation("AccountSpecializations");
+                });
+
+            modelBuilder.Entity("BusinessObject.Topic", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }
