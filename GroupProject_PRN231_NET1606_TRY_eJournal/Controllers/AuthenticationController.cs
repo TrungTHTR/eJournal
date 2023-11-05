@@ -23,18 +23,18 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         [HttpPost("authentication")]
-        public async Task<ActionResult<string>> Login(AuthenticationRequest request)
+        public async Task<ActionResult<AuthenticationResponse>> Login(AuthenticationRequest request)
         {
-            string token;
+            AuthenticationResponse response;
             try
             {
-                 token = await _userService.Login(request);
+               response = await _userService.Login(request);
             } catch(Exception ex)
             {
                 return BadRequest(new  { ex.Message});
             }
-            return Ok(token);
-            
+          
+            return Ok(response);
         }
 
         [HttpPost("registration")]
@@ -63,5 +63,20 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             List<UserViewAllModel> users= await _userService.ListAll();
             return Ok(users);
         }*/
+
+		[HttpPost("logout")]
+        [Authorize]
+		public async Task<ActionResult> Logout()
+		{
+            await _userService.Logout();
+			return Ok();
+		}
+
+		[HttpPost("refresh-access-token")]
+        public async Task<ActionResult<AuthenticationResponse>> RefreshAccessToken(string refreshToken)
+        {
+            var result = await _userService.RefreshToken(refreshToken);
+            return Ok(result);
+        }
     }
 }

@@ -12,6 +12,7 @@ using System.Reflection;
 using Application.ViewModels.UserViewModels;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.OData.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal
 {
@@ -43,18 +44,26 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IRequestDetailService, RequestDetailService>();
             services.AddScoped<IAccountSpecializeService, AccountSpecializationService>();
             services.AddScoped<ISpecializeService,SpecializationService>();
+            services.AddScoped<IRequestDetailService, RequestDetailService>();  
+            services.AddScoped<IMajorService, MajorService>();
+            services.AddScoped<IAuthorService, AuthorService>();
 			services.AddHttpContextAccessor();
 
             // Mapper
 			services.AddAutoMapper(typeof(UserMappingProfile));
             services.AddAutoMapper(typeof(ArticleMappingProfile));
-            services.AddAutoMapper(typeof(RequestDetailMappingProfile));
+            services.AddAutoMapper(typeof(RequestDetailsMappingProfile));
             services.AddAutoMapper(typeof(RequestReviewMappingProfile));
             // Authentication
             services.AddAuthorization();
-            services.AddAuthentication().AddJwtBearer(options =>
+            services.AddAuthentication(options =>
             {
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
                     ValidateIssuer = true,

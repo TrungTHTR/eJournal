@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,8 +29,29 @@ namespace Infrastructure.Repository
         }
         public async Task<int> CreateRequestReview(RequestReview requestReview)
         {
+            requestReview.CreationDate = _currentTime.GetCurrentTime();
             await _dbContext.RequestReviews.AddAsync(requestReview);
             return await _dbContext.SaveChangesAsync();
+        }
+        public async Task<RequestReview> GetRequestReviews(Guid id)
+        {
+            return await _dbContext.RequestReviews.FindAsync(id);
+        }
+        public async Task<int> UpdateRequestReview(RequestReview requestReview)
+        {
+            var _requestReview = await GetRequestReviews(requestReview.Id);
+            if (_requestReview != null)
+            {
+                _dbContext.Entry(_requestReview).State = EntityState.Detached;
+                _dbContext.RequestReviews.Update(requestReview);
+            }
+            return await _dbContext.SaveChangesAsync();
+        }
+
+        public Guid GetLastSavedId()
+        {
+           var requestId= _context.RequestReviews.ToList().OrderByDescending(x=>x.CreationDate).LastOrDefault().Id;
+            return requestId;
         }
     }
 }

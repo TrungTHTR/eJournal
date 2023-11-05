@@ -9,6 +9,6 @@ namespace BusinessObject
     public class Major:BaseEntity
     {
         public string MajorName { get; set;}
-        public ICollection<Specialization> Specializations { get; set; }
+        public virtual ICollection<Specialization> Specializations { get; set; } = new List<Specialization>();
     }
 }

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.ViewModels.RequestReviewViewModel;
 
 namespace Application.Service
 {
@@ -21,6 +22,7 @@ namespace Application.Service
         private readonly IMapper _mapper;
         private readonly IFirebaseService _firebaseService;
         private readonly IUserService _userService;
+        private readonly IRequestReviewService _requestReviewService;
         public ArticleService(IMapper mapper, IUnitOfWork unitOfWork, IFirebaseService firebaseService, IUserService userService)
         {
             _mapper = mapper;
@@ -78,14 +80,30 @@ namespace Application.Service
         {
             return await _unitOfWork.ArticleRepository.GetAllArticle();
         }
-
+        
         public async Task<Article> GetArticles(Guid id)
         {
-            return await _unitOfWork.ArticleRepository.GetArticles(id);
+            var article = _unitOfWork.ArticleRepository.GetAllAsync(filter: x => x.Id == id && x.Status == nameof(ArticleStatus.Publish), includedProperties: $"{nameof(Article.Issue)},{nameof(Article.Author)},{nameof(Article.Topic)}").Result.First();
+			return article;
         }
-        
-        public async Task<int> UpdateArticle(Article article)
+
+		public async Task<Article> GetArticlesForAuthor(Guid id)
+		{
+			var article = await _unitOfWork.ArticleRepository.GetArticles(id);
+			if (article == null)
+			{
+				throw new Exception("Article doesn't exist");
+			}
+			if (article.Status != nameof(ArticleStatus.Publish))
+			{
+				throw new Exception("You don't have the right to access this article");
+			}
+			return article;
+		}
+
+		public async Task<int> UpdateArticle(Article article)
         {
+
             return await _unitOfWork.ArticleRepository.UpdateArticle(article);
         }
         //search Article By Title Or AuthorName
@@ -93,5 +111,32 @@ namespace Application.Service
         {
             return await _unitOfWork.ArticleRepository.SearchArticle(value);
         }
-    }
+
+		public async Task SubmitArticle(Guid id)
+		{
+            var article = await _unitOfWork.ArticleRepository.GetByIdAsync(id, x => x.Author);
+            if (article == null)
+            {
+                throw new Exception("Article doesn't exist");
+            }
+            var author = article.Author.FirstOrDefault(x => x.AccountId == _userService.GetCurrentLoginUser().Result.Id);
+            if(author == null)
+            {
+                throw new Exception("You don't have the right to modify this article");
+            }
+            if(article.Status != nameof(ArticleStatus.Draft) && article.Status != nameof(ArticleStatus.Revise))
+            {
+                throw new Exception("Only draft or revised article can be submitted");
+            }
+            article.Status = nameof(ArticleStatus.Review);
+            _unitOfWork.ArticleRepository.Update(article);
+            await _unitOfWork.SaveAsync();
+            await _requestReviewService.CreateRequestReview(new CreateRequestReview 
+            {
+                RequestTitle = article.Title,
+                RequestDate = DateTime.UtcNow,
+                ArticleId = article.Id
+            });
+        }
+	}
 }

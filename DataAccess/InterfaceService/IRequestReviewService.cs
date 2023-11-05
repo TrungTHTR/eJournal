@@ -12,5 +12,9 @@ namespace Application.InterfaceService
     {
         Task<List<RequestReview>> GetByArticleId(Guid articleId);
         Task<int> CreateRequestReview(CreateRequestReview requestReview);
+        Task<RequestReview> GetRequestReviews(Guid id);
+        Task<int> UpdateRequestReview(RequestReview requestReview);
+        Task<List<RequestReview>> GetAllRequestReview();
+        Guid GetLastSavedId();
     }
 }

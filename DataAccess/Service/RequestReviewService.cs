@@ -29,5 +29,23 @@ namespace Application.Service
             var request= _mapper.Map<RequestReview>(requestReview);
             return await _unitOfWork.RequestReviewRepository.CreateRequestReview(request);
         }
+        public async Task<RequestReview> GetRequestReviews(Guid id)
+        {
+            return await _unitOfWork.RequestReviewRepository.GetRequestReviews(id);
+        }
+        public async Task<int> UpdateRequestReview(RequestReview requestReview)
+        {
+            return await _unitOfWork.RequestReviewRepository.UpdateRequestReview(requestReview);
+        }
+
+        public async Task<List<RequestReview>> GetAllRequestReview()
+        {
+            return (List<RequestReview>)await _unitOfWork.RequestReviewRepository.GetAllAsync();
+        }
+
+        public Guid GetLastSavedId()
+        {
+           return _unitOfWork.RequestReviewRepository.GetLastSavedId();
+        }
     }
 }

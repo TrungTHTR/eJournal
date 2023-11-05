@@ -17,6 +17,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    /*[Authorize]*/
     public class ArticleController : ODataController
     {
         private readonly IArticleService _articleService;
@@ -57,6 +58,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 
         // GET api/<ArticleController>/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
             var article = await _articleService.GetArticles(id);
@@ -68,16 +70,21 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         // POST api/<ArticleController>
+        /*[HttpPost]
+        public async Task<IActionResult> Post([FromBody] ArticleRequest article)
+        {
+            *//* var _article = await _articleService.GetArticles(article.Id);
+             if (_article != null)
+             {
+                 return BadRequest("Article has exist");
+             }*//*
+        }*/
+        [Authorize(Roles = "Author")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ArticleRequest article)
         {
-           /* var _article = await _articleService.GetArticles(article.Id);
-            if (_article != null)
-            {
-                return BadRequest("Article has exist");
-            }*/
             await _articleService.CreateArticle(article);
-            return NoContent();
+            return Ok();
         }
 
         // PUT api/<ArticleController>/5
@@ -112,7 +119,11 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPut("{id}/article-submission")]
+        public async Task SubmitArticle([FromRoute] Guid id)
+        {
+            await _articleService.SubmitArticle(id);
+        }
 
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
@@ -125,7 +136,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
         //NgoThiKhanhLy
         [HttpPost("{id}/article-file")]
-        [Authorize]
+        [Authorize("Author")]
         public async Task<ActionResult<string>> AddArticleFile(IFormFile file, [FromRoute(Name = "id")] Guid id)
         {
             var url = await _articleService.AddArticleFile(file, id);

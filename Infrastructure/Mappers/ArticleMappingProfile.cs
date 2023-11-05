@@ -13,9 +13,12 @@ namespace Infrastructure.Mappers
     {
         public ArticleMappingProfile()
         {
+            CreateMap<ArticleRequest, Article>()
+                .ForAllMembers(config => config.Condition((src, dest, srcValue) => srcValue != null));
             CreateMap<Article, ArticleResponse>();
             CreateMap<Guid, string>().ConstructUsing(x => x.ToString());
             CreateMap<string, Guid>().ConstructUsing(x => new Guid(x));
+            CreateMap<Major, MajorDTO>().ReverseMap();
         }
     }
 }

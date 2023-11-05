@@ -23,8 +23,17 @@
     <form id="reviewRequestForm" method="post" asp-page-handler="SendRequest">
         <label for="articleTitle">Article Title:</label>
         <select asp-for="@Model.CreateRequestReview.ArticleId" asp-items="ViewBag.ArticleId"></select>
+        <label>Request Title</label>
+        <input type="text" asp-for="@Model.CreateRequestReview.RequestTitle" />
         @if (Model.Accounts != null && Model.Accounts.Any())
         {
+             for (int i = 0; i < Model.Accounts.Count; i++)
+        {
+            <input type="hidden" name="Accounts[@i].Email" value="@Model.Accounts[i].Email" />
+            <input type="hidden" name="Accounts[@i].UserName" value="@Model.Accounts[i].UserName" />
+                <input type="hidden" name="Accounts[@i].Id" value="@Model.Accounts[i].Id" />
+            <!-- Add more hidden fields for other properties of AccountModel as needed -->
+        }
             <table>
                 <thead>
                     <tr>
@@ -58,7 +67,7 @@
     <ul id="email-list"></ul>
 </div>*@
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $('select[name="SelectedSpecialization"]').on('change', function () {
         var selectedSpecialization = $(this).val();
@@ -88,5 +97,5 @@
             }
         });
     });
-</script>
+</script>*@
 </html>

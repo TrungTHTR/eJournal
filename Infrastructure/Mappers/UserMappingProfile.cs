@@ -1,4 +1,5 @@
-﻿using Application.Utils;
+﻿using Application.InterfaceRepository;
+using Application.Utils;
 using Application.ViewModels.UserViewModels;
 using AutoMapper;
 using BusinessObject;
@@ -25,6 +26,9 @@ namespace Infrastructure.Mappers
                     dest.RoleId = 5;
                 })
                 .ForAllMembers(config => config.Condition((src, dest, value) => value != null));
+            CreateMap<Author, AuthorResponse>();
+            CreateMap<AuthorRequest, Author>();
+            CreateMap<string, Author>().ConvertUsing<AuthorConverter>();
         }
     }
 }

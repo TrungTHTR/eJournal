@@ -3,26 +3,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace eJournal_WebClient.Pages
 {
     public class LoginModel : PageModel
     {
         [BindProperty]
-        public AuthenticationRequest AuthenRequest { get; set; }
+        public AuthenticationRequest AuthenRequest { get; set; } = default!;
         [BindProperty]
         public string ErrorMessage { get; set; }
         private readonly HttpClient _client;
-        private readonly IHttpContextAccessor _contextAccessor;
         private string LoginUrl;
-        public LoginModel(HttpClient client, IHttpContextAccessor contextAccessor)
+        private string LogoutUrl = "http://localhost:5035/api/Authentication/logout";
+        public LoginModel(HttpClient client)
         {
             _client = client;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             LoginUrl = "http://localhost:5035/api/Authentication/authentication";
-            _contextAccessor = contextAccessor;
         }
+
+        public IActionResult OnGet()
+        {
+            return Page();
+        }
+
         public async Task<IActionResult> OnPost()
         {
             JsonContent jsonContent = JsonContent.Create(AuthenRequest);
@@ -32,9 +42,33 @@ namespace eJournal_WebClient.Pages
                 ErrorMessage = await httpResponseMessage.Content.ReadAsStringAsync();
                 return Page();
             }
-            string jwt = await httpResponseMessage.Content.ReadAsStringAsync();
+            else
+            {
+                string data = await httpResponseMessage.Content.ReadAsStringAsync();
+                AuthenticationResponse? authResponse = JsonConvert.DeserializeObject<AuthenticationResponse>(data);
+				if (authResponse != null)
+                {
+                    HttpContext.Response.Cookies.Append("AccessToken", authResponse.AccessToken);
+                    Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
+                }
+            }
+            return RedirectToPage("/ArticlePages/Index");
+        }
 
-            return RedirectToPage("/ArticlePage/Index");
+        public async Task OnPostLogout()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["Access Token"]);
+            HttpResponseMessage response = await _client.PostAsync(LogoutUrl, null);
+            if(!response.IsSuccessStatusCode)
+            {
+                RedirectToPage("Error");
+            }
+            else
+            {
+                Response.Cookies.Delete("Access Token");
+                Response.Cookies.Delete("Redirect Token");
+                RedirectToPage("Index");
+            }
         }
     }
 }

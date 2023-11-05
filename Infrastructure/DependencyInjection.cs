@@ -28,6 +28,8 @@ namespace Infrastructure
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
             services.AddScoped<IAccountSpecializationRepository, AccountSpecializationRepository>();
             services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+            services.AddScoped<IMajorRepository, MajorRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
             return services;
         }
     }

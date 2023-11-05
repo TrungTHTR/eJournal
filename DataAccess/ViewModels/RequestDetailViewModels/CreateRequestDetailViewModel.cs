@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.ViewModels.RequestDetailViewModel
+namespace Application.ViewModels.RequestDetailViewModels
 {
-    public  class CreateRequestDetailViewModel
+    public class CreateRequestDetailViewModel
     {
         public int Status { get; set; }
         public string Description { get; set; }

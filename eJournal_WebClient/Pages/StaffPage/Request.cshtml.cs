@@ -1,9 +1,12 @@
 using Application.ViewModels.ArticleViewModels;
+using Application.ViewModels.RequestDetailViewModels;
 using Application.ViewModels.RequestReviewViewModel;
 using BusinessObject;
+using BusinessObject.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -24,6 +27,7 @@ namespace eJournal_WebClient.Pages.StaffPage
         private string RequestUrl;
         private string SpecializationAPI;
         private string AccountSpecializationAPI;
+        private string RequestDetailURL;
         public RequestModel(HttpClient client)
         {
             _client= client;
@@ -33,6 +37,7 @@ namespace eJournal_WebClient.Pages.StaffPage
             RequestUrl = "http://localhost:5035/api/RequestReview";
             SpecializationAPI = "http://localhost:5035/api/Specialization";
             AccountSpecializationAPI = "http://localhost:5035/api/AccountSpecialization";
+            RequestDetailURL = "http://localhost:5035/api/RequestDetail";
         }
         public async Task<IActionResult> OnGet()
         {
@@ -75,9 +80,31 @@ namespace eJournal_WebClient.Pages.StaffPage
             ViewData["SpecializeName"] = new SelectList(Specializations);
             return Page();
         }
-        public Task<IActionResult> OnPostSendRequest()
+        public async Task<IActionResult> OnPostSendRequest(List<Account> Accounts)
         {
-
+            JsonContent jsonContent = JsonContent.Create(CreateRequestReview);
+            var httResponseRequestMessage = await _client.PostAsync(RequestUrl,jsonContent);
+            if(httResponseRequestMessage.IsSuccessStatusCode) 
+            {
+                foreach(var account in Accounts)
+                {
+                    CreateRequestDetailViewModel createRequestDetailViewModel = new CreateRequestDetailViewModel()
+                    {
+                        AccountId = account.Id,
+                        Description="",
+                        Status= ((int)RequestDetailStatus.OnProcess),
+                    };
+                    JsonContent json = JsonContent.Create(createRequestDetailViewModel);
+                    var httpResponseMessage =await _client.PostAsync(RequestDetailURL,json);
+                    if(!httpResponseMessage.IsSuccessStatusCode)
+                    {
+                        string strData= await httpResponseMessage.Content.ReadAsStringAsync();
+                    }
+                }
+                return Page();
+            }
+            
+            return RedirectToPage("/StaffPage/Index");
         }
     }
 }

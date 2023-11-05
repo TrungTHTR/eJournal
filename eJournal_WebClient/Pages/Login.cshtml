@@ -10,7 +10,11 @@
 <head>
 
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>Login</title>
+=======
+    <title>eJournal - Login</title>
+>>>>>>> ee40a1daf8d210217d62ee266906889010ad9fb5
     <link rel="stylesheet" href="~/css/login.css">
 
 </head>
@@ -30,11 +34,11 @@
                 <div class="form">
                     <form method="post">
                         <div class="inputBox">
-                            <input asp-for="@Model.AuthenRequest.Email" type="email" required>
+                            <input asp-for="AuthenRequest.Email" type="email" required>
                             <i>Email</i>
                         </div>
                         <div class="inputBox">
-                            <input asp-for="@Model.AuthenRequest.Password" type="password" required>
+                            <input asp-for="AuthenRequest.Password" type="password" required>
                             <i>Password</i>
                         </div>
                       
@@ -44,7 +48,7 @@
                         </div>
                         @if (!string.IsNullOrEmpty(@Model.ErrorMessage))
                         {
-                                <div style="color: red; margin-bottom: 5px">*@Model.ErrorMessage</div>
+                                <div style="color: white; margin-bottom: 5px">*@Model.ErrorMessage</div>
                         }
                         <div class="inputBox">
                             <input type="submit" value="Login">

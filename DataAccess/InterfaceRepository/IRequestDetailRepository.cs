@@ -12,5 +12,7 @@ namespace Application.InterfaceRepository
         Task<List<RequestDetail>> ShowAllRequestDetail(Guid AccountId);
         Task<List<RequestDetail>> GetAllRequestDetail();
         Task SoftRemove(Guid requestDetailId);
+        Task<RequestDetail> GetRequestDetails(Guid id);
+        Task<int> UpdateRequestDetail(RequestDetail requestDetail);
     }
 }
