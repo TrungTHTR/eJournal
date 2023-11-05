@@ -98,14 +98,14 @@ namespace Application.Service
 			}
 			#endregion
 			string token = _jwtService.GenerateAuthenticatedAccessToken(user.Role.Rolename, user.Email, user.Id.ToString());
-			refreshToken = _jwtService.GenerateAuthenticatedRefreshToken(user.Id.ToString(), expiredDate ?? DateTime.UtcNow);
-            user.RefreshToken = refreshToken;
+			string newRefreshToken = _jwtService.GenerateAuthenticatedRefreshToken(user.Id.ToString(), expiredDate ?? DateTime.UtcNow.AddYears(1));
+            user.RefreshToken = newRefreshToken;
 			_unitOfWork.AccountRepository.Update(user);
 			await _unitOfWork.SaveAsync();
 			return new AuthenticationResponse
             {
                 AccessToken = token,
-                RefreshToken = refreshToken
+                RefreshToken = newRefreshToken
             };
         }
 

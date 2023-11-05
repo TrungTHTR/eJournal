@@ -23,14 +23,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         [HttpPost("authentication")]
         public async Task<ActionResult<AuthenticationResponse>> Login(AuthenticationRequest request)
         {
-            AuthenticationResponse response;
-            try
-            {
-                response = await _userService.Login(request);
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _userService.Login(request);
             return Ok(response);
         }
 

@@ -21,6 +21,7 @@ namespace Application.Service
         private readonly IMapper _mapper;
         private readonly IFirebaseService _firebaseService;
         private readonly IUserService _userService;
+        private readonly IRequestReviewService _requestReviewService;
         public ArticleService(IMapper mapper, IUnitOfWork unitOfWork, IFirebaseService firebaseService, IUserService userService)
         {
             _mapper = mapper;
@@ -52,9 +53,11 @@ namespace Application.Service
             var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status.Equals(status.ToString()));
             return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleResponse>>(articles);
         }
-        public async Task<int> CreateArticle(Article article)
+        public async Task<int> CreateArticle(ArticleRequest request)
         {
-            return await _unitOfWork.ArticleRepository.CreateArticle(article);
+            var article = _mapper.Map<Article>(request);
+            await _unitOfWork.ArticleRepository.AddAsync(article);
+            return await _unitOfWork.SaveAsync();
         }
         public async Task<int> DeleteArticle(Guid id)
         {
@@ -75,18 +78,10 @@ namespace Application.Service
         {
             return await _unitOfWork.ArticleRepository.GetAllArticle();
         }
-
+        
         public async Task<Article> GetArticles(Guid id)
         {
-            var article = await _unitOfWork.ArticleRepository.GetArticles(id);
-            if(article == null)
-            {
-                throw new Exception("Article doesn't exist");
-            }
-            if(article.Status != nameof(ArticleStatus.Publish))
-            {
-                throw new Exception("You don't have the right to access this article");
-            }
+            var article = _unitOfWork.ArticleRepository.GetAllAsync(filter: x => x.Id == id && x.Status == nameof(ArticleStatus.Publish), includedProperties: $"{nameof(Article.Issue)},{nameof(Article.Author)},{nameof(Article.Topic)}").Result.First();
 			return article;
         }
 
@@ -106,6 +101,7 @@ namespace Application.Service
 
 		public async Task<int> UpdateArticle(Article article)
         {
+
             return await _unitOfWork.ArticleRepository.UpdateArticle(article);
         }
         //search Article By Title Or AuthorName
@@ -121,7 +117,7 @@ namespace Application.Service
             {
                 throw new Exception("Article doesn't exist");
             }
-            var author = article.Author.FirstOrDefault(x => x.Id == _userService.GetCurrentLoginUser().Result.Id);
+            var author = article.Author.FirstOrDefault(x => x.AccountId == _userService.GetCurrentLoginUser().Result.Id);
             if(author == null)
             {
                 throw new Exception("You don't have the right to modify this article");
@@ -132,8 +128,13 @@ namespace Application.Service
             }
             article.Status = nameof(ArticleStatus.Review);
             _unitOfWork.ArticleRepository.Update(article);
-
             await _unitOfWork.SaveAsync();
+			await _requestReviewService.CreateRequestReview(new RequestReview
+			{
+				RequestTitle = article.Title,
+				RequestDate = DateTime.UtcNow,
+				ArticleId = article.Id
+			});
 		}
 	}
 }

@@ -44,6 +44,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();  
             services.AddScoped<IMajorService, MajorService>();
+            services.AddScoped<IAuthorService, AuthorService>();
 			services.AddHttpContextAccessor();
 
             // Mapper

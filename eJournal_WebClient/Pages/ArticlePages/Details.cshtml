@@ -2,3 +2,22 @@
 @model eJournal_WebClient.Pages.ArticlePages.DetailsModel
 @{
 }
+	<h1>@Model.Article.Title</h1>
+	<h2>Volume @Model.Article.Issue.Volumn</h2>
+	<h2>Author</h2>
+	@foreach(var author in Model.Article.Author)
+	{
+		<a href="#">@author.AuthorName</a>
+	}
+	<p>@Model.Article.Content</p>
+	<h2>Topic</h2>
+<a href="#">@Model.Article.Topic.TopicName</a>
+	<h2>Download url</h2>
+@if(Model.Article.ArticleFileUrl == null)
+{
+	<p>Download data is not yet available.</p>
+}
+else
+{
+	<a href="@Model.Article.ArticleFileUrl">@Model.Article.Title</a>
+}

@@ -16,6 +16,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArticleController : ODataController
     {
         private readonly IArticleService _articleService;
@@ -49,6 +50,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 
         // GET api/<ArticleController>/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
             var article = await _articleService.GetArticles(id);
@@ -61,13 +63,9 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 
         // POST api/<ArticleController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Article article)
+        [Authorize(Roles = "Author")]
+        public async Task<IActionResult> Post([FromBody] ArticleRequest article)
         {
-            var _article = await _articleService.GetArticles(article.Id);
-            if (_article != null)
-            {
-                return BadRequest("Article has exist");
-            }
             await _articleService.CreateArticle(article);
             return NoContent();
         }
@@ -113,7 +111,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         //NgoThiKhanhLy
         [HttpGet("unauthorized-user")]
         [EnableQuery]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IQueryable<ArticleResponse>> GetArticles()
         {
             var articles = await _articleService.GetAll(ArticleStatus.Publish);
@@ -121,7 +119,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
         //NgoThiKhanhLy
         [HttpPost("{id}/article-file")]
-        [Authorize]
+        [Authorize("Author")]
         public async Task<ActionResult<string>> AddArticleFile(IFormFile file, [FromRoute(Name = "id")] Guid id)
         {
             var url = await _articleService.AddArticleFile(file, id);

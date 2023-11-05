@@ -9,7 +9,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.WebService
         public ClaimService(IHttpContextAccessor httpContextAccessor)
         {
             // todo implementation to get the current userId
-            var Id = httpContextAccessor.HttpContext?.User?.FindFirstValue("userId");
+            var Id = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Sid);
             GetCurrentUserId = string.IsNullOrEmpty(Id) ? Guid.Empty : Guid.Parse(Id);
         }
         public Guid  GetCurrentUserId { get; }

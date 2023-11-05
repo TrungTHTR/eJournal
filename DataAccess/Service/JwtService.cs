@@ -52,12 +52,24 @@ namespace Application.Service
 			{
 				new Claim(ClaimTypes.Sid, id),
 			};
-            var token = new JwtSecurityToken(
-                signingCredentials: credentials, 
-                expires: expiredDate,
-                issuer: _configuration["jwt:issuer"],
-                audience: _configuration["jwt:audience"],
-                claims: claims);
+			var tokenDescriptor = new SecurityTokenDescriptor
+			{
+				SigningCredentials = credentials,
+				Subject = new ClaimsIdentity(claims),
+				Expires = DateTime.UtcNow.AddMinutes(30),
+				//Expires = DateTime.UtcNow.AddDays(1),
+				Issuer = _configuration["jwt:issuer"],
+				Audience = _configuration["jwt:audience"]
+
+			};
+			var tokenHandler = new JwtSecurityTokenHandler();
+			var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+			//var token = new JwtSecurityToken(
+   //             signingCredentials: credentials, 
+   //             expires: expiredDate,
+   //             issuer: _configuration["jwt:issuer"],
+   //             audience: _configuration["jwt:audience"],
+   //             claims: claims);
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 
