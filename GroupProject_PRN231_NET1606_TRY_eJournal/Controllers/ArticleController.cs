@@ -59,7 +59,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         // GET api/<ArticleController>/5
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<ActionResult<ArticleResponse>> Get(Guid id)
         {
             var article = await _articleService.GetArticles(id);
             if (article == null)

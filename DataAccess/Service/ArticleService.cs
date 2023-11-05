@@ -54,12 +54,12 @@ namespace Application.Service
             var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status.Equals(status.ToString()));
             return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleResponse>>(articles);
         }
-        public async Task<int> CreateArticle(ArticleRequest article)
+        public async Task<int> CreateArticle(ArticleRequest request)
         {
-            Article articleCreate = _mapper.Map<Article>(article);
-            articleCreate.Status = "Draft";
-            articleCreate.IsDelete = false;
-            return await _unitOfWork.ArticleRepository.CreateArticle(articleCreate);
+            var article = _mapper.Map<Article>(request);
+            article.Status = nameof(ArticleStatus.Draft);
+            await _unitOfWork.ArticleRepository.AddAsync(article);
+            return await _unitOfWork.SaveAsync();
         }
         public async Task<int> DeleteArticle(Guid id)
         {

@@ -3,16 +3,16 @@
 @{
 }
 	<h1>@Model.Article.Title</h1>
-	<h2>Volume @Model.Article.Issue.Volumn</h2>
-	<h2>Author</h2>
-	@foreach(var author in Model.Article.Author)
-	{
-		<a href="#">@author.AuthorName</a>
-	}
 	<p>@Model.Article.Content</p>
-	<h2>Topic</h2>
+<h3>Volume @Model.Article.Issue.Volumn</h3>
+<h3>Author</h3>
+@foreach (var author in Model.Article.Author)
+{
+	<a asp-page="/ArticlePages/Index" asp-route-authorName="@author.AuthorName">@author.AuthorName</a>
+}
+	<h3>Topic</h3>
 <a href="#">@Model.Article.Topic.TopicName</a>
-	<h2>Download url</h2>
+	<h3>Download url</h3>
 @if(Model.Article.ArticleFileUrl == null)
 {
 	<p>Download data is not yet available.</p>

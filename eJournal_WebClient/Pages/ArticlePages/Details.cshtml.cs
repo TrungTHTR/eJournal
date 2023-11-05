@@ -1,4 +1,4 @@
-using BusinessObject;
+using Application.ViewModels.ArticleViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -18,15 +18,15 @@ namespace eJournal_WebClient.Pages.ArticlePages
 			_httpClient.DefaultRequestHeaders.Accept.Add(contentType);
 		}
 
-		public Article Article { get; set; } = default!;
+		public ArticleResponse Article { get; set; } = default!;
 
 		public async Task<IActionResult> OnGetAsync(string id)
 		{
-			HttpResponseMessage response = _httpClient.GetAsync($"{ApiUrl}/{id}").Result;
+			HttpResponseMessage response = await _httpClient.GetAsync($"{ApiUrl}/{id}");
 			if (response.IsSuccessStatusCode)
 			{
 				string data = await response.Content.ReadAsStringAsync();
-				Article = JsonConvert.DeserializeObject<Article>(data);
+				Article = JsonConvert.DeserializeObject<ArticleResponse>(data);
 			}
 			else
 			{
