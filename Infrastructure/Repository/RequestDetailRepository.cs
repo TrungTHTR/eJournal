@@ -30,6 +30,16 @@ namespace Infrastructure.Repository
         {
             return await _dbContext.RequestDetails.ToListAsync();
         }
+
+        public async Task SoftRemove(Guid requestDetailId)
+        {
+            var requestDetail = await _context.RequestDetails.FindAsync(requestDetailId);
+            if (requestDetail != null)
+            {
+                requestDetail.Status = 1;
+                _context.RequestDetails.Update(requestDetail);
+            }
+        }
         public async Task<RequestDetail> GetRequestDetails(Guid id)
         {
             return await _dbContext.RequestDetails.FindAsync(id);

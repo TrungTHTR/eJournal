@@ -1,6 +1,6 @@
 using Application.InterfaceService;
 using Application.ViewModels.RequestDetailViewModels;
-using Application.ViewModels.RequestReviewViewModels;
+/*using Application.ViewModels.RequestReviewViewModels;*/
 using BusinessObject;
 using BusinessObject.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +30,16 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             }
             return Ok(requestDetails);
         }
-
+        [HttpPost]
+        public async Task<IActionResult> CreateRequestDetail(CreateRequestDetailViewModel createRequestDetailViewModel)
+        {
+            bool isCreated = await _requestDetailService.CreateRequestDetail(createRequestDetailViewModel);
+            if (isCreated)
+            {
+                return Ok();
+            }
+            return BadRequest("Error when creating detail");
+        }
         [HttpGet("reviewer/{id}")]
         public async Task<IActionResult> GetByReviewerId(Guid id)
         {
@@ -42,13 +51,13 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             return Ok(requests);
         }
 
-        [HttpPost]
+      /*  [HttpPost]
         //[Authorize("Staff")]
-        public async Task<IActionResult> Create([FromBody] CreatedRequestDetailsRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateRequestDetailViewModel request)
         {
             await _requestDetailService.Create(request);
             return Ok();
-        }
+        }*/
 
         [HttpPut("{id}/status")]
         public async Task ChangeRequestDetailsStatus([FromRoute] Guid id, [FromQuery] RequestDetailStatus status)

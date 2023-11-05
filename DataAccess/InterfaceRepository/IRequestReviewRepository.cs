@@ -13,5 +13,6 @@ namespace Application.InterfaceRepository
         Task<int> CreateRequestReview(RequestReview requestReview);
         Task<RequestReview> GetRequestReviews(Guid id);
         Task<int> UpdateRequestReview(RequestReview requestReview);
+        Guid GetLastSavedId();
     }
 }

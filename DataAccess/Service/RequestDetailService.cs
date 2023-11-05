@@ -1,5 +1,6 @@
 ﻿using Application.InterfaceService;
-using Application.ViewModels.RequestReviewViewModels;
+using Application.ViewModels.RequestDetailViewModels;
+/*using Application.ViewModels.RequestReviewViewModels;*/
 using AutoMapper;
 using BusinessObject;
 using BusinessObject.Enums;
@@ -11,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace Application.Service
 {
-	public class RequestDetailService : IRequestDetailService
+    public class RequestDetailService : IRequestDetailService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private IMapper _mapper;
         public RequestDetailService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -30,6 +31,20 @@ namespace Application.Service
             return await _unitOfWork.RequestDetailRepository.GetAllRequestDetail();
         }
 
+        public async Task<bool> CreateRequestDetail(CreateRequestDetailViewModel createRequestDetailViewModel)
+        {
+           /* createRequestDetailViewModel.RequestId= _unitOfWork.RequestReviewRepository.GetLastSavedId();*/
+           var requestDetail = _mapper.Map<RequestDetail>(createRequestDetailViewModel);
+            requestDetail.RequestId= _unitOfWork.RequestReviewRepository.GetLastSavedId();
+            await _unitOfWork.RequestDetailRepository.AddAsync(requestDetail);
+            return await _unitOfWork.SaveAsync()>0;
+        }
+
+        public async Task<bool> RejectRequest(Guid requestDetailId)
+        {
+            await _unitOfWork.RequestDetailRepository.SoftRemove(requestDetailId);
+            return await _unitOfWork.SaveAsync() > 0;
+        }
 		public async Task ChangeRequestStatus(Guid id, RequestDetailStatus status)
 		{
             var requestDetail = await _unitOfWork.RequestDetailRepository.GetAsync(id);
@@ -42,12 +57,12 @@ namespace Application.Service
             await _unitOfWork.SaveAsync();
 		}
 
-		public async Task Create(CreatedRequestDetailsRequest request)
+		/*public async Task Create(CreateRequestDetailViewModel request)
 		{
             var detail = _mapper.Map<RequestDetail>(request);
             await _unitOfWork.RequestDetailRepository.AddAsync(detail);
             await _unitOfWork.SaveAsync();
-		}
+		}*/
         public async Task<RequestDetail> GetRequestDetails(Guid id)
         {
             return await _unitOfWork.RequestDetailRepository.GetRequestDetails(id);

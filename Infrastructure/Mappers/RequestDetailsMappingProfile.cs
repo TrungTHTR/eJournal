@@ -1,4 +1,4 @@
-﻿using Application.ViewModels.RequestReviewViewModels;
+﻿using Application.ViewModels.RequestDetailViewModels;
 using AutoMapper;
 using BusinessObject;
 using BusinessObject.Enums;
@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Mappers
 {
-	public class RequestDetailsMappingProfile: Profile
+    public class RequestDetailsMappingProfile: Profile
 	{
 		public RequestDetailsMappingProfile()
 		{
-			CreateMap<CreatedRequestDetailsRequest, RequestDetail>()
+			CreateMap<CreateRequestDetailViewModel, RequestDetail>()
 				.AfterMap((src, dest) =>
 				{
 					dest.Description = "";
@@ -22,7 +22,7 @@ namespace Infrastructure.Mappers
 					dest.ModificationDate = DateTime.Now;
 					dest.CreationDate = DateTime.Now;
 					dest.IsDelete = false;
-				});
+				}).ForMember(dest=>dest.RequestId,opt=>opt.MapFrom(src=>src.RequestId));
 			CreateMap<RequestDetail, RequestDetailResponse>();
 		}
 	}

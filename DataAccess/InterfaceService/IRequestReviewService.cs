@@ -1,4 +1,5 @@
-﻿using BusinessObject;
+﻿using Application.ViewModels.RequestReviewViewModel;
+using BusinessObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,10 @@ namespace Application.InterfaceService
     public interface IRequestReviewService
     {
         Task<List<RequestReview>> GetByArticleId(Guid articleId);
-        Task<int> CreateRequestReview(RequestReview requestReview);
+        Task<int> CreateRequestReview(CreateRequestReview requestReview);
         Task<RequestReview> GetRequestReviews(Guid id);
         Task<int> UpdateRequestReview(RequestReview requestReview);
+        Task<List<RequestReview>> GetAllRequestReview();
+        Guid GetLastSavedId();
     }
 }

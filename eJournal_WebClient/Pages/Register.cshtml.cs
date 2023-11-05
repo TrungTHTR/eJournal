@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace eJournal_WebClient.Pages
 {
@@ -23,26 +24,32 @@ namespace eJournal_WebClient.Pages
             _client= client;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            CountryAPIUrl = "http://localhost:5035/odata/Countries";
+            CountryAPIUrl = "http://localhost:5035/api/Country/Countries";
             RegisterAPIUrl = "http://localhost:5035/api/Authentication/registration";
         }
         public async Task<IActionResult> OnGet()
         {
             var httpResponseMessage= await _client.GetAsync(CountryAPIUrl);
-            string productionData = await httpResponseMessage.Content.ReadAsStringAsync();
-            dynamic jsonContent = JObject.Parse(productionData);
-            var lstData = jsonContent.value;
-            if (lstData != null)
+            string strData = await httpResponseMessage.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
             {
-                List<Country> countries=((JArray)lstData).Select(x=>new Country
-                {
-                    CountryId = (int)x["CountryId"],
-                    CountryName = (string)x["CountryName"]
-                }).ToList();
-                ViewData["CountryId"] = new SelectList(countries, "CountryId", "CountryName");
-            }
+                PropertyNameCaseInsensitive = true,
+            };
+            /*  dynamic jsonContent = JObject.Parse(productionData);
+              var lstData = jsonContent.value;
+              if (lstData != null)
+              {
+                  List<Country> countries=((JArray)lstData).Select(x=>new Country
+                  {
+                      CountryId = (int)x["CountryId"],
+                      CountryName = (string)x["CountryName"]
+                  }).ToList();*/
+            List<Country> countries= JsonSerializer.Deserialize<List<Country>>(strData, options);
+            ViewData["CountryId"] = new SelectList(countries, "CountryId", "CountryName");
             return Page();
         }
+           
+        
         public async Task<IActionResult> OnPost()
         {
             JsonContent jsonContent = JsonContent.Create(RegistrationRequest);

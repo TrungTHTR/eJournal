@@ -52,7 +52,7 @@ namespace eJournal_WebClient.Pages
                     Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
                 }
             }
-            return RedirectToPage("/ArticlePage/Index");
+            return RedirectToPage("/ArticlePages/Index");
         }
 
         public async Task OnPostLogout()

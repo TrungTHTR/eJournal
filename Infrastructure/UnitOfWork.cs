@@ -23,15 +23,20 @@ namespace Infrastructure
         private readonly ICurrentTime _timeService;
 
         public IAccountRepository AccountRepository { get; }
-        
+
         private readonly IRequestDetailRepository _requestDetailRepository;
         private readonly IArticleRepository _articleRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IRequestReviewRepository _requestReviewRepository;
+        private readonly IAccountSpecializationRepository _accountSpecializationRepository;
+        private readonly ISpecializationRepository _specializationRepository;
         private readonly IMajorRepository _majorRepository;
         private readonly IAuthorRepository _authorRepository;
-        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, 
-        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository,ICountryRepository countryRepository, IMajorRepository majorRepository, IAuthorRepository authorRepository)
+
+        public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository,
+        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository
+            , ICountryRepository countryRepository, IAccountSpecializationRepository accountSpecializationRepository,
+        ISpecializationRepository specializationRepository, IMajorRepository majorRepository, IAuthorRepository authorRepository,IRequestDetailRepository requestDetailRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
@@ -40,8 +45,11 @@ namespace Infrastructure
             _articleRepository = articleRepository;
             _countryRepository = countryRepository;
             _requestReviewRepository = requestReviewRepository;
+            _accountSpecializationRepository = accountSpecializationRepository;
+            _specializationRepository = specializationRepository;
             _majorRepository = majorRepository;
             _authorRepository = authorRepository;
+            _requestDetailRepository= requestDetailRepository;  
         }
 
         public int Save()
@@ -49,7 +57,7 @@ namespace Infrastructure
             return _appDbContext.SaveChanges();
         }
 
-        public async  Task<int> SaveAsync()
+        public async Task<int> SaveAsync()
         {
             return await _appDbContext.SaveChangesAsync();
         }
@@ -84,11 +92,17 @@ namespace Infrastructure
         }
         public IRequestDetailRepository RequestDetailRepository => _requestDetailRepository;
         public IArticleRepository ArticleRepository => _articleRepository;
-		    public ICountryRepository CountryRepository => _countryRepository;
+        public ICountryRepository CountryRepository => _countryRepository;
         public IRequestReviewRepository RequestReviewRepository => _requestReviewRepository;
 
-		public IMajorRepository MajorRepository => _majorRepository;
+        public IAccountSpecializationRepository AccountSpecializationRepository => _accountSpecializationRepository;
+
+        public ISpecializationRepository SpecializationRepository => _specializationRepository;
+
+
+        public IMajorRepository MajorRepository => _majorRepository;
 
         public IAuthorRepository AuthorRepository => _authorRepository;
-	}
+
+    }
 }
