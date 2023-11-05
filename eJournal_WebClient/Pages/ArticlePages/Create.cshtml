@@ -1,0 +1,39 @@
+﻿@page
+@model eJournal_WebClient.Pages.ArticlePages.CreateModel
+@{
+    ViewData["Title"] = "Create Article";
+}
+<h4>Issue</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Article.Title" class="control-label"></label>
+                <input asp-for="Article.Title" class="form-control" />
+                <span asp-validation-for="Article.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Article.Content" class="control-label"></label>
+                <textarea asp-for="Article.Content" class="form-control" />
+                <span asp-validation-for="Article.Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Article.TopicId" class="control-label"></label>
+                <select asp-for="Article.TopicId" class="form-control" asp-items="ViewBag.Topics"></select>
+            </div>
+            @if (!string.IsNullOrEmpty(@Model.ErrorMessage))
+            {
+                <div style="color: red; margin-bottom: 5px">*@Model.ErrorMessage</div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>

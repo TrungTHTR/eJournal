@@ -56,6 +56,7 @@ namespace Application.Service
         public async Task<int> CreateArticle(ArticleRequest request)
         {
             var article = _mapper.Map<Article>(request);
+            article.Status = nameof(ArticleStatus.Draft);
             await _unitOfWork.ArticleRepository.AddAsync(article);
             return await _unitOfWork.SaveAsync();
         }

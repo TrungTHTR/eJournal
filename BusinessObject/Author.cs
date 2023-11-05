@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BusinessObject
@@ -17,6 +18,7 @@ namespace BusinessObject
 		public Guid? AccountId { get; set; }
 		[ForeignKey(nameof(AccountId))]
 		public virtual Account? Account { get; set; }
+		[JsonIgnore]
 		public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 
 	}
