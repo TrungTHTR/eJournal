@@ -24,6 +24,7 @@ namespace eJournal_WebClient.Pages.IssuePage
             _httpClient = httpClient;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _httpClient.DefaultRequestHeaders.Accept.Add(contentType);
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["AccessToken"]);
             _httpClient.Timeout = TimeSpan.FromSeconds(100);
             IssueAPIUrl = "http://localhost:5035/api/Issue";
         }

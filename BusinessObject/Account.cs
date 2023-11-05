@@ -25,6 +25,7 @@ namespace BusinessObject
         public int CountryId { get; set; }
 
         public virtual Country? Country { get; set; }
-        public virtual ICollection<AccountSpecialization> Specializations { get; set; }
+        public virtual Author? Author { get; set; }
+        public virtual ICollection<AccountSpecialization> Specializations { get; set; } = new List<AccountSpecialization>();
     }
 }

@@ -11,5 +11,6 @@ namespace Application.InterfaceService
     {
         Task<List<RequestReview>> GetByArticleId(Guid articleId);
         Task<int> CreateRequestReview(RequestReview requestReview);
+        Task<RequestReview> GetRequestReviews(Guid id);
     }
 }

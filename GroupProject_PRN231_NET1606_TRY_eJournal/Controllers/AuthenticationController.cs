@@ -9,7 +9,6 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   /* [Route("odata")]*/
     [AllowAnonymous]
     
     public class AuthenticationController : ODataController
@@ -22,18 +21,17 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         [HttpPost("authentication")]
-        public async Task<ActionResult<string>> Login(AuthenticationRequest request)
+        public async Task<ActionResult<AuthenticationResponse>> Login(AuthenticationRequest request)
         {
-            string token;
+            AuthenticationResponse response;
             try
             {
-                 token = await _userService.Login(request);
-            } catch(Exception ex)
+                response = await _userService.Login(request);
+            } catch (Exception ex)
             {
-                return BadRequest(new  { message=ex.Message});
+                return BadRequest(ex.Message);
             }
-            return Ok(token);
-            
+            return Ok(response);
         }
 
         [HttpPost("registration")]
@@ -42,12 +40,20 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             await _userService.Register(request);
             return Ok();
         }
-        /*[EnableQuery]
-        [HttpGet("Users")]
-        public async Task<ActionResult> Get() 
-        { 
-            List<UserViewAllModel> users= await _userService.ListAll();
-            return Ok(users);
-        }*/
+
+		[HttpPost("logout")]
+        [Authorize]
+		public async Task<ActionResult> Logout()
+		{
+            await _userService.Logout();
+			return Ok();
+		}
+
+		[HttpPost("refresh-access-token")]
+        public async Task<ActionResult<AuthenticationResponse>> RefreshAccessToken(string refreshToken)
+        {
+            var result = await _userService.RefreshToken(refreshToken);
+            return Ok(result);
+        }
     }
 }

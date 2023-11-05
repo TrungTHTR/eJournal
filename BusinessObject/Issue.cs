@@ -11,6 +11,6 @@ namespace BusinessObject
         public string Volumn { get; set; }
         public string Description { get; set; }
         public DateTime DateRelease { get; set; }
-        public ICollection<Article> Articles { get; set; }
+        public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
     }
 }
