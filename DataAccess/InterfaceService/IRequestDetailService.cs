@@ -1,4 +1,5 @@
-﻿using BusinessObject;
+﻿using Application.ViewModels.RequestDetailViewModel;
+using BusinessObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Application.InterfaceService
     {
         Task<List<RequestDetail>> GetByReviewerId(Guid accountId);
         Task<List<RequestDetail>> GetAllRequestDetail();
+        Task<bool> CreateRequestDetail(CreateRequestDetailViewModel createRequestDetailViewModel);
+        Task<bool> RejectRequest(Guid requestDetailId);
     }
 }

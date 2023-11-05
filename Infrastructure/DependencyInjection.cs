@@ -26,6 +26,8 @@ namespace Infrastructure
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IRequestReviewRepository, RequestReviewRepository>();
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
+            services.AddScoped<IAccountSpecializationRepository, AccountSpecializationRepository>();
+            services.AddScoped<ISpecializationRepository, SpecializationRepository>();
             return services;
         }
     }

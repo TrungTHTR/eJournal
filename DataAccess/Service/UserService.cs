@@ -81,5 +81,10 @@ namespace Application.Service
             }
             return user;
         }
-    }
+
+		public async Task<List<Account>> ListAllReviewer()
+		{
+			return (List<Account>)await _unitOfWork.AccountRepository.GetAllAsync(filter:x=>x.RoleId==3);
+		}
+	}
 }

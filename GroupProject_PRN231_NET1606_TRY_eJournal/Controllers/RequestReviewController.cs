@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.InterfaceService;
+using Application.ViewModels.RequestReviewViewModel;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,10 +36,14 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RequestReview requestReview)
+        public async Task<IActionResult> Post([FromBody] CreateRequestReview requestReview)
         {
-            await _requestReviewService.CreateRequestReview(requestReview);
-            return NoContent();
+          int isCreated=  await _requestReviewService.CreateRequestReview(requestReview);
+            if(isCreated == 0)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
     }
 }

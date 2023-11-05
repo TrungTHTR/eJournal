@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using AutoMapper;
 using Application.Service;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
+using Microsoft.EntityFrameworkCore;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
@@ -33,6 +34,13 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
                 return BadRequest();
             }
             return Ok(articles);
+        }
+        [HttpGet("draft")]
+        public async Task<IActionResult> GetDraftArticles()
+        {
+            var articles = await _articleService.GetAll(ArticleStatus.Draft);
+            List<ArticleResponse> articleResponses= (List<ArticleResponse>)articles;
+            return Ok(articleResponses);
         }
 
         // GET api/<ArticleController>/search/5
@@ -61,13 +69,13 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 
         // POST api/<ArticleController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Article article)
+        public async Task<IActionResult> Post([FromBody] ArticleRequest article)
         {
-            var _article = await _articleService.GetArticles(article.Id);
+           /* var _article = await _articleService.GetArticles(article.Id);
             if (_article != null)
             {
                 return BadRequest("Article has exist");
-            }
+            }*/
             await _articleService.CreateArticle(article);
             return NoContent();
         }

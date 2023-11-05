@@ -1,4 +1,6 @@
 ﻿using Application.InterfaceService;
+using Application.ViewModels.RequestDetailViewModel;
+using AutoMapper;
 using BusinessObject;
 using System;
 using System.Collections.Generic;
@@ -11,9 +13,11 @@ namespace Application.Service
     public class RequestDetailService : IRequestDetailService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public RequestDetailService(IUnitOfWork unitOfWork)
+        private IMapper _mapper;
+        public RequestDetailService(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<List<RequestDetail>> GetByReviewerId(Guid accountId)
@@ -23,6 +27,19 @@ namespace Application.Service
         public async Task<List<RequestDetail>> GetAllRequestDetail()
         {
             return await _unitOfWork.RequestDetailRepository.GetAllRequestDetail();
+        }
+
+        public async Task<bool> CreateRequestDetail(CreateRequestDetailViewModel createRequestDetailViewModel)
+        {
+           var requestDetail = _mapper.Map<RequestDetail>(createRequestDetailViewModel);
+            await _unitOfWork.RequestDetailRepository.AddAsync(requestDetail);
+            return await _unitOfWork.SaveAsync()>0;
+        }
+
+        public async Task<bool> RejectRequest(Guid requestDetailId)
+        {
+            await _unitOfWork.RequestDetailRepository.SoftRemove(requestDetailId);
+            return await _unitOfWork.SaveAsync() > 0;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Application.InterfaceService
         Task<string> AddArticleFile(IFormFile file, Guid id);
         Task<List<Article>> GetAllArticle();
         Task<Article> GetArticles(Guid id);
-        Task<int> CreateArticle(Article article);
+        Task<int> CreateArticle(ArticleRequest article);
         Task<int> UpdateArticle(Article article);
         Task<int> DeleteArticle(Guid id);
         //search Article By Title Or AuthorName

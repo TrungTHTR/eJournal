@@ -28,14 +28,11 @@ namespace Infrastructure
         private readonly IArticleRepository _articleRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IRequestReviewRepository _requestReviewRepository;
-        /* public UnitOfWork (IRequestDetailRepository requestDetailRepository, IIssueRepository issueRepository, IArticleRepository articleRepository)
-         {
-             _requestDetailRepository = requestDetailRepository;
-             _issueRepository = issueRepository;
-             _articleRepository = articleRepository;
-         }*/
+        private readonly IAccountSpecializationRepository _accountSpecializationRepository;
+        private readonly ISpecializationRepository _specializationRepository;
         public UnitOfWork(AppDbContext appDbContext, IClaimService claimService, ICurrentTime timeService, IAccountRepository accountRepository, 
-        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository,ICountryRepository countryRepository)
+        IArticleRepository articleRepository, IRequestReviewRepository requestReviewRepository
+            ,ICountryRepository countryRepository,IAccountSpecializationRepository accountSpecializationRepository,ISpecializationRepository specializationRepository)
         {
             _appDbContext = appDbContext;
             _claimService = claimService;
@@ -45,6 +42,8 @@ namespace Infrastructure
             _countryRepository = countryRepository;
      
             _requestReviewRepository = requestReviewRepository;
+            _accountSpecializationRepository= accountSpecializationRepository;
+            _specializationRepository= specializationRepository;
         }
 
         public int Save()
@@ -89,5 +88,9 @@ namespace Infrastructure
         public IArticleRepository ArticleRepository => _articleRepository;
 		    public ICountryRepository CountryRepository => _countryRepository;
         public IRequestReviewRepository RequestReviewRepository => _requestReviewRepository;
+
+        public IAccountSpecializationRepository AccountSpecializationRepository => _accountSpecializationRepository;
+
+        public ISpecializationRepository SpecializationRepository => _specializationRepository;
     }
 }

@@ -25,7 +25,6 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             modelBuilder.EntitySet<Country>("Countries");
             modelBuilder.EntitySet<Account>("Accounts");
             modelBuilder.EntitySet<UserViewAllModel>("Users");
-            modelBuilder.EntityType<Country>();
             services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
             services.AddScoped<IClaimService, ClaimService>();
             
@@ -41,13 +40,16 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IFirebaseService, FirebaseService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService,UserService>();
-            services.AddScoped<IRequestDetailService, RequestDetailService>();  
+            services.AddScoped<IRequestDetailService, RequestDetailService>();
+            services.AddScoped<IAccountSpecializeService, AccountSpecializationService>();
+            services.AddScoped<ISpecializeService,SpecializationService>();
 			services.AddHttpContextAccessor();
 
             // Mapper
 			services.AddAutoMapper(typeof(UserMappingProfile));
             services.AddAutoMapper(typeof(ArticleMappingProfile));
-
+            services.AddAutoMapper(typeof(RequestDetailMappingProfile));
+            services.AddAutoMapper(typeof(RequestReviewMappingProfile));
             // Authentication
             services.AddAuthorization();
             services.AddAuthentication().AddJwtBearer(options =>

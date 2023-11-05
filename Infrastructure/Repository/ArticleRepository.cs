@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@ namespace Infrastructure.Repository
          //GetAllArticle is Publish
         public async Task<List<Article>> GetAllArticle()
         {
-           return await _appDbContext.Articles.Where(x=>x.IsDelete.Equals(false) && x.Status == "Publish").ToListAsync();
+           return await _appDbContext.Articles.Where(x=> x.Status == "Publish").ToListAsync();
         }
 
 

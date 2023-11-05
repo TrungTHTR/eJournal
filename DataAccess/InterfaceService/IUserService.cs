@@ -15,6 +15,6 @@ namespace Application.InterfaceService
         Task<List<UserViewAllModel>> ListAll();
     
         Task<Account> GetCurrentLoginUser();
-
+        Task<List<Account>> ListAllReviewer(); 
 	}
 }
