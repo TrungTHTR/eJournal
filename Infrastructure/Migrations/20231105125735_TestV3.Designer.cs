@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231104002057_v1")]
-    partial class v1
+    [Migration("20231105125735_TestV3")]
+    partial class TestV3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -224,7 +224,8 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid?>("AccountId")
                         .HasColumnType("uniqueidentifier");

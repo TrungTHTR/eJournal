@@ -19,8 +19,14 @@ namespace Application.InterfaceService
         Task<string> AddArticleFile(IFormFile file, Guid id);
         Task<List<Article>> GetAllArticle();
         Task<Article> GetArticles(Guid id);
+//<<<<<<< HEAD
         Task<int> CreateArticle(ArticleRequest request);
         Task<int> UpdateArticle(Guid id, ArticleRequest request);
+//=======
+//        Task<int> CreateArticle(ArticleRequest article);
+//      /*  Task<int> CreateArticle(ArticleRequest request);*/
+//        Task<int> UpdateArticle(Article article);
+//>>>>>>> d355c1e6ccd43c8badb2391c4300ef72a4a649fa
         Task<int> DeleteArticle(Guid id);
         //search Article By Title Or AuthorName
         Task<List<Article>> SearchArticle(string value);

@@ -1,3 +1,6 @@
+﻿using Application;
+using Application.InterfaceService;
+using Application.ViewModels.RequestReviewViewModel;
 ﻿using Application.InterfaceService;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
@@ -29,15 +32,36 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RequestReview requestReview)
+        public async Task<IActionResult> Post([FromBody] CreateRequestReview requestReview)
         {
-            var _requestReview = await _requestReviewService.GetRequestReviews(requestReview.Id);
+         /* int isCreated=  await _requestReviewService.CreateRequestReview(requestReview);
+            if(isCreated == 0)
+            {
+                return BadRequest();
+            }
+            return Ok();*/
+
+           /* var _requestReview = await _requestReviewService.GetRequestReviews(requestReview.Id.Value);
             if (_requestReview == null)
             {
                 return BadRequest("Request has exist");
+            }*/
+            int isCreated = await _requestReviewService.CreateRequestReview(requestReview);
+            if (isCreated == 0)
+            {
+                return BadRequest();
             }
-            await _requestReviewService.CreateRequestReview(requestReview);
-            return NoContent();
+            return Ok();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllReview() 
+        {
+            List<RequestReview> requestReviews = await _requestReviewService.GetAllRequestReview();
+            if (requestReviews.Count > 0)
+            {
+                return Ok(requestReviews);
+            }
+            return BadRequest();
         }
     }
 }

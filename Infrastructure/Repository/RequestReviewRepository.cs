@@ -29,6 +29,7 @@ namespace Infrastructure.Repository
         }
         public async Task<int> CreateRequestReview(RequestReview requestReview)
         {
+            requestReview.CreationDate = _currentTime.GetCurrentTime();
             await _dbContext.RequestReviews.AddAsync(requestReview);
             return await _dbContext.SaveChangesAsync();
         }
@@ -45,6 +46,12 @@ namespace Infrastructure.Repository
                 _dbContext.RequestReviews.Update(requestReview);
             }
             return await _dbContext.SaveChangesAsync();
+        }
+
+        public Guid GetLastSavedId()
+        {
+           var requestId= _context.RequestReviews.ToList().OrderByDescending(x=>x.CreationDate).LastOrDefault().Id;
+            return requestId;
         }
     }
 }

@@ -1,0 +1,101 @@
+﻿@page
+@model eJournal_WebClient.Pages.StaffPage.RequestModel
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Review Request</title>
+    <link rel="stylesheet" href="~/css/request.css"/>
+</head>
+
+<body>
+    <h2>Article Review Request</h2>
+    <form method="post" asp-page-handler="Filter">
+        <label>Specialize Title:</label>
+        <select asp-for="@Model.SelectedSpecialization" asp-items="ViewBag.SpecializeName"></select>
+        <input type="submit" value="Filter" />
+    </form>
+   
+    <form id="reviewRequestForm" method="post" asp-page-handler="SendRequest">
+        <label for="articleTitle">Article Title:</label>
+        <select asp-for="@Model.CreateRequestReview.ArticleId" asp-items="ViewBag.ArticleId"></select>
+        <label>Request Title</label>
+        <input type="text" asp-for="@Model.CreateRequestReview.RequestTitle" />
+        @if (Model.Accounts != null && Model.Accounts.Any())
+        {
+             for (int i = 0; i < Model.Accounts.Count; i++)
+        {
+            <input type="hidden" name="Accounts[@i].Email" value="@Model.Accounts[i].Email" />
+            <input type="hidden" name="Accounts[@i].UserName" value="@Model.Accounts[i].UserName" />
+                <input type="hidden" name="Accounts[@i].Id" value="@Model.Accounts[i].Id" />
+            <!-- Add more hidden fields for other properties of AccountModel as needed -->
+        }
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <!-- Add more headers as needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var account in Model.Accounts)
+                    {
+                        <tr>
+                            <td>@account.Email</td>
+                            <td>@account.UserName</td>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            
+        }
+        <input type="submit" value="Create Request" />
+    </form>
+</body>
+
+<@*div class="email-list">
+    <h2>Reviewer Emails:</h2>
+    <ul id="email-list"></ul>
+</div>*@
+
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('select[name="SelectedSpecialization"]').on('change', function () {
+        var selectedSpecialization = $(this).val();
+
+        // AJAX request to fetch reviewer emails from the API
+        $.ajax({
+            url: 'http://localhost:5035/api/AccountSpecialization/search?specializeName=' + selectedSpecialization,
+            type: 'GET',
+            success: function (data) {
+                // Update the email list with fetched data
+                var emailList = $('#email-list');
+                emailList.empty();
+                if (Array.isArray(data)) {
+                    data.forEach(function (item) {
+                        if (item.email) {
+                            emailList.append('<li>' + item.email + '</li>');
+                        }
+                    });
+                } else if (data.email) {
+                    emailList.append('<li>' + data.email + '</li>');
+                } else {
+                    console.log('Invalid API response format.');
+                }
+            },
+            error: function () {
+                console.log('Error occurred while fetching data from the API.');
+            }
+        });
+    });
+</script>*@
+</html>

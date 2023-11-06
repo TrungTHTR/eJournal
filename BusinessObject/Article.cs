@@ -15,7 +15,7 @@ namespace BusinessObject
         public string Status { get; set; }
         public string AuthorName { get; set; }
         public Guid? IssueId { get; set; }
-        public int TopicId { get; set; }
+        public int? TopicId { get; set; }
         [ForeignKey(nameof(IssueId))]
         public virtual Issue? Issue { get; set; }
         [ForeignKey(nameof(TopicId))]

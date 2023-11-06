@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.ViewModels.RequestReviewViewModel;
 
 namespace Application.Service
 {
@@ -144,13 +145,13 @@ namespace Application.Service
             article.Status = nameof(ArticleStatus.Review);
             _unitOfWork.ArticleRepository.Update(article);
             await _unitOfWork.SaveAsync();
-			await _requestReviewService.CreateRequestReview(new RequestReview
-			{
-				RequestTitle = article.Title,
-				RequestDate = DateTime.UtcNow,
-				ArticleId = article.Id
-			});
-		}
+            await _requestReviewService.CreateRequestReview(new CreateRequestReview
+            {
+                RequestTitle = article.Title,
+                RequestDate = DateTime.UtcNow,
+                ArticleId = article.Id
+            });
+        }
 
 		public async Task<IEnumerable<ArticleResponse>> GetArticlesByCurrentLoginUser()
 		{

@@ -44,6 +44,9 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IFirebaseService, FirebaseService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IRequestDetailService, RequestDetailService>();
+            services.AddScoped<IAccountSpecializeService, AccountSpecializationService>();
+            services.AddScoped<ISpecializeService,SpecializationService>();
             services.AddScoped<IRequestDetailService, RequestDetailService>();  
             services.AddScoped<IMajorService, MajorService>();
             services.AddScoped<IAuthorService, AuthorService>();
@@ -53,7 +56,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             // Mapper
 			services.AddAutoMapper(typeof(UserMappingProfile));
             services.AddAutoMapper(typeof(ArticleMappingProfile));
-
+            services.AddAutoMapper(typeof(RequestDetailsMappingProfile));
+            services.AddAutoMapper(typeof(RequestReviewMappingProfile));
             // Authentication
             services.AddAuthorization();
             services.AddAuthentication(options =>

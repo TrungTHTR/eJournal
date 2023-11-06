@@ -14,7 +14,7 @@ namespace Application.ViewModels.UserViewModels
         [Required]
         public string Email { get; set; }
         [Required]
-        [RegularExpression(@"^\w{8,}$", ErrorMessage = "Password must be at least 8 characters and contain a-z, A-Z, 0-9, and underscore characters")]
+       /* [RegularExpression(@"^\w{8,}$", ErrorMessage = "Password must be at least 8 characters and contain a-z, A-Z, 0-9, and underscore characters")]*/
         public string Password { get; set; }
         [Required]
         public string UserName { get; set; }

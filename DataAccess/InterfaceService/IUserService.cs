@@ -16,5 +16,7 @@ namespace Application.InterfaceService
         Task<AuthenticationResponse> RefreshToken(string refreshToken);
 		Task<Account> GetCurrentLoginUser();
         Task<List<UserViewAllModel>> ListAll();
+    
+        Task<List<Account>> ListAllReviewer(); 
 	}
 }
