@@ -89,22 +89,11 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
 
         // PUT api/<ArticleController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Article article)
+        [Authorize(Roles = "Author")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] ArticleRequest article)
         {
-            var _article = await _articleService.GetArticles(id);
-            if (_article != null)
-            {
-                if (_article.Status.Equals("Draff") || _article.Status.Equals("Revise"))
-                {
-                    await _articleService.UpdateArticle(article);
-                    return Ok(article);
-                }
-                else
-                {
-                    return BadRequest("Article can't do it right now!! ");
-                }
-            }
-            return BadRequest("Article not exist");
+            await _articleService.UpdateArticle(id, article);
+            return NoContent();
         }
 
         // DELETE api/<ArticleController>/5

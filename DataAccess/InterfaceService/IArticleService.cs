@@ -20,7 +20,7 @@ namespace Application.InterfaceService
         Task<List<Article>> GetAllArticle();
         Task<Article> GetArticles(Guid id);
         Task<int> CreateArticle(ArticleRequest request);
-        Task<int> UpdateArticle(Article article);
+        Task<int> UpdateArticle(Guid id, ArticleRequest request);
         Task<int> DeleteArticle(Guid id);
         //search Article By Title Or AuthorName
         Task<List<Article>> SearchArticle(string value);

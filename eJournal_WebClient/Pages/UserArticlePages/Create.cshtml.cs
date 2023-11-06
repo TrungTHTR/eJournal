@@ -42,9 +42,8 @@ namespace eJournal_WebClient.Pages.UserArticlePages
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            JsonContent content = JsonContent.Create(Article);
             _httpClient.AddAuthorizationHeader(HttpContext);
-            var response = await _httpClient.PostAsync(ApiUrl, content);
+            var response = await _httpClient.PostAsync(ApiUrl, JsonContent.Create(Article));
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");
@@ -54,6 +53,25 @@ namespace eJournal_WebClient.Pages.UserArticlePages
             {
                 return RedirectToAction("OnPostAsync", "CreateModel");
             }
+            //if (ArticleFile != null && ArticleFile.Length <= 0)
+            //{
+            //    var fileName = ContentDispositionHeaderValue.Parse(ArticleFile.ContentDisposition).FileName.Trim('"');
+
+            //    using (var content = new MultipartFormDataContent())
+            //    {
+            //        content.Add(new StreamContent(ArticleFile.OpenReadStream())
+            //        {
+            //            Headers =
+            //        {
+            //            ContentLength = ArticleFile.Length,
+            //            ContentType = new MediaTypeHeaderValue(ArticleFile.ContentType)
+            //        }
+            //        }, "File", fileName);
+
+            //        var response2 = await _httpClient.PostAsync($"{ApiUrl}/{id}/article-file", content);
+            //    }
+            //}
+            
             ErrorMessage = await response.Content.ReadAsStringAsync();
             return Page();
         }

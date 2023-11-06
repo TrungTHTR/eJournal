@@ -100,10 +100,25 @@ namespace Application.Service
 			return article;
 		}
 
-		public async Task<int> UpdateArticle(Article article)
+		public async Task<int> UpdateArticle(Guid id, ArticleRequest request)
         {
-
-            return await _unitOfWork.ArticleRepository.UpdateArticle(article);
+            var article = await _unitOfWork.ArticleRepository.GetAsync(id);
+            if (article == null)
+            {
+                throw new Exception("Article doesn't exist");
+            }
+            if(article.Status != nameof(ArticleStatus.Draft) || article.Status != nameof(ArticleStatus.Revise))
+            {
+                throw new Exception("Article is not allowed to modify");
+            }
+            Account user = await _userService.GetCurrentLoginUser();
+            if(!article.Author.Any(x => x.AccountId == user.Id))
+            {
+                throw new Exception("You are not allowed to modify this article");
+            }
+            article = _mapper.Map(request, article);
+            _unitOfWork.ArticleRepository.Update(article);
+            return await _unitOfWork.SaveAsync();
         }
         //search Article By Title Or AuthorName
         public async Task<List<Article>> SearchArticle(string value)
@@ -118,8 +133,7 @@ namespace Application.Service
             {
                 throw new Exception("Article doesn't exist");
             }
-            var author = article.Author.FirstOrDefault(x => x.AccountId == _userService.GetCurrentLoginUser().Result.Id);
-            if(author == null)
+            if(!article.Author.Any(x => x.AccountId == _userService.GetCurrentLoginUser().Result.Id))
             {
                 throw new Exception("You don't have the right to modify this article");
             }
