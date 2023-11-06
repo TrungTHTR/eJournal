@@ -1,27 +1,33 @@
 ﻿@page
-@model eJournal_WebClient.Pages.ArticlePages.CreateModel
+@model eJournal_WebClient.Pages.UserArticlePages.CreateModel
 @{
     ViewData["Title"] = "Create Article";
 }
-<h4>Issue</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
+    <div class="col-9 col-12-small">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Article.Title" class="control-label"></label>
                 <input asp-for="Article.Title" class="form-control" />
                 <span asp-validation-for="Article.Title" class="text-danger"></span>
             </div>
+            <div>
+                <label asp-for="ArticleFile" class="control-label">Article file</label>
+                <input asp-for="ArticleFile" class="form-control" type="file"/>
+            </div>
             <div class="form-group">
                 <label asp-for="Article.Content" class="control-label"></label>
-                <textarea asp-for="Article.Content" class="form-control" />
+                <textarea asp-for="Article.Content" class="form-control"></textarea>
                 <span asp-validation-for="Article.Content" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Article.TopicId" class="control-label"></label>
-                <select asp-for="Article.TopicId" class="form-control" asp-items="ViewBag.Topics"></select>
+                <select data-placeholder="Topic name" asp-for="Article.TopicId" class="form-control" asp-items="ViewBag.Topics"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Article.Author" class="control-label"></label>
+                <select data-placeholder="Author ID Number" asp-for ="Article.Author" class="form-control" asp-items="ViewBag.Authors" multiple></select>
             </div>
             @if (!string.IsNullOrEmpty(@Model.ErrorMessage))
             {

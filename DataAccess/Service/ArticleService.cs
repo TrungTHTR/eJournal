@@ -50,7 +50,7 @@ namespace Application.Service
 
         public async Task<IEnumerable<ArticleResponse>> GetAll(ArticleStatus? status)
         {
-            var articles = await _unitOfWork.ArticleRepository.GetAllAsync(x => x.Status.Equals(status.ToString()));
+            var articles = await _unitOfWork.ArticleRepository.GetAllAsync(filter: x => x.Status.Equals(status.ToString()), includedProperties: $"{nameof(Article.Topic)},{nameof(Article.Issue)}");
             return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleResponse>>(articles);
         }
         public async Task<int> CreateArticle(ArticleRequest request)
@@ -136,6 +136,45 @@ namespace Application.Service
 				RequestDate = DateTime.UtcNow,
 				ArticleId = article.Id
 			});
+		}
+
+		public async Task<IEnumerable<ArticleResponse>> GetArticlesByCurrentLoginUser()
+		{
+            Account user = await _userService.GetCurrentLoginUser();
+            var author = await _unitOfWork.AuthorRepository.GetAuthorByAccountId(user.Id);
+            if(author == null)
+            {
+                throw new Exception("User hasn't registered as an author");
+            }
+			var articles = await _unitOfWork.ArticleRepository.GetAllAsync(
+                filter: x => x.Author.FirstOrDefault(y => y.Id == author.Id) != null, includedProperties: $"{nameof(Article.Issue)},{nameof(Article.Author)},{nameof(Article.Topic)}");
+			return _mapper.Map<IEnumerable<ArticleResponse>>(articles);
+		}
+
+		public async Task<ArticleResponse> GetArticleByCurrentLoginUser(string articleId)
+		{
+			Account user = await _userService.GetCurrentLoginUser();
+			var author = await _unitOfWork.AuthorRepository.GetAuthorByAccountId(user.Id);
+			if (author == null)
+			{
+				throw new Exception("User hasn't registered as an author");
+			}
+			var article = _unitOfWork.ArticleRepository.GetAllAsync(
+				filter: x => x.Id == _mapper.Map<Guid>(articleId) && x.Author.FirstOrDefault(y => y.Id == author.Id) != null, includedProperties: $"{nameof(Article.Issue)},{nameof(Article.Author)},{nameof(Article.Topic)}").Result.First();
+			return _mapper.Map<ArticleResponse>(article);
+		}
+
+		public async Task PublishArticle(Guid articleId, Guid issueId)
+		{
+            var article = await _unitOfWork.ArticleRepository.GetAsync(articleId);
+            if(article == null || article.Status != nameof(ArticleStatus.Accept))
+            {
+                throw new Exception("Article is not available for publish");
+            }
+            article.Status = nameof(ArticleStatus.Publish);
+            article.IssueId = issueId;
+            _unitOfWork.ArticleRepository.Update(article);
+            await _unitOfWork.SaveAsync();
 		}
 	}
 }

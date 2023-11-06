@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using eJournal_WebClient.Common;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace eJournal_WebClient.Pages.ArticlePages
 {
@@ -13,7 +14,7 @@ namespace eJournal_WebClient.Pages.ArticlePages
     {
 		private readonly HttpClient _httpClient;
 		private readonly string ApiUrl = "http://localhost:5035/api/Article/unauthorized-user";
-		private readonly string MajorApiUrl = "http://localhost:5035/api/Majors";
+		private readonly string TopicApiUrl = "http://localhost:5035/api/Topics";
 
 		public IndexModel()
 		{
@@ -24,10 +25,11 @@ namespace eJournal_WebClient.Pages.ArticlePages
 
 		public IList<ArticleResponse> Articles { get; set; } = default!;
 
-		public async Task<IActionResult> OnGetAsync(string? id, string? title, string? authorName)
+		public async Task<IActionResult> OnGetAsync(string? id, string? title, string? authorName, int? topic)
 		{
-            #region Get articles
-            StringBuilder apiUrl = new StringBuilder(ApiUrl);
+			#region Get articles
+			#region article filter
+			StringBuilder apiUrl = new StringBuilder(ApiUrl);
             List<string> filters = new List<string>();
             if (!string.IsNullOrEmpty(id))
             {
@@ -41,7 +43,11 @@ namespace eJournal_WebClient.Pages.ArticlePages
             {
                 filters.Add($"contains(authorName, '{authorName}')");
             }
-            if (filters.Any())
+			if (topic != null && topic != 0)
+			{
+				filters.Add($"topic/topicId eq {topic}");
+			}
+			if (filters.Any())
             {
                 apiUrl.Append("?$filter=");
                 if (filters.Count > 1)
@@ -53,8 +59,8 @@ namespace eJournal_WebClient.Pages.ArticlePages
                     apiUrl.Append(filters.First());
                 }
             }
-            _httpClient.AddAuthorizationHeader(HttpContext);
-            HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result;
+			#endregion
+			HttpResponseMessage response = _httpClient.GetAsync(apiUrl.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
@@ -62,25 +68,22 @@ namespace eJournal_WebClient.Pages.ArticlePages
             }
             else
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && response.Headers.WwwAuthenticate.ToString().Contains("Bearer error=\"invalid_token\", error_description=\"The token expired at"))
-                {
-                    var renewTokenStatus = await _httpClient.RenewAccessToken(HttpContext);
-                    if (renewTokenStatus)
-                    {
-                        return RedirectToPage("./Index");
-                    }
-                }
                 return RedirectToPage("/Error");
             }
-            #endregion
-            #region Get majors
-            HttpResponseMessage response2 = _httpClient.GetAsync(MajorApiUrl).Result;
-            if (response2.IsSuccessStatusCode)
-            {
-
-            }
-            #endregion
-            return Page();
+			#endregion
+			#region Get topics
+			var topics = await GetTopics();
+			ViewData["Topic"] = new SelectList(topics, "TopicId", "TopicName");
+			#endregion
+			return Page();
         }
-    }
+
+		private async Task<IList<TopicResponse>> GetTopics()
+		{
+			HttpResponseMessage response = await _httpClient.GetAsync(TopicApiUrl);
+			string data = await response.Content.ReadAsStringAsync();
+			var list = JsonConvert.DeserializeObject<IList<TopicResponse>>(data);
+			return list;
+		}
+	}
 }

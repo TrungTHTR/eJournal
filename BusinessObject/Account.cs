@@ -17,14 +17,12 @@ namespace BusinessObject
         public string? RefreshToken { get; set; }
         public string Address { get; set; }
         public string Affiliation { get; set; }
-        [ForeignKey(nameof(RoleId))]
         public int RoleId { get; set; }
-      
-        public virtual Role? Role { get; set; }
-        [ForeignKey(nameof(CountryId))]
+		[ForeignKey(nameof(RoleId))]
+		public virtual Role? Role { get; set; }
         public int CountryId { get; set; }
-
-        public virtual Country? Country { get; set; }
+		[ForeignKey(nameof(CountryId))]
+		public virtual Country? Country { get; set; }
         public virtual Author? Author { get; set; }
         public virtual ICollection<AccountSpecialization> Specializations { get; set; } = new List<AccountSpecialization>();
     }

@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using eJournal_WebClient.Common;
 
-namespace eJournal_WebClient.Pages.ArticlePages
+namespace eJournal_WebClient.Pages.UserArticlePages
 {
     public class CreateModel : PageModel
     {
@@ -27,14 +26,16 @@ namespace eJournal_WebClient.Pages.ArticlePages
 		public async Task<IActionResult> OnGetAsync()
         {
             var topics = await GetTopics();
-			ViewData["Topic"] = new SelectList(topics, "ProducerID", "ProducerName");
+			ViewData["Topics"] = new SelectList(topics, "TopicId", "TopicName");
             var authors = await GetAuthors();
-			ViewData["Author"] = new SelectList(authors, "Id", "ProducerName");
+			ViewData["Authors"] = new SelectList(authors, "Id", "IdentityCardNumber");
 			return Page();
         }
 
         [BindProperty]
         public ArticleRequest Article { get; set; } = default!;
+        [BindProperty]
+        public IFormFile? ArticleFile { get; set; }
         [BindProperty]
         public string? ErrorMessage { get; set; }
 
@@ -57,11 +58,11 @@ namespace eJournal_WebClient.Pages.ArticlePages
             return Page();
         }
 
-        private async Task<IList<Topic>> GetTopics()
+        private async Task<IList<TopicResponse>> GetTopics()
         {
 			HttpResponseMessage response = await _httpClient.GetAsync(TopicApiUrl);
 			string data = await response.Content.ReadAsStringAsync();
-			var list = JsonConvert.DeserializeObject<List<Topic>>(data);
+			var list = JsonConvert.DeserializeObject<IList<TopicResponse>>(data);
             return list;
 		}
 

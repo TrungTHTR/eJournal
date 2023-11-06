@@ -19,5 +19,6 @@ namespace Application
         public IRequestReviewRepository RequestReviewRepository { get; }
         public IMajorRepository MajorRepository { get; }
         public IAuthorRepository AuthorRepository { get; }
+        public ITopicRepository TopicRepository { get; }
     }
 }

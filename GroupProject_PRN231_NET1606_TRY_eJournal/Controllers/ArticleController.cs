@@ -24,8 +24,25 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
         {
             _articleService = articleService;
         }
-        // GET: api/<ArticleController>
-        [HttpGet]
+
+        [HttpGet("author")]
+        [Authorize(Roles = "Author")]
+        public async Task<IActionResult> GetArticlesByCurrentLoginUser()
+        {
+            var articles = await _articleService.GetArticlesByCurrentLoginUser();
+            return Ok(articles);
+        }
+
+		[HttpGet("{id}/author")]
+		[Authorize(Roles = "Author")]
+		public async Task<IActionResult> GetArticleByCurrentLoginUser([FromRoute] string id)
+		{
+			var article = await _articleService.GetArticleByCurrentLoginUser(id);
+			return Ok(article);
+		}
+
+		// GET: api/<ArticleController>
+		[HttpGet]
         public async Task<IActionResult> Get()
         {
             List<Article> articles = await _articleService.GetAllArticle();
@@ -108,7 +125,13 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             await _articleService.SubmitArticle(id);
         }
 
-        //NgoThiKhanhLy
+        [HttpPut("{articleId}/publish")]
+        [Authorize(Roles = "Director")]
+        public async Task PublishArticle([FromRoute] Guid articleId, [FromQuery] Guid issueId)
+        {
+            await _articleService.PublishArticle(articleId, issueId);
+        }
+
         [HttpGet("unauthorized-user")]
         [EnableQuery]
         [AllowAnonymous]
@@ -117,9 +140,9 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal.Controllers
             var articles = await _articleService.GetAll(ArticleStatus.Publish);
             return articles.AsQueryable();
         }
-        //NgoThiKhanhLy
+
         [HttpPost("{id}/article-file")]
-        [Authorize("Author")]
+        [Authorize(Roles = "Author")]
         public async Task<ActionResult<string>> AddArticleFile(IFormFile file, [FromRoute(Name = "id")] Guid id)
         {
             var url = await _articleService.AddArticleFile(file, id);

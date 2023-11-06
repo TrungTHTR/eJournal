@@ -52,22 +52,23 @@ namespace eJournal_WebClient.Pages
                     Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
                 }
             }
-            return RedirectToPage("/ArticlePage/Index");
+            return RedirectToPage("/ArticlePages/Index");
         }
 
-        public async Task OnPostLogout()
+        public async Task<IActionResult> OnPostLogout()
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["Access Token"]);
             HttpResponseMessage response = await _client.PostAsync(LogoutUrl, null);
             if(!response.IsSuccessStatusCode)
             {
-                RedirectToPage("Error");
+                string error = await response.Content.ReadAsStringAsync();
+                return RedirectToPage("/Error", new { errorMessage = error });
             }
             else
             {
                 Response.Cookies.Delete("Access Token");
                 Response.Cookies.Delete("Redirect Token");
-                RedirectToPage("Index");
+                return RedirectToPage("/ArticlePages/Index");
             }
         }
     }

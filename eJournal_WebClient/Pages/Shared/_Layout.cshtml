@@ -34,16 +34,17 @@
             <h2>Menu</h2>
             <ul>
                 <li><a asp-area="" asp-page="/Home">Home</a></li>
-                <li><a asp-area="" asp-page="/About">About</a></li>
+                @*<li><a asp-area="" asp-page="/About">About</a></li>
                 <li><a asp-area="" asp-page="#">Groups</a></li>
                 <li><a asp-area="" asp-page="/Explore">Explore</a></li>
-                <li><a asp-area="" asp-page="/Privacy">Privacy</a></li>
+                <li><a asp-area="" asp-page="/Privacy">Privacy</a></li>*@
                 <li><a asp-page="/ArticlePages/Index">Article</a></li>
+                <li><a asp-page="/UserArticlePages/Index">Your article</a></li>
                 <li><a asp-page="/Login">Login</a></li>
                 <li>
-                    <form asp-controller="Login" asp-action="Logout" method="post">
-                        <button class="nav-link">Logout</button>
-                    </form>
+                    @*<form asp-controller="Login" asp-action="Logout" method="post">*@
+                        <button class="link-info" onclick="redirectToLoginPage()" >Logout</button>
+                    @*</form>*@
                 </li>
             </ul>
         </nav>
@@ -62,6 +63,13 @@
         </footer>
     </div>
 
+    <script>
+        function redirectToLoginPage() {
+            // Redirect the user to the login page
+            window.location.href = "/Login"; // Replace "login.html" with the actual URL of your login page
+            
+        }
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

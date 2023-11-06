@@ -55,5 +55,10 @@ namespace Infrastructure.Repository
 		{
 			return _dbContext.Author.Find(id);
 		}
+
+		public async Task<Author?> GetAuthorByAccountId(Guid id)
+		{
+			return await _dbContext.Author.FirstOrDefaultAsync(x => x.AccountId == id);
+		}
 	}
 }

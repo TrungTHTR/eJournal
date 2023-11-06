@@ -27,6 +27,8 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             modelBuilder.EntitySet<Account>("Accounts");
             modelBuilder.EntitySet<UserViewAllModel>("Users");
             modelBuilder.EntityType<Country>();
+            modelBuilder.EntityType<TopicResponse>();
+            modelBuilder.EntityType<AuthorResponse>();
             services.AddControllers().AddOData(options => options.Select().Filter().OrderBy().Expand().AddRouteComponents("odata", modelBuilder.GetEdmModel()));
             services.AddScoped<IClaimService, ClaimService>();
             
@@ -45,6 +47,7 @@ namespace GroupProject_PRN231_NET1606_TRY_eJournal
             services.AddScoped<IRequestDetailService, RequestDetailService>();  
             services.AddScoped<IMajorService, MajorService>();
             services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<ITopicService, TopicService>();
 			services.AddHttpContextAccessor();
 
             // Mapper

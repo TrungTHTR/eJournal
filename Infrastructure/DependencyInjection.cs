@@ -28,6 +28,7 @@ namespace Infrastructure
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
             services.AddScoped<IMajorRepository, MajorRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<ITopicRepository, TopicRepository>();
             return services;
         }
     }

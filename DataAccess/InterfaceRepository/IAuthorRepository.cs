@@ -9,6 +9,7 @@ namespace Application.InterfaceRepository
 		Task<Author?> GetAuthorAsync(Guid id);
 		Author? GetAuthor(Guid id);
 		Task<Author?> GetAuthor(string identityCardNumber);
+		Task<Author?> GetAuthorByAccountId(Guid id);
 		Task CreateAuthor(Author request);
 		void UpdateAuthor(Author request);
 	}

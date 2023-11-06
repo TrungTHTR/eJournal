@@ -18,6 +18,7 @@ namespace Application.ViewModels.UserViewModels
         public string Password { get; set; }
         [Required]
         public string UserName { get; set; }
+        [RegularExpression(@"(+84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Invalid phone number.")]
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string Affiliation { get; set; }
